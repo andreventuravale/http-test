@@ -7,9 +7,9 @@ const Url = createToken({ name: "Url", pattern: /https?:\/\/[^\s]+/ })
 const HeaderKey = createToken({ name: "HeaderKey", pattern: /[^\s:]+/ })
 const HeaderValue = createToken({ name: "HeaderValue", pattern: /[^\r\n]+/ })
 const HeaderSeparator = createToken({ name: "HeaderSeparator", pattern: /:/ })
-const TestSeparator = createToken({ name: "RequestBody", pattern: /###/ })
+const TestSeparator = createToken({ name: "TestSeparator", pattern: /###/ })
 
-const allTokens = [Newline, Space, Method, Url, HeaderKey, HeaderValue, HeaderSeparator, RequestBody, TestSeparator]
+const allTokens = [Newline, Space, TestSeparator, Method, Url, HeaderKey, HeaderSeparator, HeaderValue]
 
 const HttpLexer = new Lexer(allTokens)
 
@@ -35,7 +35,7 @@ class HttpParser extends CstParser {
       })
       $.OPTION(() => {
         $.CONSUME(Newline)
-        $.CONSUME(RequestBody)
+        $.CONSUME(TestSeparator)
       })
     })
 
@@ -71,7 +71,9 @@ export default async (inputText) => {
   const cst = parser.httpFile()
 
   if (parser.errors.length > 0) {
-    throw new Error("Parsing errors detected")
+    console.error(parser.errors.map(({ message }) => message).join('\n'))
+
+    process.exit(1)
   }
 
   console.log(cst)

@@ -3,12 +3,6 @@ import { globby } from 'globby'
 import { readFile } from 'node:fs/promises'
 import parse from './parser.js'
 
-globalThis.window = {}
-
-const { default: grammar } = await import("./grammar/index.js")
-
-console.log(grammar)
-
 const files = await globby(['**/*.http'], {
   cwd: process.pwd
 })
