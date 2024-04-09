@@ -3,10 +3,18 @@
   "version": "1.0.0",
   "type": "module",
   "main": "index.js",
+  "bin": {
+    "http-test": "index.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "clear && biome check --quote-style=single --semicolons=as-needed --arrow-parentheses=as-needed --json-formatter-indent-style=space --apply-unsafe .",
+    "lint": "clear && biome lint .",
+    "test": "http-test"
   },
   "keywords": [],
   "author": "Andre Vale <andreventuravale@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "biome": "^0.3.3"
+  }
 }
