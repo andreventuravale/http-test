@@ -1,22 +1,62 @@
-import moo from 'moo'
-
-const lexer = moo.compile({
-  WS: /[ \t]+/,
-  comment: /#[^\r\n]*/,
-  endpoint: /(?:GET|POST|PUT|HEAD|OPTIONS|PATCH|DELETE)\s+(?:[^\r\n]+)/,
-  header: /(?:[a-z_][a-z0-9\-_]*): (?:[^\r\n]*)/,
-  // number: /0|[1-9][0-9]*/,
-  // string: /"(?:\\["\\]|[^\n"\\])*"/,
-  // lparen: '(',
-  // rparen: ')',
-  // keyword: ['while', 'if', 'else', 'moo', 'cows'],
-  NL: { match: /[\r\n]+/, lineBreaks: true },
-})
 
 export default async (inputText) => {
-  lexer.reset(inputText)
+  const lines = inputText.split(/[\r\n]+/g)
 
-  for (const tk of lexer) {
-    console.log(tk)
+  return requests(lines)
+}
+
+function ws(lines) {
+  while (lines.length && /^\s*$/.test(lines[0])) {
+    lines.shift()
   }
+}
+
+function comments(lines) {
+  while (lines.length && /^\s*#.*$/.test(lines[0])) {
+    lines.shift()
+  }
+}
+
+function headers(lines) {
+  const list = []
+  const regex = /^\s*([\w-]+):\s+(.*)\s*$/
+  while (lines.length && regex.test(lines[0])) {
+    const [, key, value] = regex.exec(lines.shift())
+    console.log('header', key, value)
+    list.push({ key, value })
+  }
+  return list
+}
+
+function body(lines) {
+  const fragment = []
+  const separator = /^\s*###\s*$/
+  while (lines.length && !separator.test(lines[0])) {
+    fragment.push(lines.shift())
+  }
+  return fragment.join('\n').trim()
+}
+
+function requests(lines) {
+  const requests = []
+
+  do {
+    ws(lines)
+
+    comments(lines)
+
+    const methodAndUrlRegex = /^\s*([A-Z]+)\s+(.*)$/
+
+    console.log(lines, lines[0], methodAndUrlRegex.test(lines[0]))
+
+    if (!methodAndUrlRegex.test(lines[0])) {
+      throw new Error(`method + url expected but found: ${lines[0]}`)
+    }
+
+    const [, method, url] = methodAndUrlRegex.exec(lines.shift())
+
+    requests.push({ method, url, headers: headers(lines), body: body(lines) })
+  } while (lines.length)
+
+  return requests
 }

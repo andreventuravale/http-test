@@ -12,5 +12,5 @@ for (const file of files) {
 
   const results = await parse(content)
 
-  console.log(parser.results)
+  console.log(results)
 }

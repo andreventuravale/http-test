@@ -11,14 +11,12 @@
     "lint": "clear && biome lint .",
     "test": "http-test"
   },
-  "keywords": [],
   "author": "Andre Vale <andreventuravale@gmail.com>",
   "license": "ISC",
   "devDependencies": {
     "biome": "^0.3.3"
   },
   "dependencies": {
-    "globby": "^14.0.1",
-    "moo": "^0.5.2"
+    "globby": "^14.0.1"
   }
 }

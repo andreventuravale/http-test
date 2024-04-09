@@ -8,9 +8,6 @@ dependencies:
   globby:
     specifier: ^14.0.1
     version: 14.0.1
-  moo:
-    specifier: ^0.5.2
-    version: 0.5.2
 
 devDependencies:
   biome:
@@ -548,10 +545,6 @@ packages:
     dependencies:
       brace-expansion: 1.1.11
     dev: true
-
-  /moo@0.5.2:
-    resolution: {integrity: sha512-iSAJLHYKnX41mKcJKjqvnAN9sf0LMDTXDEvFv+ffuRR9a1MIuXLjMNL6EsnDHSkKLTWNqQQ5uo61P4EbU4NU+Q==}
-    dev: false
 
   /mute-stream@0.0.5:
     resolution: {integrity: sha512-EbrziT4s8cWPmzr47eYVW3wimS4HsvlnV5ri1xw1aR6JQo/OrJX5rkl32K/QQHdxeabJETtfeaROGhd8W7uBgg==}
