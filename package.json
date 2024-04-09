@@ -18,7 +18,7 @@
     "biome": "^0.3.3"
   },
   "dependencies": {
-    "chevrotain": "^11.0.3",
-    "globby": "^14.0.1"
+    "globby": "^14.0.1",
+    "moo": "^0.5.2"
   }
 }
