@@ -1,7 +1,6 @@
 
 export default async (inputText) => {
   const lines = inputText.split(/[\r\n]+/g)
-
   return requests(lines)
 }
 
@@ -19,10 +18,9 @@ function comments(lines) {
 
 function headers(lines) {
   const list = []
-  const regex = /^\s*([\w-]+):\s+(.*)\s*$/
+  const regex = /^\s*([\w-]+)\s*:\s+(.*)\s*$/
   while (lines.length && regex.test(lines[0])) {
     const [, key, value] = regex.exec(lines.shift())
-    console.log('header', key, value)
     list.push({ key, value })
   }
   return list
@@ -46,8 +44,6 @@ function requests(lines) {
     comments(lines)
 
     const methodAndUrlRegex = /^\s*([A-Z]+)\s+(.*)$/
-
-    console.log(lines, lines[0], methodAndUrlRegex.test(lines[0]))
 
     if (!methodAndUrlRegex.test(lines[0])) {
       throw new Error(`method + url expected but found: ${lines[0]}`)
