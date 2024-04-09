@@ -15,6 +15,10 @@
   "author": "Andre Vale <andreventuravale@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "biome": "^0.3.3"
+    "biome": "^0.3.3",
+    "nearley": "^2.20.1"
+  },
+  "dependencies": {
+    "globby": "^14.0.1"
   }
 }
