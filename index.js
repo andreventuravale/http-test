@@ -2,6 +2,7 @@
 import { globby } from 'globby'
 import nearley from "nearley"
 import { readFile } from 'node:fs/promises'
+import parse from './parser.js'
 
 globalThis.window = {}
 
@@ -16,9 +17,7 @@ const files = await globby(['**/*.http'], {
 for (const file of files) {
   const content = await readFile(file, 'utf-8')
 
-  const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
-
-  parser.feed(content)
+  const results = await parse(content)
 
   console.log(parser.results)
 }
