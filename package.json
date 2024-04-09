@@ -8,6 +8,7 @@
   },
   "scripts": {
     "format": "clear && biome check --quote-style=single --semicolons=as-needed --arrow-parentheses=as-needed --json-formatter-indent-style=space --apply-unsafe .",
+    "grammar": "npx nearleyc grammar.ne -o grammar.js",
     "lint": "clear && biome lint .",
     "test": "http-test"
   },
@@ -19,6 +20,7 @@
     "nearley": "^2.20.1"
   },
   "dependencies": {
-    "globby": "^14.0.1"
+    "globby": "^14.0.1",
+    "moo": "^0.5.2"
   }
 }
