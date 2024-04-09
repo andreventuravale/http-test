@@ -7,9 +7,9 @@ const Url = createToken({ name: "Url", pattern: /https?:\/\/[^\s]+/ })
 const HeaderKey = createToken({ name: "HeaderKey", pattern: /[^\s:]+/ })
 const HeaderValue = createToken({ name: "HeaderValue", pattern: /[^\r\n]+/ })
 const HeaderSeparator = createToken({ name: "HeaderSeparator", pattern: /:/ })
-const RequestBody = createToken({ name: "RequestBody", pattern: /[^\r\n]+/ })
+const TestSeparator = createToken({ name: "RequestBody", pattern: /###/ })
 
-const allTokens = [Newline, Space, Method, Url, HeaderKey, HeaderValue, HeaderSeparator, RequestBody]
+const allTokens = [Newline, Space, Method, Url, HeaderKey, HeaderValue, HeaderSeparator, RequestBody, TestSeparator]
 
 const HttpLexer = new Lexer(allTokens)
 

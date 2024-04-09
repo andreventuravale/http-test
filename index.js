@@ -1,6 +1,5 @@
 #!/usr/bin/env -S node --no-warnings
 import { globby } from 'globby'
-import nearley from "nearley"
 import { readFile } from 'node:fs/promises'
 import parse from './parser.js'
 
