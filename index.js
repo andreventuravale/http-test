@@ -2,7 +2,12 @@
 import { globby } from 'globby'
 import nearley from "nearley"
 import { readFile } from 'node:fs/promises'
-import grammar from "./grammar.js"
+
+globalThis.window = {}
+
+const { default: grammar } = await import("./grammar/index.js")
+
+console.log(grammar)
 
 const files = await globby(['**/*.http'], {
   cwd: process.pwd
@@ -15,5 +20,5 @@ for (const file of files) {
 
   parser.feed(content)
 
-  console.log(parser)
+  console.log(parser.results)
 }

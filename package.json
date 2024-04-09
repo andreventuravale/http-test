@@ -8,7 +8,6 @@
   },
   "scripts": {
     "format": "clear && biome check --quote-style=single --semicolons=as-needed --arrow-parentheses=as-needed --json-formatter-indent-style=space --apply-unsafe .",
-    "grammar": "npx nearleyc grammar.ne -o grammar.js",
     "lint": "clear && biome lint .",
     "test": "http-test"
   },
@@ -16,11 +15,10 @@
   "author": "Andre Vale <andreventuravale@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "biome": "^0.3.3",
-    "nearley": "^2.20.1"
+    "biome": "^0.3.3"
   },
   "dependencies": {
-    "globby": "^14.0.1",
-    "moo": "^0.5.2"
+    "chevrotain": "^11.0.3",
+    "globby": "^14.0.1"
   }
 }
