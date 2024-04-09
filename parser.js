@@ -63,7 +63,9 @@ export default async (inputText) => {
   const lexingResult = HttpLexer.tokenize(inputText)
 
   if (lexingResult.errors.length > 0) {
-    throw new Error("Lexing errors detected")
+    console.error(ngResult.errors.map(({ message }) => message).join('\n'))
+
+    process.exit(1)
   }
 
   parser.input = lexingResult.tokens
