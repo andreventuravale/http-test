@@ -21,7 +21,7 @@ function headers(lines) {
   const regex = /^\s*([\w-]+)\s*:\s+(.*)\s*$/
   while (lines.length && regex.test(lines[0])) {
     const [, key, value] = regex.exec(lines.shift())
-    list.push({ key, value })
+    list.push([key, value])
   }
   return list
 }
