@@ -33,38 +33,52 @@ async function test({ request, url }) {
 
 export function evaluate(id) {
   const [fn, ...args] = id.slice(1).split(/\s+/)
+
   switch (fn) {
     case 'processEnv': {
       return process.env[args[0]]
     }
-    default:
+
+    default: {
       throw new Error(`not implemented: ${fn}`)
+    }
   }
 }
 
 export function interpolate(text, { env = {} } = {}) {
   const brokenAtStart = text?.split('{{') ?? []
+
   const variables = []
-  const spans = [brokenAtStart.shift()]
+
+  const segments = [brokenAtStart.shift()]
+
   for (const start of brokenAtStart) {
     const endIndex = start.indexOf('}}')
+
     const id = start.slice(0, endIndex)
+
     variables.push(id)
+
     if (id[0] === '$') {
-      spans.push(evaluate(id))
+      segments.push(evaluate(id))
     } else {
-      spans.push(env[process.env.NODE_ENV]?.[id])
+      segments.push(env[process.env.NODE_ENV]?.[id])
     }
-    spans.push(start.slice(endIndex + 2))
+
+    segments.push(start.slice(endIndex + 2))
   }
-  return spans.join('')
+
+  return segments.join('')
 }
 
 export default {
   process: (src, filename) => {
     const requests = parse(src)
 
-    const envPath = join(dirname(filename), 'http-client.env.json')
+    const envPath = join(
+      dirname(filename ?? 'a1c63c96-ad67-4546-8a78-66b9805f10e2'),
+      'http-client.env.json'
+    )
 
     const env = existsSync(envPath)
       ? JSON.parse(readFileSync(envPath, 'utf-8'))
