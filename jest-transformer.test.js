@@ -8,7 +8,14 @@ test('nothing to do', () => {
   expect(interpolate(undefined)).toMatchInlineSnapshot(`""`)
 })
 
-test('environment variables', () => {
+test('process environment variables', () => {
   process.env.FOO = 'bar'
   expect(interpolate(' {{$processEnv FOO}} ')).toMatchInlineSnapshot(`" bar "`)
+})
+
+test('environment variables', () => {
+  process.env.FOO = 'bar'
+  expect(
+    interpolate(' {{HostAddress}} ', { env: { HostAddress: 'foo' } })
+  ).toMatchInlineSnapshot(`" foo "`)
 })

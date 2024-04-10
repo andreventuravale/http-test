@@ -1,4 +1,6 @@
 #!/usr/bin/env -S node --no-warnings
+import { existsSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import fetch from 'node-fetch'
 import parse from './parser.js'
 
@@ -13,7 +15,7 @@ export function evaluate(id) {
   }
 }
 
-export function interpolate(text) {
+export function interpolate(text, { env = {} } = {}) {
   const brokenAtStart = text?.split('{{') ?? []
   const variables = []
   const spans = [brokenAtStart.shift()]
@@ -23,6 +25,8 @@ export function interpolate(text) {
     variables.push(id)
     if (id[0] === '$') {
       spans.push(evaluate(id))
+    } else {
+      spans.push(env[id])
     }
     spans.push(start.slice(endIndex + 2))
   }
@@ -33,11 +37,15 @@ export default {
   process: (src, filename) => {
     const requests = parse(src)
 
+    const envPath = join(dirname(filename), 'http-client.env.json')
+
+    const env = existsSync(envPath) ? readFileSync(envPath, 'utf-8') : {}
+
     return {
       code: `
       ${requests
         .map(request => {
-          const url = interpolate(request.url)
+          const url = interpolate(request.url, { env })
 
           return `
               /**
@@ -45,7 +53,7 @@ export default {
                */
               test('${request.method} ${url}', async () => {
                 const outcome = await (${test.toString()})(${JSON.stringify(
-                  { request, url },
+                  { env, request, url },
                   null,
                   2
                 )})
