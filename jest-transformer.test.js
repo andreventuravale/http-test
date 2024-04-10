@@ -1,4 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs'
+import { Headers } from 'node-fetch'
+import * as td from 'testdouble'
 import transformer, { interpolate, test } from './jest-transformer.js'
 
 describe('interpolate', () => {
@@ -130,61 +132,129 @@ describe('process', () => {
 })
 
 describe('test', () => {
-  it('GET', async () => {
-    expect(
-      await test({
-        request: {
-          method: 'GET',
-          url: 'https://jsonplaceholder.typicode.com/todos/1'
-        }
-      })
-    ).toStrictEqual({
-      request: {
-        method: 'GET',
-        url: 'https://jsonplaceholder.typicode.com/todos/1'
-      },
-      response: expect.any(Object)
+  it.only('GET text', async () => {
+    const fetch = td.func('fetch')
+
+    td.when(
+      await fetch('http://foo', td.matchers.contains({ method: 'GET' }))
+    ).thenResolve({
+      headers: new Headers({
+        'content-type': 'text/'
+      }),
+      text: async () => 'foo'
     })
+
+    expect(
+      await test(
+        {
+          request: {
+            method: 'GET',
+            url: 'http://foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
+{
+  "request": {
+    "method": "GET",
+    "url": "http://foo",
+  },
+  "response": {
+    "body": "foo",
+    "headers": [
+      [
+        "content-type",
+        "text/",
+      ],
+    ],
+  },
+}
+`)
   })
 
-  it('HEAD', async () => {
-    expect(
-      await test({
-        request: {
-          method: 'HEAD',
-          url: 'https://jsonplaceholder.typicode.com/todos/1'
-        }
-      })
-    ).toStrictEqual({
-      request: {
-        method: 'HEAD',
-        url: 'https://jsonplaceholder.typicode.com/todos/1'
-      },
-      response: expect.any(Object)
+  it.only('HEAD text', async () => {
+    const fetch = td.func('fetch')
+
+    td.when(
+      await fetch('http://foo', td.matchers.contains({ method: 'HEAD' }))
+    ).thenResolve({
+      headers: new Headers({
+        'content-type': 'text/'
+      }),
+      text: async () => 'foo'
     })
+
+    expect(
+      await test(
+        {
+          request: {
+            method: 'HEAD',
+            url: 'http://foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
+{
+  "request": {
+    "method": "HEAD",
+    "url": "http://foo",
+  },
+  "response": {
+    "body": "foo",
+    "headers": [
+      [
+        "content-type",
+        "text/",
+      ],
+    ],
+  },
+}
+`)
   })
 
-  it('POST', async () => {
-    expect(
-      await test({
-        request: {
-          method: 'POST',
-          url: 'https://jsonplaceholder.typicode.com/todos/1',
-          body: JSON.stringify({
-            title: 'foo',
-            body: 'bar',
-            userId: 1
-          })
-        }
-      })
-    ).toStrictEqual({
-      request: {
-        body: '{"title":"foo","body":"bar","userId":1}',
-        method: 'POST',
-        url: 'https://jsonplaceholder.typicode.com/todos/1'
-      },
-      response: expect.any(Object)
+  it.only('POST', async () => {
+    const fetch = td.func('fetch')
+
+    td.when(
+      await fetch('http://foo', td.matchers.contains({ method: 'POST' }))
+    ).thenResolve({
+      headers: new Headers({
+        'content-type': 'text/'
+      }),
+      text: async () => 'foo'
     })
+
+    expect(
+      await test(
+        {
+          request: {
+            method: 'POST',
+            url: 'http://foo',
+            body: 'foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
+{
+  "request": {
+    "body": "foo",
+    "method": "POST",
+    "url": "http://foo",
+  },
+  "response": {
+    "body": "foo",
+    "headers": [
+      [
+        "content-type",
+        "text/",
+      ],
+    ],
+  },
+}
+`)
   })
 
   it('POST without body', async () => {

@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { isFinite as _isFinite, isInteger } from 'lodash-es'
-import fetch from 'node-fetch'
+import nodeFetch from 'node-fetch'
 import parse from './parser.js'
 
 function assertInteger(something) {
@@ -82,7 +82,7 @@ export function interpolate(text, { env = {}, variables = {} } = {}) {
   return visit(text, [])
 }
 
-export async function test({ request }) {
+export async function test({ request }, { fetch = nodeFetch } = {}) {
   const fetchResponse = await fetch(request.url, {
     method: request.method,
     headers: request.headers,
@@ -97,6 +97,7 @@ export async function test({ request }) {
     responseBody = await fetchResponse.text()
   } else if (contentType.indexOf('json') > -1) {
     const jsonText = await fetchResponse.text()
+
     responseBody = JSON.parse(jsonText || 'null')
   } else {
     responseBody = Buffer.from(await fetchResponse.arrayBuffer()).toString(
