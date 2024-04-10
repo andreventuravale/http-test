@@ -6,4 +6,6 @@ test('interpolation', () => {
   expect(interpolate()).toMatchInlineSnapshot(`""`)
   expect(interpolate(null)).toMatchInlineSnapshot(`""`)
   expect(interpolate(undefined)).toMatchInlineSnapshot(`""`)
+  process.env.FOO = 'bar'
+  expect(interpolate(' {{$processEnv FOO}} ')).toMatchInlineSnapshot(`" bar "`)
 })
