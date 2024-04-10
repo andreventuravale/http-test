@@ -100,9 +100,7 @@ export async function test({ request }, { fetch = nodeFetch } = {}) {
 
     responseBody = JSON.parse(jsonText || 'null')
   } else {
-    responseBody = Buffer.from(await fetchResponse.arrayBuffer()).toString(
-      'hex'
-    )
+    responseBody = (await fetchResponse.buffer()).toString('hex')
   }
 
   const response = {

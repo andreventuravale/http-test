@@ -132,7 +132,7 @@ describe('process', () => {
 })
 
 describe('test', () => {
-  it('GET text', async () => {
+  it('text', async () => {
     const fetch = td.func('fetch')
 
     td.when(
@@ -173,7 +173,132 @@ describe('test', () => {
 `)
   })
 
-  it('HEAD text', async () => {
+  it('json', async () => {
+    const fetch = td.func('fetch')
+
+    td.when(
+      await fetch('http://foo', td.matchers.contains({ method: 'GET' }))
+    ).thenResolve({
+      headers: new Headers({
+        'content-type': 'something/that-contains-json'
+      }),
+      text: async () => JSON.stringify({ foo: 'bar' })
+    })
+
+    expect(
+      await test(
+        {
+          request: {
+            method: 'GET',
+            url: 'http://foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
+{
+  "request": {
+    "method": "GET",
+    "url": "http://foo",
+  },
+  "response": {
+    "body": {
+      "foo": "bar",
+    },
+    "headers": [
+      [
+        "content-type",
+        "something/that-contains-json",
+      ],
+    ],
+  },
+}
+`)
+  })
+
+  it('json - no content', async () => {
+    const fetch = td.func('fetch')
+
+    td.when(
+      await fetch('http://foo', td.matchers.contains({ method: 'GET' }))
+    ).thenResolve({
+      headers: new Headers({
+        'content-type': 'something/that-contains-json'
+      }),
+      text: async () => ''
+    })
+
+    expect(
+      await test(
+        {
+          request: {
+            method: 'GET',
+            url: 'http://foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
+{
+  "request": {
+    "method": "GET",
+    "url": "http://foo",
+  },
+  "response": {
+    "body": null,
+    "headers": [
+      [
+        "content-type",
+        "something/that-contains-json",
+      ],
+    ],
+  },
+}
+`)
+  })
+
+  it('binary', async () => {
+    const fetch = td.func('fetch')
+
+    td.when(
+      await fetch('http://foo', td.matchers.contains({ method: 'GET' }))
+    ).thenResolve({
+      headers: new Headers({
+        'content-type': 'something/else'
+      }),
+      buffer: async () => Buffer.from('the lazy fox jumped over the brown dog')
+    })
+
+    expect(
+      await test(
+        {
+          request: {
+            method: 'GET',
+            url: 'http://foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
+{
+  "request": {
+    "method": "GET",
+    "url": "http://foo",
+  },
+  "response": {
+    "body": "746865206c617a7920666f78206a756d706564206f766572207468652062726f776e20646f67",
+    "headers": [
+      [
+        "content-type",
+        "something/else",
+      ],
+    ],
+  },
+}
+`)
+  })
+
+  it('HEAD', async () => {
     const fetch = td.func('fetch')
 
     td.when(
