@@ -20,7 +20,7 @@ function parseHeaders(lines) {
   const regex = /^\s*([\w-]+)\s*:\s+(.*)\s*$/
   while (lines.length && regex.test(lines[0])) {
     const [, key, value] = regex.exec(lines.shift())
-    headers.push([key, value])
+    headers.push([key.trim(), value.trim()])
   }
   return headers.length ? headers : undefined
 }
