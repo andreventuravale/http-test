@@ -10,7 +10,12 @@ test('results', () => {
   expect(results).toMatchInlineSnapshot(`
 [
   {
-    "body": "content-type: application/json",
+    "headers": [
+      [
+        "content-type",
+        "application/json    ",
+      ],
+    ],
     "method": "GET",
     "url": "https://jsonplaceholder.typicode.com/todos/1",
   },

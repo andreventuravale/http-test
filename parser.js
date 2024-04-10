@@ -51,9 +51,9 @@ function requests(lines) {
 
     const [, method, url] = methodAndUrlRegex.exec(lines.shift())
 
-    const body = parseBody(lines)
-
     const headers = parseHeaders(lines)
+
+    const body = parseBody(lines)
 
     requests.push({
       method,
