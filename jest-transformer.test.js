@@ -132,7 +132,7 @@ describe('process', () => {
 })
 
 describe('test', () => {
-  it.only('GET text', async () => {
+  it('GET text', async () => {
     const fetch = td.func('fetch')
 
     td.when(
@@ -173,7 +173,7 @@ describe('test', () => {
 `)
   })
 
-  it.only('HEAD text', async () => {
+  it('HEAD text', async () => {
     const fetch = td.func('fetch')
 
     td.when(
@@ -214,7 +214,7 @@ describe('test', () => {
 `)
   })
 
-  it.only('POST', async () => {
+  it('POST', async () => {
     const fetch = td.func('fetch')
 
     td.when(
@@ -258,19 +258,43 @@ describe('test', () => {
   })
 
   it('POST without body', async () => {
-    expect(
-      await test({
-        request: {
-          method: 'POST',
-          url: 'https://jsonplaceholder.typicode.com/todos/1'
-        }
-      })
-    ).toStrictEqual({
-      request: {
-        method: 'POST',
-        url: 'https://jsonplaceholder.typicode.com/todos/1'
-      },
-      response: expect.any(Object)
+    const fetch = td.func('fetch')
+
+    td.when(
+      await fetch('http://foo', td.matchers.contains({ method: 'POST' }))
+    ).thenResolve({
+      headers: new Headers({
+        'content-type': 'text/'
+      }),
+      text: async () => 'foo'
     })
+
+    expect(
+      await test(
+        {
+          request: {
+            method: 'POST',
+            url: 'http://foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
+{
+  "request": {
+    "method": "POST",
+    "url": "http://foo",
+  },
+  "response": {
+    "body": "foo",
+    "headers": [
+      [
+        "content-type",
+        "text/",
+      ],
+    ],
+  },
+}
+`)
   })
 })
