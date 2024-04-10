@@ -13,13 +13,19 @@ function skip(source) {
 
 function parseHeaders(source) {
   const headers = []
+
   const regex = /^\s*([\w-]+)\s*:(.*)$/
+
   skip(source)
+
   while (!source.eof && regex.test(source.currentLine)) {
     const [, key, value] = regex.exec(source.consumeLine())
+
     headers.push([key.trim(), value.trim()])
+
     skip(source)
   }
+
   return headers.length ? headers : undefined
 }
 
@@ -83,15 +89,23 @@ function parseEndpoint(source) {
 
 function parseVariables(source) {
   let flag = false
+
   const variables = {}
+
   const regex = /^\s*@([a-z_][\w]+)=(.*)$/i
+
   skip(source)
+
   while (!source.eof && regex.test(source.currentLine)) {
     const [, key, value] = regex.exec(source.consumeLine())
+
     variables[key.trim()] = value.trim()
+
     flag = true
+
     skip(source)
   }
+
   return flag ? variables : undefined
 }
 
