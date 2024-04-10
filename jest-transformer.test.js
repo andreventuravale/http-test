@@ -65,15 +65,15 @@ describe('process', () => {
 })
 
 describe('test', () => {
-  it('test', async () => {
-    expect(await test({
-  request: {
-    method: 'GET',
-    url: 'https://jsonplaceholder.typicode.com/todos/1'
-  }
-
-
-})).toMatchInlineSnapshot(`
+  it('GET', async () => {
+    expect(
+      await test({
+        request: {
+          method: 'GET',
+          url: 'https://jsonplaceholder.typicode.com/todos/1'
+        }
+      })
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "method": "GET",
@@ -93,7 +93,7 @@ describe('test', () => {
       ],
       [
         "age",
-        "19360",
+        "19466",
       ],
       [
         "alt-svc",
@@ -109,7 +109,7 @@ describe('test', () => {
       ],
       [
         "cf-ray",
-        "872434648806b3b6-MIA",
+        "872436f55c794c24-MIA",
       ],
       [
         "connection",
@@ -125,7 +125,7 @@ describe('test', () => {
       ],
       [
         "date",
-        "Wed, 10 Apr 2024 16:44:58 GMT",
+        "Wed, 10 Apr 2024 16:46:44 GMT",
       ],
       [
         "etag",

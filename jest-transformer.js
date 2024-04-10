@@ -60,7 +60,9 @@ export async function test({ request }) {
   } else if (contentType.indexOf('json') > -1) {
     responseBody = await fetchResponse.json()
   } else {
-    responseBody = Buffer.from(await fetchResponse.arrayBuffer()).toString('hex')
+    responseBody = Buffer.from(await fetchResponse.arrayBuffer()).toString(
+      'hex'
+    )
   }
 
   const response = {
@@ -87,25 +89,25 @@ export default {
     return {
       code: `
       ${requests
-          .map(request => {
-            const url = interpolate(request.url, { env })
+        .map(request => {
+          const url = interpolate(request.url, { env })
 
-            return `
+          return `
               /**
                * ${filename}
                */
               test('${request.method} ${url}', async () => {
                 const outcome = await (${test.toString()})(${JSON.stringify(
-              { env, request: { ...request, url } },
-              null,
-              2
-            )})
+                  { env, request: { ...request, url } },
+                  null,
+                  2
+                )})
 
                 expect(outcome).toMatchSnapshot()
               })
             `
-          })
-          .join('')}
+        })
+        .join('')}
         `
     }
   }

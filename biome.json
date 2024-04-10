@@ -10,7 +10,7 @@
       "lineWidth": 80,
       "trailingComma": "none"
     },
-    "globals": ["describe", "expect", "test"]
+    "globals": ["describe", "expect", "it", "test"]
   },
   "linter": {
     "enabled": true,
