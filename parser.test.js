@@ -69,7 +69,7 @@ test('variables', () => {
 `)
 })
 
-test.only('white space and comments are ignored', () => {
+test('white space and comments are ignored', () => {
   const requests = parse(`
 
     \r \n \t
