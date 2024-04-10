@@ -31,8 +31,6 @@ export function interpolate(text) {
 }
 
 export default {
-  getCacheKey: () => randomUUID(),
-
   process: (src, filename) => {
     const requests = parse(src)
 

@@ -1,5 +1,5 @@
 export default source => {
-  const lines = source.split(/[\r\n]+/g)
+  const lines = source?.split?.(/[\r\n]+/g) ?? []
   return requests(lines)
 }
 
@@ -43,10 +43,14 @@ function requests(lines) {
 
     skipComments(lines)
 
+    if (lines.length === 0) {
+      break
+    }
+
     const methodAndUrlRegex = /^\s*([A-Z]+)\s+(.*)$/
 
     if (!methodAndUrlRegex.test(lines[0])) {
-      throw new Error(`method + url expected but found: ${lines[0]}`)
+      break
     }
 
     const [, method, url] = methodAndUrlRegex.exec(lines.shift())
