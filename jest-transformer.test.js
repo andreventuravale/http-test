@@ -25,6 +25,28 @@ describe('interpolate', () => {
     )
   })
 
+  it('$randomInt', () => {
+    testCase(-10, -1)
+    testCase(0, 0)
+    testCase(0, 1)
+    testCase(10, 20)
+
+    function testCase(min, max) {
+      const number = Number(interpolate(`{{$randomInt ${min} ${max}}}`))
+      expect(number).toBeGreaterThanOrEqual(min)
+      expect(number).toBeLessThanOrEqual(max)
+    }
+  })
+
+  it('$randomInt - invalid values', () => {
+    expect(() => interpolate('{{$randomInt a}}')).toThrow(
+      '"a" is not a integer number'
+    )
+    expect(() => interpolate('{{$randomInt 1 b}}')).toThrow(
+      '"b" is not a integer number'
+    )
+  })
+
   it('variables', () => {
     expect(
       interpolate(' {{foo}} {{bar}} ', {

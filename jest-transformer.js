@@ -1,8 +1,20 @@
 #!/usr/bin/env -S node --no-warnings
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
+import { isFinite as _isFinite, isInteger } from 'lodash-es'
 import fetch from 'node-fetch'
 import parse from './parser.js'
+
+function assertInteger(value) {
+  let v = value
+  if (v.startsWith('-')) {
+    v = v.slice(1)
+  }
+  const coerced = Number(v)
+  if (!isInteger(coerced) || !_isFinite(coerced)) {
+    throw new Error(`"${v}" is not a integer number`)
+  }
+}
 
 export function evaluate(id) {
   const [fn, ...args] = id.slice(1).split(/\s+/)
@@ -10,6 +22,17 @@ export function evaluate(id) {
   switch (fn) {
     case 'processEnv': {
       return process.env[args[0]]
+    }
+
+    case 'randomInt': {
+      let [min = Number.MIN_SAFE_INTEGER, max = Number.MAX_SAFE_INTEGER] = args
+      assertInteger(min)
+      assertInteger(max)
+      min = Number(min)
+      max = Number(max)
+      const delta = Number(max) - Number(min)
+      const rnd = Math.trunc(delta * Math.random())
+      return min + rnd
     }
 
     default: {
