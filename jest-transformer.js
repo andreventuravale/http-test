@@ -4,33 +4,6 @@ import { dirname, join } from 'node:path'
 import fetch from 'node-fetch'
 import parse from './parser.js'
 
-async function test({ request, url }) {
-  const response = await fetch(url, {
-    method: request.method,
-    headers: request.headers,
-    ...(['GET', 'HEAD'].includes(request.method) ? {} : { body: request.body })
-  })
-
-  let body
-
-  const contentType = response.headers.get('content-type')
-
-  if (contentType.startsWith('text/')) {
-    body = await response.text()
-  } else if (contentType.indexOf('json') > -1) {
-    body = await response.json()
-  } else {
-    body = Buffer.from(await response.arrayBuffer()).toString('hex')
-  }
-
-  return {
-    method: request.method,
-    url,
-    headers: Array.from(response.headers),
-    body
-  }
-}
-
 export function evaluate(id) {
   const [fn, ...args] = id.slice(1).split(/\s+/)
 
@@ -71,6 +44,33 @@ export function interpolate(text, { env = {} } = {}) {
   return segments.join('')
 }
 
+export async function test({ request }) {
+  const fetchResponse = await fetch(request.url, {
+    method: request.method,
+    headers: request.headers,
+    ...(['GET', 'HEAD'].includes(request.method) ? {} : { body: request.body })
+  })
+
+  let responseBody
+
+  const contentType = fetchResponse.headers.get('content-type')
+
+  if (contentType.startsWith('text/')) {
+    responseBody = await fetchResponse.text()
+  } else if (contentType.indexOf('json') > -1) {
+    responseBody = await fetchResponse.json()
+  } else {
+    responseBody = Buffer.from(await fetchResponse.arrayBuffer()).toString('hex')
+  }
+
+  const response = {
+    headers: Array.from(fetchResponse.headers),
+    body: responseBody
+  }
+
+  return { request, response }
+}
+
 export default {
   process: (src, filename) => {
     const requests = parse(src)
@@ -87,25 +87,25 @@ export default {
     return {
       code: `
       ${requests
-        .map(request => {
-          const url = interpolate(request.url, { env })
+          .map(request => {
+            const url = interpolate(request.url, { env })
 
-          return `
+            return `
               /**
                * ${filename}
                */
               test('${request.method} ${url}', async () => {
                 const outcome = await (${test.toString()})(${JSON.stringify(
-                  { env, request, url },
-                  null,
-                  2
-                )})
+              { env, request: { ...request, url } },
+              null,
+              2
+            )})
 
                 expect(outcome).toMatchSnapshot()
               })
             `
-        })
-        .join('')}
+          })
+          .join('')}
         `
     }
   }
