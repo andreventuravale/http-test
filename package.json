@@ -2,22 +2,16 @@
   "name": "http-test",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
-  "bin": {
-    "http-test": "index.js"
-  },
+  "main": "./jest-transformer.js",
   "scripts": {
     "format": "clear && biome check --quote-style=single --semicolons=as-needed --arrow-parentheses=as-needed --json-formatter-indent-style=space --apply-unsafe .",
     "lint": "clear && biome lint .",
-    "test": "http-test"
+    "test": "jest"
   },
   "author": "Andre Vale <andreventuravale@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "biome": "^0.3.3"
-  },
-  "dependencies": {
-    "globby": "^14.0.1",
+    "biome": "^0.3.3",
     "jest": "^29.7.0",
     "node-fetch": "^3.3.2"
   }

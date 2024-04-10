@@ -49,7 +49,7 @@ async function test({ request, url }) {
     body = Buffer.from(await response.arrayBuffer()).toString('hex')
   }
 
-  return {
+  return    {
     method: request.method,
     url,
     headers: Array.from(response.headers),
@@ -58,7 +58,11 @@ async function test({ request, url }) {
 }
 
 export default {
-  getCacheKey: () => randomUUID(),
+  getCacheKey:         () =>                         
+  
+  
+  
+  randomUUID(),
 
   process: (src, filename) => {
     const requests = parse(src)
@@ -69,18 +73,18 @@ export default {
         const url = interpolate(request.url)
 
         return `
-          /**
-           * ${filename}
-           */
-          test('${request.method} ${url}', async () => {
-            const outcome = await (${test.toString()})(${JSON.stringify({ request, url }, null, 2)})
+              /**
+               * ${filename}
+               */
+              test('${request.method} ${url}', async () => {
+                const outcome = await (${test.toString()})(${JSON.stringify({ request, url }, null, 2)})
 
-            expect(outcome).toMatchSnapshot()
-          })
+                expect(outcome).toMatchSnapshot()
+              })
+            `
+          }).join('')
+            }
         `
-      }).join('')
-        }
-    `
     }
   }
 }
