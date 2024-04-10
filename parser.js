@@ -1,3 +1,5 @@
+import { groupBy, isArray } from 'lodash-es'
+
 export default source => parseRequests(source)
 
 function skip(source) {
@@ -31,7 +33,18 @@ function skip(source) {
     meta = meta.concat(variables)
   }
 
-  return meta.length ? meta : undefined
+  return meta.length
+    ? Object.fromEntries(
+        Object.entries(groupBy(meta, ([key]) => key)).map(([k, v]) => [
+          k,
+          isArray(v)
+            ? v.length === 1
+              ? v[0][1]
+              : v.map(([, value]) => value)
+            : v.map(([, value]) => value)
+        ])
+      )
+    : undefined
 }
 
 function parseHeaders(source) {
@@ -154,7 +167,7 @@ function parseRequests(sourceText) {
       ...(headers ? { headers } : {}),
       ...(body ? { body } : {}),
       ...(variables ? { variables: Object.fromEntries(variables) } : {}),
-      ...(meta ? { meta: Object.fromEntries(meta) } : {})
+      ...(meta ? { meta } : {})
     })
   } while (!source.eof)
 

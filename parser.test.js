@@ -296,7 +296,7 @@ test('body is trimmed only at the ends', () => {
 `)
 })
 
-test('named requests', () => {
+test.only('named requests', () => {
   const requests = parse(`
     // @name foo
     GET https://jsonplaceholder.typicode.com/todos/1
@@ -307,6 +307,29 @@ test('named requests', () => {
   {
     "meta": {
       "name": "foo",
+    },
+    "method": "GET",
+    "url": "https://jsonplaceholder.typicode.com/todos/1",
+  },
+]
+`)
+})
+
+test.only('request meta', () => {
+  const requests = parse(`
+    // @foo bar
+    // @foo baz
+    GET https://jsonplaceholder.typicode.com/todos/1
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "meta": {
+      "foo": [
+        "bar",
+        "baz",
+      ],
     },
     "method": "GET",
     "url": "https://jsonplaceholder.typicode.com/todos/1",
