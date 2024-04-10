@@ -2,7 +2,7 @@ import parser from './parser.js'
 
 test('invalid inputs', () => {
   expect(() => parser('foo bar')).toThrow(
-    'method + url expected but found: foo bar'
+    '(line: 1) method + url expected but found: foo bar'
   )
 })
 
@@ -22,7 +22,7 @@ test('invalid inputs ignoring comments and whitespace', () => {
 
     foo bar
   `)
-  ).toThrow('method + url expected but found: foo bar')
+  ).toThrow('(line: 15) method + url expected but found: foo bar')
 })
 
 test('empty inputs', () => {

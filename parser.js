@@ -1,66 +1,90 @@
-export default source => {
-  const lines = source?.split?.(/[\r\n]+/g) ?? []
-  return requests(lines)
-}
+export default source => requests(source)
 
-function skip(lines) {
+function skip(source) {
   while (
-    lines.length &&
-    (/^\s*$/.test(lines[0]) || /^\s*#(?!#).*$/.test(lines[0]))
+    !source.eof &&
+    (/^\s*$/.test(source.currentLine) ||
+      /^\s*#(?!#).*$/.test(source.currentLine))
   ) {
-    lines.shift()
+    source.consumeLine()
   }
 }
 
-function parseHeaders(lines) {
+function parseHeaders(source) {
   const headers = []
   const regex = /^\s*([\w-]+)\s*:(.*)$/
-  skip(lines)
-  while (lines.length && regex.test(lines[0])) {
-    const [, key, value] = regex.exec(lines.shift())
+  skip(source)
+  while (!source.eof && regex.test(source.currentLine)) {
+    const [, key, value] = regex.exec(source.consumeLine())
     headers.push([key.trim(), value.trim()])
-    skip(lines)
+    skip(source)
   }
   return headers.length ? headers : undefined
 }
 
-function parseBody(lines) {
+function parseBody(source) {
   const fragment = []
   const separator = /^\s*###\s*$/
-  skip(lines)
-  while (lines.length && !separator.test(lines[0])) {
-    fragment.push(lines.shift())
+  skip(source)
+  while (!source.eof && !separator.test(source.currentLine)) {
+    fragment.push(source.consumeLine())
   }
-  if (lines.length) {
-    lines.shift()
+  if (!source.eof) {
+    source.consumeLine()
   }
   const body = fragment.join('\n').trim()
   return body ? body : undefined
 }
 
-function requests(lines) {
+function makeSource(text) {
+  const lines = text?.split?.(/[\r\n]+/g) ?? []
+
+  let cursor = 1
+
+  return {
+    get currentLine() {
+      return lines[0]?.trim()
+    },
+    get cursor() {
+      return cursor
+    },
+    get eof() {
+      return lines.length === 0
+    },
+
+    consumeLine() {
+      cursor++
+
+      return lines.shift()
+    }
+  }
+}
+
+function requests(sourceText) {
+  const source = makeSource(sourceText)
+
   const requests = []
 
   do {
-    skip(lines)
+    skip(source)
 
-    if (lines.length === 0) {
+    if (source.eof) {
       break
     }
 
-    console.log(lines[0])
-
     const methodAndUrlRegex = /^\s*([A-Z]+)\s+(.*)$/
 
-    if (!methodAndUrlRegex.test(lines[0])) {
-      throw new Error(`method + url expected but found: ${lines[0].trim()}`)
+    if (!methodAndUrlRegex.test(source.currentLine)) {
+      throw new Error(
+        `(line: ${source.cursor}) method + url expected but found: ${source.currentLine}`
+      )
     }
 
-    const [, method, url] = methodAndUrlRegex.exec(lines.shift())
+    const [, method, url] = methodAndUrlRegex.exec(source.consumeLine())
 
-    const headers = parseHeaders(lines)
+    const headers = parseHeaders(source)
 
-    const body = parseBody(lines)
+    const body = parseBody(source)
 
     requests.push({
       method,
@@ -68,7 +92,7 @@ function requests(lines) {
       ...(headers ? { headers } : {}),
       ...(body ? { body } : {})
     })
-  } while (lines.length)
+  } while (!source.eof)
 
   return requests
 }
