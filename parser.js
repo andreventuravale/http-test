@@ -1,14 +1,37 @@
 export default source => parseRequests(source)
 
 function skip(source) {
+  let meta = []
+
   while (
     !source.eof &&
     (/^\s*$/.test(source.currentLine) ||
       /^\s*#(?!#).*$/.test(source.currentLine) ||
       /^\s*\/\/.*$/.test(source.currentLine))
   ) {
-    source.consumeLine()
+    const line = source.consumeLine()
+
+    const isComment1 = /^\s*#(?!#).*$/.test(line)
+
+    const isComment2 = /^\s*\/\/.*$/.test(line)
+
+    if ((isComment1 || isComment2) && line.includes('@')) {
+      fillMeta(line, isComment1 ? '#' : '//')
+    }
   }
+
+  function fillMeta(line, commentLookahead) {
+    const variables = parseVariables(
+      makeSource(
+        line.slice(line.indexOf(commentLookahead) + commentLookahead.length)
+      ),
+      '\\s+'
+    )
+
+    meta = meta.concat(variables)
+  }
+
+  return meta.length ? meta : undefined
 }
 
 function parseHeaders(source) {
@@ -68,7 +91,7 @@ function makeSource(text) {
     consumeLine() {
       cursor++
 
-      return lines.shift()
+      return lines.shift().trim()
     }
   }
 }
@@ -87,26 +110,22 @@ function parseEndpoint(source) {
   return { method, url }
 }
 
-function parseVariables(source) {
-  let flag = false
+function parseVariables(source, separator = '=') {
+  const variables = []
 
-  const variables = {}
-
-  const regex = /^\s*@([a-z_][\w]+)=(.*)$/i
+  const regex = new RegExp(`^\\s*@([a-z_][\\w]+)${separator}(.*)$`, 'i')
 
   skip(source)
 
   while (!source.eof && regex.test(source.currentLine)) {
     const [, key, value] = regex.exec(source.consumeLine())
 
-    variables[key.trim()] = value.trim()
-
-    flag = true
+    variables.push([key.trim(), value.trim()])
 
     skip(source)
   }
 
-  return flag ? variables : undefined
+  return variables.length ? variables : undefined
 }
 
 function parseRequests(sourceText) {
@@ -115,7 +134,7 @@ function parseRequests(sourceText) {
   const requests = []
 
   do {
-    skip(source)
+    const meta = skip(source)
 
     if (source.eof) {
       break
@@ -134,7 +153,8 @@ function parseRequests(sourceText) {
       url,
       ...(headers ? { headers } : {}),
       ...(body ? { body } : {}),
-      ...(variables ? { variables } : {})
+      ...(variables ? { variables: Object.fromEntries(variables) } : {}),
+      ...(meta ? { meta: Object.fromEntries(meta) } : {})
     })
   } while (!source.eof)
 
