@@ -33,13 +33,13 @@ describe('interpolate', () => {
 
 describe('process', () => {
   it('process without variables from an environment variables file', () => {
-    expect(transformer.process('GET https://foo/bar')).toEqual({
+    expect(transformer.process('GET https://foo/bar')).toStrictEqual({
       code: expect.stringContaining(` test('GET https://foo/bar',`)
     })
   })
 
   it('process with variables from an environment variables file', () => {
-    expect(existsSync('./tests/http-client.env.json')).toEqual(true)
+    expect(existsSync('./tests/http-client.env.json')).toStrictEqual(true)
 
     expect(
       JSON.parse(readFileSync('./tests/http-client.env.json', 'utf-8'))
@@ -58,7 +58,7 @@ describe('process', () => {
 
     expect(
       transformer.process('GET {{HostAddress}}', './tests/sample.http')
-    ).toEqual({
+    ).toStrictEqual({
       code: expect.stringContaining('https://localhost:44320')
     })
   })
@@ -73,7 +73,7 @@ describe('test', () => {
           url: 'https://jsonplaceholder.typicode.com/todos/1'
         }
       })
-    ).toEqual({
+    ).toStrictEqual({
       request: {
         method: 'GET',
         url: 'https://jsonplaceholder.typicode.com/todos/1'
@@ -90,9 +90,49 @@ describe('test', () => {
           url: 'https://jsonplaceholder.typicode.com/todos/1'
         }
       })
-    ).toEqual({
+    ).toStrictEqual({
       request: {
         method: 'HEAD',
+        url: 'https://jsonplaceholder.typicode.com/todos/1'
+      },
+      response: expect.any(Object)
+    })
+  })
+
+  it('POST', async () => {
+    expect(
+      await test({
+        request: {
+          method: 'POST',
+          url: 'https://jsonplaceholder.typicode.com/todos/1',
+          body: JSON.stringify({
+            title: 'foo',
+            body: 'bar',
+            userId: 1
+          })
+        }
+      })
+    ).toStrictEqual({
+      request: {
+        body: '{"title":"foo","body":"bar","userId":1}',
+        method: 'POST',
+        url: 'https://jsonplaceholder.typicode.com/todos/1'
+      },
+      response: expect.any(Object)
+    })
+  })
+
+  it('POST without body', async () => {
+    expect(
+      await test({
+        request: {
+          method: 'POST',
+          url: 'https://jsonplaceholder.typicode.com/todos/1'
+        }
+      })
+    ).toStrictEqual({
+      request: {
+        method: 'POST',
         url: 'https://jsonplaceholder.typicode.com/todos/1'
       },
       response: expect.any(Object)
