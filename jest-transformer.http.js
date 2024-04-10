@@ -58,11 +58,7 @@ async function test({ request, url }) {
 }
 
 export default {
-  getCacheKey(...args) {
-    // console.log(args)
-
-    return randomUUID()
-  },
+  getCacheKey: () => randomUUID(),
 
   process: (src, filename) => {
     const requests = parse(src)
