@@ -1,5 +1,4 @@
 #!/usr/bin/env -S node --no-warnings
-import { randomUUID } from 'node:crypto'
 import fetch from 'node-fetch'
 import parse from './parser.js'
 
