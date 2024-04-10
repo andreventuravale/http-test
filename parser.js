@@ -1,46 +1,47 @@
-export default inputText => {
-  const lines = inputText.split(/[\r\n]+/g)
+export default source => {
+  const lines = source.split(/[\r\n]+/g)
   return requests(lines)
 }
 
-function ws(lines) {
+function skipWs(lines) {
   while (lines.length && /^\s*$/.test(lines[0])) {
     lines.shift()
   }
 }
 
-function comments(lines) {
+function skipComments(lines) {
   while (lines.length && /^\s*#.*$/.test(lines[0])) {
     lines.shift()
   }
 }
 
-function headers(lines) {
-  const list = []
+function parseHeaders(lines) {
+  const headers = []
   const regex = /^\s*([\w-]+)\s*:\s+(.*)\s*$/
   while (lines.length && regex.test(lines[0])) {
     const [, key, value] = regex.exec(lines.shift())
-    list.push([key, value])
+    headers.push([key, value])
   }
-  return list
+  return headers.length ? headers : undefined
 }
 
-function body(lines) {
+function parseBody(lines) {
   const fragment = []
   const separator = /^\s*###\s*$/
   while (lines.length && !separator.test(lines[0])) {
     fragment.push(lines.shift())
   }
-  return fragment.join('\n').trim()
+  const body = fragment.join('\n').trim()
+  return body ? body : undefined
 }
 
 function requests(lines) {
   const requests = []
 
   do {
-    ws(lines)
+    skipWs(lines)
 
-    comments(lines)
+    skipComments(lines)
 
     const methodAndUrlRegex = /^\s*([A-Z]+)\s+(.*)$/
 
@@ -50,7 +51,16 @@ function requests(lines) {
 
     const [, method, url] = methodAndUrlRegex.exec(lines.shift())
 
-    requests.push({ method, url, headers: headers(lines), body: body(lines) })
+    const body = parseBody(lines)
+
+    const headers = parseHeaders(lines)
+
+    requests.push({
+      method,
+      url,
+      ...(headers ? { headers } : {}),
+      ...(body ? { body } : {})
+    })
   } while (lines.length)
 
   return requests
