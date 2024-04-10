@@ -99,7 +99,7 @@ describe('process', () => {
 
   it('process without variables from an environment variables file', () => {
     expect(transformer.process('GET https://foo/bar')).toStrictEqual({
-      code: expect.stringContaining(` test('GET https://foo/bar',`)
+      code: expect.stringContaining(` test(\"GET https://foo/bar\",`)
     })
   })
 
