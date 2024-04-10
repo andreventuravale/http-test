@@ -3,24 +3,23 @@ export default source => {
   return requests(lines)
 }
 
-function skipWs(lines) {
-  while (lines.length && /^\s*$/.test(lines[0])) {
-    lines.shift()
-  }
-}
-
-function skipComments(lines) {
-  while (lines.length && /^\s*#.*$/.test(lines[0])) {
+function skip(lines) {
+  while (
+    lines.length &&
+    (/^\s*$/.test(lines[0]) || /^\s*#.*$/.test(lines[0]))
+  ) {
     lines.shift()
   }
 }
 
 function parseHeaders(lines) {
   const headers = []
-  const regex = /^\s*([\w-]+)\s*:\s+(.*)\s*$/
+  const regex = /^\s*([\w-]+)\s*:(.*)$/
+  skip(lines)
   while (lines.length && regex.test(lines[0])) {
     const [, key, value] = regex.exec(lines.shift())
     headers.push([key.trim(), value.trim()])
+    skip(lines)
   }
   return headers.length ? headers : undefined
 }
@@ -28,6 +27,7 @@ function parseHeaders(lines) {
 function parseBody(lines) {
   const fragment = []
   const separator = /^\s*###\s*$/
+  skip(lines)
   while (lines.length && !separator.test(lines[0])) {
     fragment.push(lines.shift())
   }
@@ -39,9 +39,7 @@ function requests(lines) {
   const requests = []
 
   do {
-    skipWs(lines)
-
-    skipComments(lines)
+    skip(lines)
 
     if (lines.length === 0) {
       break

@@ -70,6 +70,35 @@ test('with many headers', () => {
 `)
 })
 
+test('headers are trimmed at both ends ( keys and values )', () => {
+  const results = parser(`
+    GET https://jsonplaceholder.typicode.com/todos/1
+
+    \t \f \v content-type \t \f \v : \t \f \v application/json \t \f \v
+
+    \t \f \v x-foo \t \f \v : \t \f \v bar \t \f \v
+  `)
+
+  expect(results).toMatchInlineSnapshot(`
+[
+  {
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+      [
+        "x-foo",
+        "bar",
+      ],
+    ],
+    "method": "GET",
+    "url": "https://jsonplaceholder.typicode.com/todos/1",
+  },
+]
+`)
+})
+
 test('with duplicated headers', () => {
   const results = parser(`
     GET https://jsonplaceholder.typicode.com/todos/1
@@ -117,12 +146,9 @@ test('many requests', () => {
   expect(results).toMatchInlineSnapshot(`
 [
   {
+    "body": "POST https://jsonplaceholder.typicode.com/todos/1
+    {}",
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1",
-  },
-  {
-    "body": "{}",
-    "method": "POST",
     "url": "https://jsonplaceholder.typicode.com/todos/1",
   },
   {
