@@ -74,6 +74,20 @@ function parseEndpoint(source) {
   return { method, url }
 }
 
+function parseVariables(source) {
+  let flag = false
+  const variables = {}
+  const regex = /^\s*@([a-z_][\w]+)=(.*)$/i
+  skip(source)
+  while (!source.eof && regex.test(source.currentLine)) {
+    const [, key, value] = regex.exec(source.consumeLine())
+    variables[key.trim()] = value.trim()
+    flag = true
+    skip(source)
+  }
+  return flag ? variables : undefined
+}
+
 function parseRequests(sourceText) {
   const source = makeSource(sourceText)
 
@@ -86,6 +100,8 @@ function parseRequests(sourceText) {
       break
     }
 
+    const variables = parseVariables(source)
+
     const { method, url } = parseEndpoint(source)
 
     const headers = parseHeaders(source)
@@ -96,7 +112,8 @@ function parseRequests(sourceText) {
       method,
       url,
       ...(headers ? { headers } : {}),
-      ...(body ? { body } : {})
+      ...(body ? { body } : {}),
+      ...(variables ? { variables } : {})
     })
   } while (!source.eof)
 

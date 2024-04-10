@@ -18,30 +18,40 @@ export function evaluate(id) {
   }
 }
 
-export function interpolate(text, { env = {} } = {}) {
-  const brokenAtStart = text?.split('{{') ?? []
+export function interpolate(text, { env = {}, variables = {} } = {}) {
+  const context = { env, variables }
 
-  const variables = []
+  function visit(text, path) {
+    const brokenAtStart = text?.split('{{') ?? []
 
-  const segments = [brokenAtStart.shift()]
+    const segments = [brokenAtStart.shift()]
 
-  for (const start of brokenAtStart) {
-    const endIndex = start.indexOf('}}')
+    for (const start of brokenAtStart) {
+      const endIndex = start.indexOf('}}')
 
-    const id = start.slice(0, endIndex)
+      const id = start.slice(0, endIndex)
 
-    variables.push(id)
+      if (id[0] === '$') {
+        segments.push(evaluate(id, context))
+      } else {
+        if (path.includes(id)) {
+          throw new Error(
+            `variable cycle found: ${path.concat([id]).join(' -> ')}`
+          )
+        }
 
-    if (id[0] === '$') {
-      segments.push(evaluate(id))
-    } else {
-      segments.push(env[process.env.NODE_ENV]?.[id])
+        const value = variables[id] ?? env[id]
+
+        segments.push(visit(value, [...path, id]))
+      }
+
+      segments.push(start.slice(endIndex + 2))
     }
 
-    segments.push(start.slice(endIndex + 2))
+    return segments.join('')
   }
 
-  return segments.join('')
+  return visit(text, [])
 }
 
 export async function test({ request }) {
@@ -83,15 +93,19 @@ export default {
       'http-client.env.json'
     )
 
-    const env = existsSync(envPath)
+    const envs = existsSync(envPath)
       ? JSON.parse(readFileSync(envPath, 'utf-8'))
       : {}
+
+    const env = envs[process.env.NODE_ENV]
 
     return {
       code: `
       ${requests
         .map(request => {
-          const url = interpolate(request.url, { env })
+          const variables = request.variables
+
+          const url = interpolate(request.url, { env, variables })
 
           return `
               /**

@@ -1,14 +1,14 @@
-import parser from './parser.js'
+import parse from './parser.js'
 
 test('invalid inputs', () => {
-  expect(() => parser('foo bar')).toThrow(
+  expect(() => parse('foo bar')).toThrow(
     '(line: 1) method + url expected but found: foo bar'
   )
 })
 
 test('invalid inputs ignoring comments and whitespace', () => {
   expect(() =>
-    parser(`
+    parse(`
 
     \r \n \t \f \v
 
@@ -26,17 +26,17 @@ test('invalid inputs ignoring comments and whitespace', () => {
 })
 
 test('empty inputs', () => {
-  expect(parser()).toMatchInlineSnapshot('[]')
-  expect(parser(null)).toMatchInlineSnapshot('[]')
-  expect(parser(' \r \n \t \f \v ')).toMatchInlineSnapshot('[]')
+  expect(parse()).toMatchInlineSnapshot('[]')
+  expect(parse(null)).toMatchInlineSnapshot('[]')
+  expect(parse(' \r \n \t \f \v ')).toMatchInlineSnapshot('[]')
 })
 
 test('basics', () => {
-  const results = parser(`
+  const requests = parse(`
     GET https://jsonplaceholder.typicode.com/todos/1
   `)
 
-  expect(results).toMatchInlineSnapshot(`
+  expect(requests).toMatchInlineSnapshot(`
 [
   {
     "method": "GET",
@@ -46,8 +46,31 @@ test('basics', () => {
 `)
 })
 
+test('variables', () => {
+  const requests = parse(`
+    @hostname=localhost
+    @port=3000
+    @host={{hostname}}:{{port}}
+    GET https://{{host}}/todos/1
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "method": "GET",
+    "url": "https://{{host}}/todos/1",
+    "variables": {
+      "host": "{{hostname}}:{{port}}",
+      "hostname": "localhost",
+      "port": "3000",
+    },
+  },
+]
+`)
+})
+
 test('white space and comments are ignored', () => {
-  const results = parser(`
+  const requests = parse(`
 
     \r \n \t \f \v
 
@@ -73,7 +96,7 @@ test('white space and comments are ignored', () => {
 
   `)
 
-  expect(results).toMatchInlineSnapshot(`
+  expect(requests).toMatchInlineSnapshot(`
 [
   {
     "body": "POST https://jsonplaceholder.typicode.com/todos/1
@@ -91,12 +114,12 @@ test('white space and comments are ignored', () => {
 })
 
 test('with a single header', () => {
-  const results = parser(`
+  const requests = parse(`
     GET https://jsonplaceholder.typicode.com/todos/1
     content-type: application/json
   `)
 
-  expect(results).toMatchInlineSnapshot(`
+  expect(requests).toMatchInlineSnapshot(`
 [
   {
     "headers": [
@@ -113,13 +136,13 @@ test('with a single header', () => {
 })
 
 test('with many headers', () => {
-  const results = parser(`
+  const requests = parse(`
     GET https://jsonplaceholder.typicode.com/todos/1
     content-type: application/json
     x-foo: bar
   `)
 
-  expect(results).toMatchInlineSnapshot(`
+  expect(requests).toMatchInlineSnapshot(`
 [
   {
     "headers": [
@@ -140,7 +163,7 @@ test('with many headers', () => {
 })
 
 test('headers are trimmed at both ends ( keys and values )', () => {
-  const results = parser(`
+  const requests = parse(`
     GET https://jsonplaceholder.typicode.com/todos/1
 
     \t \f \v content-type \t \f \v : \t \f \v application/json \t \f \v
@@ -148,7 +171,7 @@ test('headers are trimmed at both ends ( keys and values )', () => {
     \t \f \v x-foo \t \f \v : \t \f \v bar \t \f \v
   `)
 
-  expect(results).toMatchInlineSnapshot(`
+  expect(requests).toMatchInlineSnapshot(`
 [
   {
     "headers": [
@@ -169,14 +192,14 @@ test('headers are trimmed at both ends ( keys and values )', () => {
 })
 
 test('with duplicated headers', () => {
-  const results = parser(`
+  const requests = parse(`
     GET https://jsonplaceholder.typicode.com/todos/1
     content-type: application/json
     x-foo: bar
     x-foo: baz
   `)
 
-  expect(results).toMatchInlineSnapshot(`
+  expect(requests).toMatchInlineSnapshot(`
 [
   {
     "headers": [
@@ -201,7 +224,7 @@ test('with duplicated headers', () => {
 })
 
 test('many requests', () => {
-  const results = parser(`
+  const requests = parse(`
     GET https://jsonplaceholder.typicode.com/todos/1
     ###
     POST https://jsonplaceholder.typicode.com/todos/1
@@ -212,7 +235,7 @@ test('many requests', () => {
     {}
   `)
 
-  expect(results).toMatchInlineSnapshot(`
+  expect(requests).toMatchInlineSnapshot(`
 [
   {
     "method": "GET",
@@ -239,7 +262,7 @@ test('many requests', () => {
 })
 
 test('body is trimmed only at the ends', () => {
-  const results = parser(`
+  const requests = parse(`
     GET https://jsonplaceholder.typicode.com/todos/1
     x-foo: bar
 
@@ -251,7 +274,7 @@ test('body is trimmed only at the ends', () => {
 
   `)
 
-  expect(results).toMatchInlineSnapshot(`
+  expect(requests).toMatchInlineSnapshot(`
 [
   {
     "body": "foo     bar",

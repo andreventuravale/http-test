@@ -11,10 +11,9 @@ describe('interpolate', () => {
   })
 
   it('environment variables', () => {
-    process.env.FOO = 'bar'
     expect(
       interpolate(' {{HostAddress}} ', {
-        env: { test: { HostAddress: 'foo' } }
+        env: { HostAddress: 'foo' }
       })
     ).toMatchInlineSnapshot(`" foo "`)
   })
@@ -24,6 +23,39 @@ describe('interpolate', () => {
     expect(interpolate(' {{$processEnv FOO}} ')).toMatchInlineSnapshot(
       `" bar "`
     )
+  })
+
+  it('variables', () => {
+    expect(
+      interpolate(' {{foo}} {{bar}} ', {
+        variables: {
+          bar: 'baz',
+          foo: '{{bar}}'
+        }
+      })
+    ).toMatchInlineSnapshot(`" baz baz "`)
+  })
+
+  it.only('variables - no direct cycles', () => {
+    expect(() =>
+      interpolate(' {{self}} ', {
+        variables: {
+          self: 'self = {{self}}'
+        }
+      })
+    ).toThrow('variable cycle found: self -> self')
+  })
+
+  it.only('variables - no distant cycles', () => {
+    expect(() =>
+      interpolate(' {{foo}} ', {
+        variables: {
+          foo: '{{bar}}',
+          bar: '{{baz}}',
+          baz: '{{foo}}'
+        }
+      })
+    ).toThrow('variable cycle found: foo -> bar -> baz -> foo')
   })
 
   it('unknown function', () => {
