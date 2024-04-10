@@ -4,7 +4,8 @@ function skip(source) {
   while (
     !source.eof &&
     (/^\s*$/.test(source.currentLine) ||
-      /^\s*#(?!#).*$/.test(source.currentLine))
+      /^\s*#(?!#).*$/.test(source.currentLine) ||
+      /^\s*(?:\/\/).*$/.test(source.currentLine))
   ) {
     source.consumeLine()
   }

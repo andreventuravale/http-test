@@ -82,7 +82,7 @@ test('white space and comments are ignored', () => {
 
     \r \n \t \f \v
 
-    \r \n \t \f \v #  bar \r \n \t \f \v
+    \r \n \t \f \v //  bar \r \n \t \f \v
 
     \r \n \t \f \v
 
