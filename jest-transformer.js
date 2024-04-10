@@ -1,6 +1,6 @@
 #!/usr/bin/env -S node --no-warnings
 import { existsSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
 import fetch from 'node-fetch'
 import parse from './parser.js'
 
@@ -26,7 +26,7 @@ export function interpolate(text, { env = {} } = {}) {
     if (id[0] === '$') {
       spans.push(evaluate(id))
     } else {
-      spans.push(env[id])
+      spans.push(env[process.env.NODE_ENV]?.[id])
     }
     spans.push(start.slice(endIndex + 2))
   }
@@ -39,7 +39,9 @@ export default {
 
     const envPath = join(dirname(filename), 'http-client.env.json')
 
-    const env = existsSync(envPath) ? readFileSync(envPath, 'utf-8') : {}
+    const env = existsSync(envPath)
+      ? JSON.parse(readFileSync(envPath, 'utf-8'))
+      : {}
 
     return {
       code: `

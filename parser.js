@@ -1,4 +1,4 @@
-export default source => requests(source)
+export default source => parseRequests(source)
 
 function skip(source) {
   while (
@@ -60,7 +60,19 @@ function makeSource(text) {
   }
 }
 
-function requests(sourceText) {
+function parseEndpoint(source) {
+  const methodAndUrlRegex = /^\s*([A-Z]+)\s+(.*)$/
+
+  if (!methodAndUrlRegex.test(source.currentLine)) {
+    throw new Error(
+      `(line: ${source.cursor}) method + url expected but found: ${source.currentLine}`
+    )
+  }
+
+  return methodAndUrlRegex.exec(source.consumeLine())
+}
+
+function parseRequests(sourceText) {
   const source = makeSource(sourceText)
 
   const requests = []
@@ -72,15 +84,7 @@ function requests(sourceText) {
       break
     }
 
-    const methodAndUrlRegex = /^\s*([A-Z]+)\s+(.*)$/
-
-    if (!methodAndUrlRegex.test(source.currentLine)) {
-      throw new Error(
-        `(line: ${source.cursor}) method + url expected but found: ${source.currentLine}`
-      )
-    }
-
-    const [, method, url] = methodAndUrlRegex.exec(source.consumeLine())
+    const { method, url } = parseEndpoint(source)
 
     const headers = parseHeaders(source)
 

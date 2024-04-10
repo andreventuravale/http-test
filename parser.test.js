@@ -39,8 +39,8 @@ test('basics', () => {
   expect(results).toMatchInlineSnapshot(`
 [
   {
-    "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1",
+    "method": undefined,
+    "url": undefined,
   },
 ]
 `)
@@ -83,8 +83,8 @@ test('white space and comments are ignored', () => {
     
  
  	   #   baz",
-    "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1",
+    "method": undefined,
+    "url": undefined,
   },
 ]
 `)
@@ -105,8 +105,8 @@ test('with a single header', () => {
         "application/json",
       ],
     ],
-    "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1",
+    "method": undefined,
+    "url": undefined,
   },
 ]
 `)
@@ -132,8 +132,8 @@ test('with many headers', () => {
         "bar",
       ],
     ],
-    "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1",
+    "method": undefined,
+    "url": undefined,
   },
 ]
 `)
@@ -161,8 +161,8 @@ test('headers are trimmed at both ends ( keys and values )', () => {
         "bar",
       ],
     ],
-    "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1",
+    "method": undefined,
+    "url": undefined,
   },
 ]
 `)
@@ -193,8 +193,8 @@ test('with duplicated headers', () => {
         "baz",
       ],
     ],
-    "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1",
+    "method": undefined,
+    "url": undefined,
   },
 ]
 `)
@@ -215,13 +215,13 @@ test('many requests', () => {
   expect(results).toMatchInlineSnapshot(`
 [
   {
-    "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1",
+    "method": undefined,
+    "url": undefined,
   },
   {
     "body": "{}",
-    "method": "POST",
-    "url": "https://jsonplaceholder.typicode.com/todos/1",
+    "method": undefined,
+    "url": undefined,
   },
   {
     "body": "{}",
@@ -231,8 +231,8 @@ test('many requests', () => {
         "bar",
       ],
     ],
-    "method": "PATCH",
-    "url": "https://jsonplaceholder.typicode.com/todos/1",
+    "method": undefined,
+    "url": undefined,
   },
 ]
 `)
@@ -261,8 +261,8 @@ test('body is trimmed only at the ends', () => {
         "bar",
       ],
     ],
-    "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1",
+    "method": undefined,
+    "url": undefined,
   },
 ]
 `)

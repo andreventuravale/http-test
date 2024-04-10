@@ -16,6 +16,6 @@ test('process environment variables', () => {
 test('environment variables', () => {
   process.env.FOO = 'bar'
   expect(
-    interpolate(' {{HostAddress}} ', { env: { HostAddress: 'foo' } })
+    interpolate(' {{HostAddress}} ', { env: { test: { HostAddress: 'foo' } } })
   ).toMatchInlineSnapshot(`" foo "`)
 })
