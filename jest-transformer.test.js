@@ -2,8 +2,6 @@ import { existsSync, readFileSync } from 'node:fs'
 import transformer, { interpolate } from './jest-transformer.js'
 
 test('process with variables from a environment variables file', () => {
-  process.env.NODE_ENV = 'dev'
-
   expect(existsSync('./tests/http-client.env.json')).toEqual(true)
 
   expect(
@@ -18,6 +16,8 @@ test('process with variables from a environment variables file', () => {
   },
 }
 `)
+
+  process.env.NODE_ENV = 'dev'
 
   expect(
     transformer.process('GET {{HostAddress}}', './tests/sample.http')
