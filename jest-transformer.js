@@ -1,12 +1,12 @@
 #!/usr/bin/env -S node --no-warnings
-import { randomUUID } from 'crypto'
+import { randomUUID } from 'node:crypto'
 import fetch from 'node-fetch'
 import parse from './parser.js'
 
-function interpolate(text) {
+export function interpolate(text) {
   const brokenAtStart = text.split('{{')
-  let variables = []
-  let spans = [brokenAtStart.shift()]
+  const variables = []
+  const spans = [brokenAtStart.shift()]
   for (const start of brokenAtStart) {
     const endIndex = start.indexOf('}}')
     const id = start.slice(0, endIndex)
@@ -19,7 +19,7 @@ function interpolate(text) {
   return spans.join('')
 }
 
-function evaluate(id) {
+export function evaluate(id) {
   const [fn, ...args] = id.slice(1).split(/\s+/)
   switch (fn) {
     case 'processEnv': {
@@ -27,6 +27,39 @@ function evaluate(id) {
     }
     default:
       throw new Error(`not implemented: ${fn}`)
+  }
+}
+
+export default {
+  getCacheKey: () => randomUUID(),
+
+  process: (src, filename) => {
+    const requests = parse(src)
+
+    return {
+      code: `
+      ${requests
+        .map(request => {
+          const url = interpolate(request.url)
+
+          return `
+              /**
+               * ${filename}
+               */
+              test('${request.method} ${url}', async () => {
+                const outcome = await (${test.toString()})(${JSON.stringify(
+                  { request, url },
+                  null,
+                  2
+                )})
+
+                expect(outcome).toMatchSnapshot()
+              })
+            `
+        })
+        .join('')}
+        `
+    }
   }
 }
 
@@ -49,42 +82,10 @@ async function test({ request, url }) {
     body = Buffer.from(await response.arrayBuffer()).toString('hex')
   }
 
-  return    {
+  return {
     method: request.method,
     url,
     headers: Array.from(response.headers),
     body
-  }
-}
-
-export default {
-  getCacheKey:         () =>                         
-  
-  
-  
-  randomUUID(),
-
-  process: (src, filename) => {
-    const requests = parse(src)
-
-    return {
-      code: `
-      ${requests.map((request) => {
-        const url = interpolate(request.url)
-
-        return `
-              /**
-               * ${filename}
-               */
-              test('${request.method} ${url}', async () => {
-                const outcome = await (${test.toString()})(${JSON.stringify({ request, url }, null, 2)})
-
-                expect(outcome).toMatchSnapshot()
-              })
-            `
-          }).join('')
-            }
-        `
-    }
   }
 }

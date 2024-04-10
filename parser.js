@@ -1,5 +1,4 @@
-
-export default (inputText) => {
+export default inputText => {
   const lines = inputText.split(/[\r\n]+/g)
   return requests(lines)
 }
