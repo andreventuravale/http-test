@@ -108,19 +108,19 @@ export default {
           const url = interpolate(request.url, { env, variables })
 
           return `
-              /**
-               * ${filename}
-               */
-              test('${request.method} ${url}', async () => {
-                const outcome = await (${test.toString()})(${JSON.stringify(
-                  { env, request: { ...request, url } },
-                  null,
-                  2
-                )})
+            /**
+             * ${filename}
+             */
+            test('${request.method} ${url}', async () => {
+              const outcome = await (${test.toString()})(${JSON.stringify(
+                { env, request: { ...request, url } },
+                null,
+                2
+              )})
 
-                expect(outcome).toMatchSnapshot()
-              })
-            `
+              expect(outcome).toMatchSnapshot()
+            })
+          `
         })
         .join('')}
         `
