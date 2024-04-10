@@ -14,7 +14,7 @@ export function evaluate(id) {
 }
 
 export function interpolate(text) {
-  const brokenAtStart = text.split('{{')
+  const brokenAtStart = text?.split('{{') ?? []
   const variables = []
   const spans = [brokenAtStart.shift()]
   for (const start of brokenAtStart) {
