@@ -132,6 +132,70 @@ describe('process', () => {
 })
 
 describe('test', () => {
+  it('ignore some headers', async () => {
+    const fetch = td.func('fetch')
+
+    td.when(
+      await fetch('http://foo', td.matchers.contains({ method: 'GET' }))
+    ).thenResolve({
+      headers: new Headers({
+        age: new Date().toISOString(),
+        'content-type': 'text/',
+        date: new Date().toISOString(),
+        'x-foo': 'bar'
+      }),
+      text: async () => 'foo'
+    })
+
+    expect(
+      await test(
+        {
+          request: {
+            meta: {
+              ignoreHeader: ['x-foo']
+            },
+            method: 'GET',
+            url: 'http://foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
+{
+  "request": {
+    "meta": {
+      "ignoreHeader": [
+        "x-foo",
+      ],
+    },
+    "method": "GET",
+    "url": "http://foo",
+  },
+  "response": {
+    "body": "foo",
+    "headers": [
+      [
+        "age",
+        Anything,
+      ],
+      [
+        "content-type",
+        "text/",
+      ],
+      [
+        "date",
+        Anything,
+      ],
+      [
+        "x-foo",
+        Anything,
+      ],
+    ],
+  },
+}
+`)
+  })
+
   it('text', async () => {
     const fetch = td.func('fetch')
 
