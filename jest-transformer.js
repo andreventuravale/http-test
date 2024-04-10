@@ -130,11 +130,13 @@ export default {
 
           const url = interpolate(request.url, { env, variables })
 
+          const title = request.meta?.name ?? `${request.method} ${url}`
+
           return `
             /**
              * ${filename}
              */
-            test('${request.method} ${url}', async () => {
+            test(${JSON.stringify(title)}, async () => {
               const outcome = await (${test.toString()})(${JSON.stringify(
                 { env, request: { ...request, url } },
                 null,

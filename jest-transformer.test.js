@@ -86,6 +86,17 @@ describe('interpolate', () => {
 })
 
 describe('process', () => {
+  it('uses the test name if present', () => {
+    expect(
+      transformer.process(`
+      // @name foo bar
+      GET https://foo/bar
+    `)
+    ).toStrictEqual({
+      code: expect.stringContaining(` test(\"foo bar\",`)
+    })
+  })
+
   it('process without variables from an environment variables file', () => {
     expect(transformer.process('GET https://foo/bar')).toStrictEqual({
       code: expect.stringContaining(` test('GET https://foo/bar',`)
