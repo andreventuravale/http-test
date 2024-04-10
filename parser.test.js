@@ -1,5 +1,30 @@
 import parser from './parser.js'
 
+test('invalid inputs', () => {
+  expect(() => parser('foo bar')).toThrow(
+    'method + url expected but found: foo bar'
+  )
+})
+
+test('invalid inputs ignoring comments and whitespace', () => {
+  expect(() =>
+    parser(`
+
+    \r \n \t \f \v
+
+    \r \n \t \f \v # foo \r \n \t \f \v
+
+    \r \n \t \f \v
+
+    GET https://jsonplaceholder.typicode.com/todos/1
+
+    ###
+
+    foo bar
+  `)
+  ).toThrow('method + url expected but found: foo bar')
+})
+
 test('empty inputs', () => {
   expect(parser()).toMatchInlineSnapshot('[]')
   expect(parser(null)).toMatchInlineSnapshot('[]')
@@ -14,6 +39,50 @@ test('basics', () => {
   expect(results).toMatchInlineSnapshot(`
 [
   {
+    "method": "GET",
+    "url": "https://jsonplaceholder.typicode.com/todos/1",
+  },
+]
+`)
+})
+
+test('white space and comments are ignored', () => {
+  const results = parser(`
+
+    \r \n \t \f \v
+
+    \r \n \t \f \v # foo \r \n \t \f \v
+
+    \r \n \t \f \v
+
+    GET https://jsonplaceholder.typicode.com/todos/1
+
+    \r \n \t \f \v
+
+    \r \n \t \f \v #  bar \r \n \t \f \v
+
+    \r \n \t \f \v
+
+    POST https://jsonplaceholder.typicode.com/todos/1
+
+    \r \n \t \f \v
+
+    \r \n \t \f \v #   baz \r \n \t \f \v
+
+    \r \n \t \f \v
+
+  `)
+
+  expect(results).toMatchInlineSnapshot(`
+[
+  {
+    "body": "POST https://jsonplaceholder.typicode.com/todos/1
+    
+ 
+ 	  
+    
+ 
+ 	   #   baz",
     "method": "GET",
     "url": "https://jsonplaceholder.typicode.com/todos/1",
   },
@@ -146,9 +215,12 @@ test('many requests', () => {
   expect(results).toMatchInlineSnapshot(`
 [
   {
-    "body": "POST https://jsonplaceholder.typicode.com/todos/1
-    {}",
     "method": "GET",
+    "url": "https://jsonplaceholder.typicode.com/todos/1",
+  },
+  {
+    "body": "{}",
+    "method": "POST",
     "url": "https://jsonplaceholder.typicode.com/todos/1",
   },
   {

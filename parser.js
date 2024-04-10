@@ -6,7 +6,7 @@ export default source => {
 function skip(lines) {
   while (
     lines.length &&
-    (/^\s*$/.test(lines[0]) || /^\s*#.*$/.test(lines[0]))
+    (/^\s*$/.test(lines[0]) || /^\s*#(?!#).*$/.test(lines[0]))
   ) {
     lines.shift()
   }
@@ -31,6 +31,9 @@ function parseBody(lines) {
   while (lines.length && !separator.test(lines[0])) {
     fragment.push(lines.shift())
   }
+  if (lines.length) {
+    lines.shift()
+  }
   const body = fragment.join('\n').trim()
   return body ? body : undefined
 }
@@ -45,10 +48,12 @@ function requests(lines) {
       break
     }
 
+    console.log(lines[0])
+
     const methodAndUrlRegex = /^\s*([A-Z]+)\s+(.*)$/
 
     if (!methodAndUrlRegex.test(lines[0])) {
-      break
+      throw new Error(`method + url expected but found: ${lines[0].trim()}`)
     }
 
     const [, method, url] = methodAndUrlRegex.exec(lines.shift())
