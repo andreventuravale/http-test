@@ -5,7 +5,7 @@ function skip(source) {
     !source.eof &&
     (/^\s*$/.test(source.currentLine) ||
       /^\s*#(?!#).*$/.test(source.currentLine) ||
-      /^\s*(?:\/\/).*$/.test(source.currentLine))
+      /^\s*\/\/.*$/.test(source.currentLine))
   ) {
     source.consumeLine()
   }
@@ -25,15 +25,21 @@ function parseHeaders(source) {
 
 function parseBody(source) {
   const fragment = []
+
   const separator = /^\s*###\s*$/
+
   skip(source)
+
   while (!source.eof && !separator.test(source.currentLine)) {
     fragment.push(source.consumeLine())
   }
+
   if (!source.eof) {
     source.consumeLine()
   }
+
   const body = fragment.join('\n').trim()
+
   return body ? body : undefined
 }
 
@@ -62,7 +68,7 @@ function makeSource(text) {
 }
 
 function parseEndpoint(source) {
-  const methodAndUrlRegex = /^\s*([A-Z]+)\s+(.*)$/
+  const methodAndUrlRegex = /^\s*([A-Z]+)\s+([^\r\n]*)$/
 
   if (!methodAndUrlRegex.test(source.currentLine)) {
     throw new Error(

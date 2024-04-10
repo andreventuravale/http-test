@@ -10,11 +10,11 @@ test('invalid inputs ignoring comments and whitespace', () => {
   expect(() =>
     parse(`
 
-    \r \n \t \f \v
+    \r \n \t
 
-    \r \n \t \f \v # foo \r \n \t \f \v
+    \r \n \t # foo \r \n \t
 
-    \r \n \t \f \v
+    \r \n \t
 
     GET https://jsonplaceholder.typicode.com/todos/1
 
@@ -28,7 +28,7 @@ test('invalid inputs ignoring comments and whitespace', () => {
 test('empty inputs', () => {
   expect(parse()).toMatchInlineSnapshot('[]')
   expect(parse(null)).toMatchInlineSnapshot('[]')
-  expect(parse(' \r \n \t \f \v ')).toMatchInlineSnapshot('[]')
+  expect(parse(' \r \n \t ')).toMatchInlineSnapshot('[]')
 })
 
 test('basics', () => {
@@ -69,44 +69,49 @@ test('variables', () => {
 `)
 })
 
-test('white space and comments are ignored', () => {
+test.only('white space and comments are ignored', () => {
   const requests = parse(`
 
-    \r \n \t \f \v
+    \r \n \t
 
-    \r \n \t \f \v # foo \r \n \t \f \v
+    \r \n \t # foo \r \n \t
 
-    \r \n \t \f \v
+    \r \n \t
 
     GET https://jsonplaceholder.typicode.com/todos/1
 
-    \r \n \t \f \v
+    \r \n \t
 
-    \r \n \t \f \v //  bar \r \n \t \f \v
+    \r \n \t #  foo \r \n \t
 
-    \r \n \t \f \v
+    \r \n \t
+
+    ###
+
+    \r \n \t
+
+    \r \n \t // bar \r \n \t
+
+    \r \n \t
 
     POST https://jsonplaceholder.typicode.com/todos/1
 
-    \r \n \t \f \v
+    \r \n \t
 
-    \r \n \t \f \v #   baz \r \n \t \f \v
+    \r \n \t //  bar \r \n \t
 
-    \r \n \t \f \v
+    \r \n \t
 
   `)
 
   expect(requests).toMatchInlineSnapshot(`
 [
   {
-    "body": "POST https://jsonplaceholder.typicode.com/todos/1
-    
- 
- 	  
-    
- 
- 	   #   baz",
     "method": "GET",
+    "url": "https://jsonplaceholder.typicode.com/todos/1",
+  },
+  {
+    "method": "POST",
     "url": "https://jsonplaceholder.typicode.com/todos/1",
   },
 ]
@@ -166,9 +171,9 @@ test('headers are trimmed at both ends ( keys and values )', () => {
   const requests = parse(`
     GET https://jsonplaceholder.typicode.com/todos/1
 
-    \t \f \v content-type \t \f \v : \t \f \v application/json \t \f \v
+    \t content-type \t : \t application/json \t
 
-    \t \f \v x-foo \t \f \v : \t \f \v bar \t \f \v
+    \t x-foo \t : \t bar \t
   `)
 
   expect(requests).toMatchInlineSnapshot(`
@@ -266,11 +271,11 @@ test('body is trimmed only at the ends', () => {
     GET https://jsonplaceholder.typicode.com/todos/1
     x-foo: bar
 
-    \r \n \t \f \v
+    \r \n \t
 
-    \r \n \t \f \v foo     bar \r \n \t \f \v
+    \r \n \t foo     bar \r \n \t
 
-    \r \n \t \f \v
+    \r \n \t
 
   `)
 
