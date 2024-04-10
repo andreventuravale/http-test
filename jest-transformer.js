@@ -5,14 +5,17 @@ import { isFinite as _isFinite, isInteger } from 'lodash-es'
 import fetch from 'node-fetch'
 import parse from './parser.js'
 
-function assertInteger(value) {
-  let v = value
-  if (v.startsWith('-')) {
-    v = v.slice(1)
+function assertInteger(something) {
+  let value = something
+
+  if (value.startsWith('-')) {
+    value = value.slice(1)
   }
-  const coerced = Number(v)
+
+  const coerced = Number(value)
+
   if (!isInteger(coerced) || !_isFinite(coerced)) {
-    throw new Error(`"${v}" is not a integer number`)
+    throw new Error(`"${value}" is not a integer number`)
   }
 }
 
@@ -20,24 +23,27 @@ export function evaluate(id) {
   const [fn, ...args] = id.slice(1).split(/\s+/)
 
   switch (fn) {
-    case 'processEnv': {
-      return process.env[args[0]]
-    }
-
-    case 'randomInt': {
-      let [min = Number.MIN_SAFE_INTEGER, max = Number.MAX_SAFE_INTEGER] = args
-      assertInteger(min)
-      assertInteger(max)
-      min = Number(min)
-      max = Number(max)
-      const delta = Number(max) - Number(min)
-      const rnd = Math.trunc(delta * Math.random())
-      return min + rnd
-    }
-
-    default: {
+    case 'processEnv':
+      return processEnv()
+    case 'randomInt':
+      return randomInt()
+    default:
       throw new Error(`not implemented: $${fn}`)
-    }
+  }
+
+  function processEnv() {
+    return process.env[args[0]]
+  }
+
+  function randomInt() {
+    let [min = Number.MIN_SAFE_INTEGER, max = Number.MAX_SAFE_INTEGER] = args
+    assertInteger(min)
+    assertInteger(max)
+    min = Number(min)
+    max = Number(max)
+    const delta = Number(max) - Number(min)
+    const rnd = Math.trunc(delta * Math.random())
+    return min + rnd
   }
 }
 
@@ -112,7 +118,7 @@ export default {
     const requests = parse(src)
 
     const envPath = join(
-      dirname(filename ?? 'a1c63c96-ad67-4546-8a78-66b9805f10e2'),
+      dirname(filename ?? 'a1c63c96-ad67-4546-8a78-66b9805f10e2/file.http'),
       'http-client.env.json'
     )
 
