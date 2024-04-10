@@ -296,7 +296,7 @@ test('body is trimmed only at the ends', () => {
 `)
 })
 
-test.only('named requests', () => {
+test('named requests', () => {
   const requests = parse(`
     // @name foo
     GET https://jsonplaceholder.typicode.com/todos/1
