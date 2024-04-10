@@ -15,7 +15,7 @@ exports[`GET https://jsonplaceholder.typicode.com/todos/1 1`] = `
     ],
     [
       "age",
-      "23420",
+      "23435",
     ],
     [
       "alt-svc",
@@ -31,7 +31,7 @@ exports[`GET https://jsonplaceholder.typicode.com/todos/1 1`] = `
     ],
     [
       "cf-ray",
-      "872497818c16495c-MIA",
+      "872497dc7f9b5f20-MIA",
     ],
     [
       "connection",
@@ -47,7 +47,7 @@ exports[`GET https://jsonplaceholder.typicode.com/todos/1 1`] = `
     ],
     [
       "date",
-      "Wed, 10 Apr 2024 17:52:38 GMT",
+      "Wed, 10 Apr 2024 17:52:53 GMT",
     ],
     [
       "etag",

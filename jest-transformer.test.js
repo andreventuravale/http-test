@@ -36,7 +36,7 @@ describe('interpolate', () => {
     ).toMatchInlineSnapshot(`" baz baz "`)
   })
 
-  it.only('variables - no direct cycles', () => {
+  it('variables - no direct cycles', () => {
     expect(() =>
       interpolate(' {{self}} ', {
         variables: {
@@ -46,7 +46,7 @@ describe('interpolate', () => {
     ).toThrow('variable cycle found: self -> self')
   })
 
-  it.only('variables - no distant cycles', () => {
+  it('variables - no distant cycles', () => {
     expect(() =>
       interpolate(' {{foo}} ', {
         variables: {
