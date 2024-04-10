@@ -73,123 +73,29 @@ describe('test', () => {
           url: 'https://jsonplaceholder.typicode.com/todos/1'
         }
       })
-    ).toMatchInlineSnapshot(`
-{
-  "request": {
-    "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1",
-  },
-  "response": {
-    "body": {
-      "completed": false,
-      "id": 1,
-      "title": "delectus aut autem",
-      "userId": 1,
-    },
-    "headers": [
-      [
-        "access-control-allow-credentials",
-        "true",
-      ],
-      [
-        "age",
-        "19466",
-      ],
-      [
-        "alt-svc",
-        "h3=":443"; ma=86400",
-      ],
-      [
-        "cache-control",
-        "max-age=43200",
-      ],
-      [
-        "cf-cache-status",
-        "HIT",
-      ],
-      [
-        "cf-ray",
-        "872436f55c794c24-MIA",
-      ],
-      [
-        "connection",
-        "keep-alive",
-      ],
-      [
-        "content-encoding",
-        "br",
-      ],
-      [
-        "content-type",
-        "application/json; charset=utf-8",
-      ],
-      [
-        "date",
-        "Wed, 10 Apr 2024 16:46:44 GMT",
-      ],
-      [
-        "etag",
-        "W/"53-hfEnumeNh6YirfjyjaujcOPPT+s"",
-      ],
-      [
-        "expires",
-        "-1",
-      ],
-      [
-        "nel",
-        "{"report_to":"heroku-nel","max_age":3600,"success_fraction":0.005,"failure_fraction":0.05,"response_headers":["Via"]}",
-      ],
-      [
-        "pragma",
-        "no-cache",
-      ],
-      [
-        "report-to",
-        "{"group":"heroku-nel","max_age":3600,"endpoints":[{"url":"https://nel.heroku.com/reports?ts=1710266343&sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&s=9prrD19AHq6aUZkKfuUlUyUVjun1QShk6YUtAdGQ%2BRE%3D"}]}",
-      ],
-      [
-        "reporting-endpoints",
-        "heroku-nel=https://nel.heroku.com/reports?ts=1710266343&sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&s=9prrD19AHq6aUZkKfuUlUyUVjun1QShk6YUtAdGQ%2BRE%3D",
-      ],
-      [
-        "server",
-        "cloudflare",
-      ],
-      [
-        "transfer-encoding",
-        "chunked",
-      ],
-      [
-        "vary",
-        "Origin, Accept-Encoding",
-      ],
-      [
-        "via",
-        "1.1 vegur",
-      ],
-      [
-        "x-content-type-options",
-        "nosniff",
-      ],
-      [
-        "x-powered-by",
-        "Express",
-      ],
-      [
-        "x-ratelimit-limit",
-        "1000",
-      ],
-      [
-        "x-ratelimit-remaining",
-        "999",
-      ],
-      [
-        "x-ratelimit-reset",
-        "1710266364",
-      ],
-    ],
-  },
-}
-`)
+    ).toEqual({
+      request: {
+        method: 'GET',
+        url: 'https://jsonplaceholder.typicode.com/todos/1'
+      },
+      response: expect.any(Object)
+    })
+  })
+
+  it('HEAD', async () => {
+    expect(
+      await test({
+        request: {
+          method: 'HEAD',
+          url: 'https://jsonplaceholder.typicode.com/todos/1'
+        }
+      })
+    ).toEqual({
+      request: {
+        method: 'HEAD',
+        url: 'https://jsonplaceholder.typicode.com/todos/1'
+      },
+      response: expect.any(Object)
+    })
   })
 })

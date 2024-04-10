@@ -58,7 +58,8 @@ export async function test({ request }) {
   if (contentType.startsWith('text/')) {
     responseBody = await fetchResponse.text()
   } else if (contentType.indexOf('json') > -1) {
-    responseBody = await fetchResponse.json()
+    const jsonText = await fetchResponse.text()
+    responseBody = JSON.parse(jsonText || 'null')
   } else {
     responseBody = Buffer.from(await fetchResponse.arrayBuffer()).toString(
       'hex'
