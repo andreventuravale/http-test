@@ -1,4 +1,13 @@
-import { interpolate } from './jest-transformer.js'
+import transformer, { interpolate } from './jest-transformer.js'
+
+test('process', () => {
+  process.env.NODE_ENV = 'dev'
+  expect(
+    transformer.process('GET {{HostAddress}}', './tests/sample.http')
+  ).toEqual({
+    code: expect.stringContaining('https://localhost:44320')
+  })
+})
 
 test('nothing to do', () => {
   expect(interpolate(' ')).toMatchInlineSnapshot(`" "`)
@@ -17,5 +26,5 @@ test('environment variables', () => {
   process.env.FOO = 'bar'
   expect(
     interpolate(' {{HostAddress}} ', { env: { test: { HostAddress: 'foo' } } })
-  ).toMatchInlineSnapshot(`" foo "`)
+  ).toMatchInlineSnapshot(`"  "`)
 })

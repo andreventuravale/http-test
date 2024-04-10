@@ -69,7 +69,9 @@ function parseEndpoint(source) {
     )
   }
 
-  return methodAndUrlRegex.exec(source.consumeLine())
+  const [, method, url] = methodAndUrlRegex.exec(source.consumeLine())
+
+  return { method, url }
 }
 
 function parseRequests(sourceText) {

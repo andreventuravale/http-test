@@ -4,6 +4,33 @@ import { dirname, join } from 'node:path'
 import fetch from 'node-fetch'
 import parse from './parser.js'
 
+async function test({ request, url }) {
+  const response = await fetch(url, {
+    method: request.method,
+    headers: request.headers,
+    ...(['GET', 'HEAD'].includes(request.method) ? {} : { body: request.body })
+  })
+
+  let body
+
+  const contentType = response.headers.get('content-type')
+
+  if (contentType.startsWith('text/')) {
+    body = await response.text()
+  } else if (contentType.indexOf('json') > -1) {
+    body = await response.json()
+  } else {
+    body = Buffer.from(await response.arrayBuffer()).toString('hex')
+  }
+
+  return {
+    method: request.method,
+    url,
+    headers: Array.from(response.headers),
+    body
+  }
+}
+
 export function evaluate(id) {
   const [fn, ...args] = id.slice(1).split(/\s+/)
   switch (fn) {
@@ -67,32 +94,5 @@ export default {
         .join('')}
         `
     }
-  }
-}
-
-async function test({ request, url }) {
-  const response = await fetch(url, {
-    method: request.method,
-    headers: request.headers,
-    ...(['GET', 'HEAD'].includes(request.method) ? {} : { body: request.body })
-  })
-
-  let body
-
-  const contentType = response.headers.get('content-type')
-
-  if (contentType.startsWith('text/')) {
-    body = await response.text()
-  } else if (contentType.indexOf('json') > -1) {
-    body = await response.json()
-  } else {
-    body = Buffer.from(await response.arrayBuffer()).toString('hex')
-  }
-
-  return {
-    method: request.method,
-    url,
-    headers: Array.from(response.headers),
-    body
   }
 }
