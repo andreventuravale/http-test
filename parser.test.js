@@ -306,7 +306,9 @@ test('named requests', () => {
 [
   {
     "meta": {
-      "name": "foo",
+      "name": [
+        "foo",
+      ],
     },
     "method": "GET",
     "url": "https://jsonplaceholder.typicode.com/todos/1",
@@ -343,7 +345,9 @@ test('request meta', () => {
         "bar",
         "baz",
       ],
-      "qux": "waldo",
+      "qux": [
+        "waldo",
+      ],
     },
     "method": "GET",
     "url": "https://jsonplaceholder.typicode.com/todos/1",

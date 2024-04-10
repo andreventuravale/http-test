@@ -1,4 +1,3 @@
-#!/usr/bin/env -S node --no-warnings
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { isFinite as _isFinite, isInteger } from 'lodash-es'
@@ -110,6 +109,14 @@ export async function test({ request }) {
     body: responseBody
   }
 
+  const ignoreHeader = ['age', 'date', ...(request.meta?.ignoreHeader ?? [])]
+
+  for (const header of response.headers) {
+    if (ignoreHeader.includes(header[0])) {
+      header[1] = expect.anything()
+    }
+  }
+
   return { request, response }
 }
 
@@ -136,7 +143,7 @@ export default {
 
           const url = interpolate(request.url, { env, variables })
 
-          const title = request.meta?.name ?? `${request.method} ${url}`
+          const title = request.meta?.name?.[0] ?? `${request.method} ${url}`
 
           return `
             /**

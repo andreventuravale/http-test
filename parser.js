@@ -35,18 +35,14 @@ function skip(source) {
 
   const compiledMeta = meta.length
     ? Object.fromEntries(
-        Object.entries(groupBy(meta, ([key]) => key)).map(([k, v]) => [
+        Object.entries(groupBy(meta, ([k]) => k)).map(([k, group]) => [
           k,
-          isArray(v)
-            ? v.length === 1
-              ? v[0][1]
-              : v.map(([, value]) => value)
-            : v.map(([, value]) => value)
+          group.map(([, v]) => v)
         ])
       )
     : undefined
 
-  if (isArray(compiledMeta?.name)) {
+  if ((compiledMeta?.name?.length ?? 0) > 1) {
     throw new Error(
       `(line: ${source.cursor}) only a single "name" request variable is allowed per request`
     )
