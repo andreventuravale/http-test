@@ -296,7 +296,7 @@ test('body is trimmed only at the ends', () => {
 `)
 })
 
-test.only('named requests', () => {
+test('named requests', () => {
   const requests = parse(`
     // @name foo
     GET https://jsonplaceholder.typicode.com/todos/1
@@ -315,10 +315,23 @@ test.only('named requests', () => {
 `)
 })
 
-test.only('request meta', () => {
+test('named requests - only a single name request variable', () => {
+  expect(() =>
+    parse(`
+      // @name foo
+      // @name bar
+      GET https://jsonplaceholder.typicode.com/todos/1
+    `)
+  ).toThrow(
+    '(line: 4) only a single "name" request variable is allowed per request'
+  )
+})
+
+test('request meta', () => {
   const requests = parse(`
     // @foo bar
     // @foo baz
+    // @qux waldo
     GET https://jsonplaceholder.typicode.com/todos/1
   `)
 
@@ -330,6 +343,7 @@ test.only('request meta', () => {
         "bar",
         "baz",
       ],
+      "qux": "waldo",
     },
     "method": "GET",
     "url": "https://jsonplaceholder.typicode.com/todos/1",

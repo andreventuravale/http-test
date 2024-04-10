@@ -33,7 +33,7 @@ function skip(source) {
     meta = meta.concat(variables)
   }
 
-  return meta.length
+  const compiledMeta = meta.length
     ? Object.fromEntries(
         Object.entries(groupBy(meta, ([key]) => key)).map(([k, v]) => [
           k,
@@ -45,6 +45,14 @@ function skip(source) {
         ])
       )
     : undefined
+
+  if (isArray(compiledMeta?.name)) {
+    throw new Error(
+      `(line: ${source.cursor}) only a single "name" request variable is allowed per request`
+    )
+  }
+
+  return compiledMeta
 }
 
 function parseHeaders(source) {
