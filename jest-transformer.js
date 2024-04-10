@@ -40,7 +40,7 @@ export function evaluate(id) {
     }
 
     default: {
-      throw new Error(`not implemented: ${fn}`)
+      throw new Error(`not implemented: $${fn}`)
     }
   }
 }
