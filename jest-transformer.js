@@ -3,6 +3,17 @@ import { randomUUID } from 'node:crypto'
 import fetch from 'node-fetch'
 import parse from './parser.js'
 
+export function evaluate(id) {
+  const [fn, ...args] = id.slice(1).split(/\s+/)
+  switch (fn) {
+    case 'processEnv': {
+      return process.env[args[0]]
+    }
+    default:
+      throw new Error(`not implemented: ${fn}`)
+  }
+}
+
 export function interpolate(text) {
   const brokenAtStart = text.split('{{')
   const variables = []
@@ -17,17 +28,6 @@ export function interpolate(text) {
     spans.push(start.slice(endIndex + 2))
   }
   return spans.join('')
-}
-
-export function evaluate(id) {
-  const [fn, ...args] = id.slice(1).split(/\s+/)
-  switch (fn) {
-    case 'processEnv': {
-      return process.env[args[0]]
-    }
-    default:
-      throw new Error(`not implemented: ${fn}`)
-  }
 }
 
 export default {
