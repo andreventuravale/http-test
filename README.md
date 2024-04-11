@@ -5,9 +5,9 @@
 
 ## Usage
 
-Install the npm package: **jest-dot-http-files**
+Install the npm package ( in dev mode ): **jest-dot-http-files**
 
-Install the peer-dependencies:
+Install the peer-dependencies ( in dev mode if you aren't using them already ):
 
 - **lodash-es**
 - **node-fetch**
