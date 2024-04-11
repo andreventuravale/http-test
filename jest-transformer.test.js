@@ -182,7 +182,7 @@ describe('test', () => {
         {
           request: {
             meta: {
-              ignoreHeaders: 'x-*'
+              ignoreHeaders: 'x-.*'
             },
             method: 'GET',
             url: 'http://foo'
@@ -194,7 +194,7 @@ describe('test', () => {
 {
   "request": {
     "meta": {
-      "ignoreHeaders": "x-*",
+      "ignoreHeaders": "x-.*",
     },
     "method": "GET",
     "url": "http://foo",
