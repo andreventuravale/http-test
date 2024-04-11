@@ -1,5 +1,5 @@
 {
-  "name": "http-test",
+  "name": "jest-dot-http-files",
   "version": "1.0.0",
   "type": "module",
   "main": "./jest-transformer.js",
