@@ -29,7 +29,7 @@ export default {
 
 ```
 
-## Additions to the original spec
+## Deviations to the original spec
 
 #### The @name request variable
 
@@ -57,6 +57,10 @@ Skips a test.
 @skip
 GET http://foo/bar
 ```
+
+#### The $datetime and $localDatetime functions
+
+The **$datetime** and **$localDatetime** might not fully represent the .NET reference implementation.
 
 ## A note on "assertions"
 
