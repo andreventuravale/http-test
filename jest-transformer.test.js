@@ -28,15 +28,21 @@ describe('interpolate', () => {
   })
 
   it('$randomInt', () => {
+    testCase()
     testCase(-10, -1)
     testCase(0, 0)
     testCase(0, 1)
     testCase(10, 20)
 
-    function testCase(min, max) {
-      const number = Number(interpolate(`{{$randomInt ${min} ${max}}}`))
-      expect(number).toBeGreaterThanOrEqual(min)
-      expect(number).toBeLessThanOrEqual(max)
+    function testCase(min = '', max = '') {
+      const value = interpolate(`{{$randomInt ${min} ${max}}}`)
+      const number = Number(value)
+      expect(number).toBeGreaterThanOrEqual(
+        Number(min || `${Number.MIN_SAFE_INTEGER}`)
+      )
+      expect(number).toBeLessThanOrEqual(
+        Number(max || `${Number.MAX_SAFE_INTEGER}`)
+      )
     }
   })
 

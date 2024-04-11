@@ -1,6 +1,11 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
-import { isFinite as _isFinite, isInteger } from 'lodash-es'
+import {
+  isFinite as _isFinite,
+  isNaN as _isNaN,
+  isInteger,
+  isNumber
+} from 'lodash-es'
 import nodeFetch from 'node-fetch'
 import parse from './parser.js'
 
@@ -13,7 +18,12 @@ function assertInteger(something) {
 
   const coerced = Number(value)
 
-  if (!isInteger(coerced) || !_isFinite(coerced)) {
+  if (
+    _isNaN(coerced) ||
+    !isNumber(coerced) ||
+    !isInteger(coerced) ||
+    !_isFinite(coerced)
+  ) {
     throw new Error(`"${value}" is not a integer number`)
   }
 }
@@ -35,7 +45,9 @@ export function evaluate(id) {
   }
 
   function randomInt() {
-    let [min = Number.MIN_SAFE_INTEGER, max = Number.MAX_SAFE_INTEGER] = args
+    let [min, max] = args
+    min ||= `${Number.MIN_SAFE_INTEGER}`
+    max ||= `${Number.MAX_SAFE_INTEGER}`
     assertInteger(min)
     assertInteger(max)
     min = Number(min)
