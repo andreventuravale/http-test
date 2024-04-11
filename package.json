@@ -11,14 +11,8 @@
   },
   "author": "Andre Vale <andreventuravale@gmail.com>",
   "license": "MIT",
-  "categories": [
-    "Testing"
-  ],
-  "keywords": [
-    "jest",
-    "testing",
-    "http"
-  ],
+  "categories": ["Testing"],
+  "keywords": ["jest", "testing", "http"],
   "repository": {
     "url": "https://github.com/andreventuravale/jest-dot-http-files"
   },

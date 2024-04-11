@@ -78,18 +78,32 @@ describe('interpolate', () => {
         GET https://httpbin.org/headers
         x-custom: {{$datetime "dd-MM-yyyy"}}
         x-iso8601: {{$datetime iso8601}}
-        x-iso8601l: {{$localDatetime iso8601}}
         x-rfc1123: {{$datetime rfc1123}}
-        x-rfc1123l: {{$localDatetime rfc1123}}
       `)
       ).toMatchInlineSnapshot(`
 "
         GET https://httpbin.org/headers
         x-custom: 01-04-2020
         x-iso8601: 2020-04-01T00:00:00-03:00
-        x-iso8601l: 2020-04-01T00:00:00-03:00
         x-rfc1123: Wed, 01 Apr 2020 03:00:00 GMT
-        x-rfc1123l: Wed, 01 Apr 2020 03:00:00 GMT
+      "
+`)
+    })
+
+    it('$datetime with offsets', () => {
+      expect(
+        interpolate(`
+        GET https://httpbin.org/headers
+        x-custom: {{$datetime "dd-MM-yyyy" 1 d}}
+        x-iso8601: {{$datetime iso8601 7 d}}
+        x-rfc1123: {{$datetime rfc1123 1 w}}
+      `)
+      ).toMatchInlineSnapshot(`
+"
+        GET https://httpbin.org/headers
+        x-custom: 02-04-2020
+        x-iso8601: 2020-04-08T00:00:00-03:00
+        x-rfc1123: Wed, 08 Apr 2020 03:00:00 GMT
       "
 `)
     })

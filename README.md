@@ -63,9 +63,28 @@ GET http://foo/bar
 
 Generates a random v4 UUID.
 
-#### The $datetime and $localDatetime functions
+#### The $datetime function
 
-The **$datetime** and **$localDatetime** might not fully represent the .NET reference implementation.
+The **$datetime** might not fully represent the reference implementation.
+
+Additionally, it supports offsets at the end, for instance:
+
+```http
+# "1 y" means to add one year to the current date
+GET http://foo/{{$datetime iso8601 1 y}}
+```
+Offset unit:
+
+- y = Year
+- M = Month
+- w = Week
+- d = Day
+- h = Hour
+- m = Minute
+- s = Second
+- ms = Millisecond
+
+#### The $localDatetime is not implememted
 
 ## A note on "assertions"
 

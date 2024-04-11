@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
-import { format, formatISO, formatRFC7231 } from 'date-fns'
+import { add, format, formatISO, formatRFC7231 } from 'date-fns'
 import { isFinite as _isFinite, isInteger, merge } from 'lodash-es'
 import parse from './parser.js'
 
@@ -20,17 +20,14 @@ function assertInteger(something) {
 }
 
 export function evaluate(id) {
-  const [fn, ...args] = id.slice(1).split(/\s+/)
+  const [fn, ...args] = id.slice(1).split(' ')
 
   switch (fn) {
     case 'datetime':
-      return formatDatetime(new Date(), args[0])
+      return formatDatetime(new Date(), args.join(' '))
 
     case 'guid':
       return randomUUID()
-
-    case 'localDatetime':
-      return formatDatetime(new Date().toLocaleDateString(), args[0])
 
     case 'processEnv':
       return processEnv()
@@ -42,15 +39,35 @@ export function evaluate(id) {
       throw new Error(`not implemented: $${fn}`)
   }
 
-  function formatDatetime(date, dateFormat) {
-    const lookup = {
-      iso8601: () => formatISO(date),
-      rfc1123: () => formatRFC7231(date)
+  function formatDatetime(date, expr) {
+    const [_, dateFormat, offset, offsetUnit] = expr.match(
+      `^(iso8601|rfc1123|"[^"]+"|'[^']+')(?:\\s+(\\d+)\\s+(\\w+))?$`
+    )
+
+    let finalDate = date
+
+    if (offset && offsetUnit) {
+      const unitLookup = {
+        y: 'years',
+        M: 'months',
+        w: 'weeks',
+        d: 'days',
+        h: 'hours',
+        m: 'minutes',
+        s: 'seconds'
+      }
+
+      finalDate = add(finalDate, { [unitLookup[offsetUnit]]: Number(offset) })
     }
 
-    if (dateFormat in lookup) return lookup[dateFormat](date)
+    const lookup = {
+      iso8601: date => formatISO(date),
+      rfc1123: date => formatRFC7231(date)
+    }
 
-    return format(date, JSON.parse(dateFormat))
+    if (dateFormat in lookup) return lookup[dateFormat](finalDate)
+
+    return format(finalDate, JSON.parse(dateFormat))
   }
 
   function processEnv() {
