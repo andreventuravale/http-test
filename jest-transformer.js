@@ -33,8 +33,10 @@ export function evaluate(id) {
   switch (fn) {
     case 'processEnv':
       return processEnv()
+
     case 'randomInt':
       return randomInt()
+
     default:
       throw new Error(`not implemented: $${fn}`)
   }
@@ -52,8 +54,8 @@ export function evaluate(id) {
     min = Number(min)
     max = Number(max)
     const delta = Number(max) - Number(min)
-    const rnd = Math.trunc(delta * Math.random())
-    return min + rnd
+    const random = Math.trunc(delta * Math.random())
+    return min + random
   }
 }
 
@@ -155,9 +157,15 @@ export default {
     if (filename) {
       const envPath = join(dirname(filename), 'http-client.env.json')
 
-      envs = existsSync(envPath)
+      Object.assign(envs, existsSync(envPath)
         ? JSON.parse(readFileSync(envPath, 'utf-8'))
-        : {}
+        : {})
+
+      const userEnvPath = join(dirname(filename), 'http-client.env.json.user')
+
+      Object.assign(envs, existsSync(userEnvPath)
+        ? JSON.parse(readFileSync(userEnvPath, 'utf-8'))
+        : {})
     }
 
     const env = envs[process.env.NODE_ENV]

@@ -168,6 +168,41 @@ describe('process', () => {
       code: expect.stringContaining(' test("GET https://localhost:44320')
     })
   })
+
+
+  it('process with variables from an environment variables file combined with a user-specific file', () => {
+    expect(existsSync('./tests/user-specific-env-file/http-client.env.json')).toStrictEqual(true)
+
+    expect(existsSync('./tests/user-specific-env-file/http-client.env.json.user')).toStrictEqual(true)
+
+    expect(
+  JSON.parse(readFileSync('./tests/user-specific-env-file/http-client.env.json', 'utf-8'))
+).toMatchInlineSnapshot(`
+{
+  "dev": {
+    "HostAddress": "https://localhost:44320",
+  },
+}
+`)
+
+expect(
+  JSON.parse(readFileSync('./tests/user-specific-env-file/http-client.env.json.user', 'utf-8'))
+).toMatchInlineSnapshot(`
+{
+  "dev": {
+    "HostAddress": "https://contoso.com",
+  },
+}
+`)
+
+process.env.NODE_ENV = 'dev'
+
+    expect(
+      transformer.process('GET {{HostAddress}}', './tests/user-specific-env-file/sample.http')
+    ).toStrictEqual({
+      code: expect.stringContaining(' test("GET https://contoso.com')
+    })
+  })
 })
 
 describe('test', () => {
