@@ -42,7 +42,7 @@ GET http://foo/bar
 
 #### The @only request variable
 
-Runs only that particular test
+Runs only that particular test.
 
 ```
 @only
@@ -51,7 +51,7 @@ GET http://foo/bar
 
 #### The @skip request variable
 
-Skips a test
+Skips a test.
 
 ```
 @skip
