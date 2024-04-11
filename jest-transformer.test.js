@@ -132,7 +132,7 @@ describe('process', () => {
     expect(
       transformer.process('GET {{HostAddress}}', './tests/sample.http')
     ).toStrictEqual({
-      code: expect.stringContaining('https://localhost:44320')
+      code: expect.stringContaining(' test("GET https://localhost:44320')
     })
   })
 })
