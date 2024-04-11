@@ -93,7 +93,9 @@ export function interpolate(text, { env = {}, variables = {} } = {}) {
   return visit(text, [])
 }
 
-export async function test({ request }, { fetch = globalThis.nodeFetch } = {}) {
+export async function test({ request }, { fetch } = {}) {
+  fetch = fetch ?? (await import('node-fetch')).default
+
   const fetchResponse = await fetch(request.url, {
     method: request.method,
     headers: request.headers,
@@ -156,10 +158,6 @@ export default {
           const title = request.meta?.name?.[0] ?? `${request.method} ${url}`
 
           return `
-            import nodeFetch from 'node-fetch'
-            
-            globalThis.nodeFetch = nodeFetch
-
             /**
              * ${filename}
              */
