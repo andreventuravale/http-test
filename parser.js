@@ -1,72 +1,5 @@
 export default source => parseRequests(source)
 
-function skip(source) {
-  let meta = []
-
-  while (!source.eof) {
-    if (/^\s*$/.test(source.currentLine)) {
-      source.consumeLine()
-    } else if (/^\s*#(?!#).*$/.test(source.currentLine)) {
-      fillMeta(source.consumeLine(), '#')
-    } else if (/^\s*\/\/.*$/.test(source.currentLine)) {
-      fillMeta(source.consumeLine(), '//')
-    } else {
-      break
-    }
-  }
-
-  return meta.length ? Object.fromEntries(meta) : undefined
-
-  function fillMeta(line, commentLookahead) {
-    const variables = parseVariables(
-      makeSource(
-        line.slice(line.indexOf(commentLookahead) + commentLookahead.length)
-      ),
-      '\\s+'
-    )
-
-    meta = meta.concat(variables ?? [])
-  }
-}
-
-function parseHeaders(source) {
-  const headers = []
-
-  const regex = /^\s*([\w-]+)\s*:(.*)$/
-
-  skip(source)
-
-  while (!source.eof && regex.test(source.currentLine)) {
-    const [, key, value] = regex.exec(source.consumeLine())
-
-    headers.push([key.trim(), value.trim()])
-
-    skip(source)
-  }
-
-  return headers.length ? headers : undefined
-}
-
-function parseBody(source) {
-  const fragment = []
-
-  const separator = /^\s*###\s*$/
-
-  skip(source)
-
-  while (!source.eof && !separator.test(source.currentLine)) {
-    fragment.push(source.consumeLine())
-  }
-
-  if (!source.eof) {
-    source.consumeLine()
-  }
-
-  const body = fragment.join('\n').trim()
-
-  return body ? body : undefined
-}
-
 function makeSource(text) {
   const lines = text?.split?.(/[\r\n]+/g) ?? []
 
@@ -91,6 +24,26 @@ function makeSource(text) {
   }
 }
 
+function parseBody(source) {
+  const fragment = []
+
+  const separator = /^\s*###\s*$/
+
+  skip(source)
+
+  while (!source.eof && !separator.test(source.currentLine)) {
+    fragment.push(source.consumeLine())
+  }
+
+  if (!source.eof) {
+    source.consumeLine()
+  }
+
+  const body = fragment.join('\n').trim()
+
+  return body ? body : undefined
+}
+
 function parseEndpoint(source) {
   const regex = /^\s*([A-Z]+)\s+([^\r\n]*)$/
 
@@ -105,25 +58,22 @@ function parseEndpoint(source) {
   return { method, url }
 }
 
-function parseVariables(source, separatorRegexPattern = '=') {
-  const variables = []
+function parseHeaders(source) {
+  const headers = []
 
-  const regex = new RegExp(
-    `^\\s*@([a-z_][\\w]+)(?:${separatorRegexPattern}(.*))?$`,
-    'i'
-  )
+  const regex = /^\s*([\w-]+)\s*:(.*)$/
 
   skip(source)
 
   while (!source.eof && regex.test(source.currentLine)) {
-    const [, key, value = ''] = regex.exec(source.consumeLine())
+    const [, key, value] = regex.exec(source.consumeLine())
 
-    variables.push([key.trim(), value.trim() || true])
+    headers.push([key.trim(), value.trim()])
 
     skip(source)
   }
 
-  return variables.length ? variables : undefined
+  return headers.length ? headers : undefined
 }
 
 function parseRequests(sourceText) {
@@ -157,4 +107,54 @@ function parseRequests(sourceText) {
   } while (!source.eof)
 
   return requests
+}
+
+function parseVariables(source, separatorRegexPattern = '=') {
+  const variables = []
+
+  const regex = new RegExp(
+    `^\\s*@([a-z_][\\w]+)(?:${separatorRegexPattern}(.*))?$`,
+    'i'
+  )
+
+  skip(source)
+
+  while (!source.eof && regex.test(source.currentLine)) {
+    const [, key, value = ''] = regex.exec(source.consumeLine())
+
+    variables.push([key.trim(), value.trim() || true])
+
+    skip(source)
+  }
+
+  return variables.length ? variables : undefined
+}
+
+function skip(source) {
+  let meta = []
+
+  while (!source.eof) {
+    if (/^\s*$/.test(source.currentLine)) {
+      source.consumeLine()
+    } else if (/^\s*#(?!#).*$/.test(source.currentLine)) {
+      fillMeta(source.consumeLine(), '#')
+    } else if (/^\s*\/\/.*$/.test(source.currentLine)) {
+      fillMeta(source.consumeLine(), '//')
+    } else {
+      break
+    }
+  }
+
+  return meta.length ? Object.fromEntries(meta) : undefined
+
+  function fillMeta(line, commentLookahead) {
+    const variables = parseVariables(
+      makeSource(
+        line.slice(line.indexOf(commentLookahead) + commentLookahead.length)
+      ),
+      '\\s+'
+    )
+
+    meta = meta.concat(variables ?? [])
+  }
 }
