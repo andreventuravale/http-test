@@ -40,16 +40,6 @@ Used as test title if present. This variable is optional.
 GET http://foo/bar
 ```
 
-#### The @ignoreHeaders request variable
-
-String delimited by comma or spaces.
-Use it to specify what response headers to ignore for snapshot assertion. The "age" and "date" headers are always ignored.
-
-```
-@ignoreHeaders x-foo x-bar
-GET http://foo/bar
-```
-
 #### The @only request variable
 
 Runs only that particular test
@@ -72,3 +62,12 @@ GET http://foo/bar
 
 Assertions are made using jest snapshots.
 
+#### The @ignoreHeaders request variable
+
+String delimited by comma or spaces.
+Use it to specify what response headers to ignore for snapshot assertion. The "age" and "date" headers are always ignored.
+
+```
+@ignoreHeaders x-foo x-bar
+GET http://foo/bar
+```
