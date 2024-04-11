@@ -2,6 +2,7 @@
 ## Jest transformer for .http files
 
 > @see https://github.com/dotnet/AspNetCore.Docs/blob/main/aspnetcore/test/http-files.md
+> @see https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 
 ## Usage
 
