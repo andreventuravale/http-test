@@ -58,6 +58,10 @@ Skips a test.
 GET http://foo/bar
 ```
 
+#### The @guid function
+
+Generates a random v4 UUID.
+
 #### The $datetime and $localDatetime functions
 
 The **$datetime** and **$localDatetime** might not fully represent the .NET reference implementation.

@@ -1,13 +1,8 @@
+import { randomUUID } from 'node:crypto'
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { format, formatISO, formatRFC7231 } from 'date-fns'
-import {
-  isFinite as _isFinite,
-  isNaN as _isNaN,
-  isInteger,
-  isNumber,
-  merge
-} from 'lodash-es'
+import { isFinite as _isFinite, isInteger, merge } from 'lodash-es'
 import parse from './parser.js'
 
 function assertInteger(something) {
@@ -19,12 +14,7 @@ function assertInteger(something) {
 
   const coerced = Number(value)
 
-  if (
-    _isNaN(coerced) ||
-    !isNumber(coerced) ||
-    !isInteger(coerced) ||
-    !_isFinite(coerced)
-  ) {
+  if (!isInteger(coerced) || !_isFinite(coerced)) {
     throw new Error(`"${value}" is not a integer number`)
   }
 }
@@ -35,6 +25,9 @@ export function evaluate(id) {
   switch (fn) {
     case 'datetime':
       return formatDatetime(new Date(), args[0])
+
+    case 'guid':
+      return randomUUID()
 
     case 'localDatetime':
       return formatDatetime(new Date().toLocaleDateString(), args[0])

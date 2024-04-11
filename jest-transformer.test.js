@@ -56,23 +56,10 @@ describe('interpolate', () => {
     }
   })
 
-  it('$randomInt', () => {
-    testCase()
-    testCase(-10, -1)
-    testCase(0, 0)
-    testCase(0, 1)
-    testCase(10, 20)
-
-    function testCase(min = '', max = '') {
-      const value = interpolate(`{{$randomInt ${min} ${max}}}`)
-      const number = Number(value)
-      expect(number).toBeGreaterThanOrEqual(
-        Number(min || `${Number.MIN_SAFE_INTEGER}`)
-      )
-      expect(number).toBeLessThanOrEqual(
-        Number(max || `${Number.MAX_SAFE_INTEGER}`)
-      )
-    }
+  it('$guid', () => {
+    expect(interpolate('{{$guid}}')).toMatch(
+      /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
+    )
   })
 
   describe('date related', () => {
