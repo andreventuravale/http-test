@@ -92,15 +92,15 @@ function makeSource(text) {
 }
 
 function parseEndpoint(source) {
-  const methodAndUrlRegex = /^\s*([A-Z]+)\s+([^\r\n]*)$/
+  const regex = /^\s*([A-Z]+)\s+([^\r\n]*)$/
 
-  if (!methodAndUrlRegex.test(source.currentLine)) {
+  if (!regex.test(source.currentLine)) {
     throw new Error(
       `(line: ${source.cursor}) method + url expected but found: ${source.currentLine}`
     )
   }
 
-  const [, method, url] = methodAndUrlRegex.exec(source.consumeLine())
+  const [, method, url] = regex.exec(source.consumeLine())
 
   return { method, url }
 }
@@ -109,16 +109,16 @@ function parseVariables(source, separatorRegexPattern = '=') {
   const variables = []
 
   const regex = new RegExp(
-    `^\\s*@([a-z_][\\w]+)${separatorRegexPattern}(.*)$`,
+    `^\\s*@([a-z_][\\w]+)(?:${separatorRegexPattern}(.*))?$`,
     'i'
   )
 
   skip(source)
 
   while (!source.eof && regex.test(source.currentLine)) {
-    const [, key, value] = regex.exec(source.consumeLine())
+    const [, key, value = ''] = regex.exec(source.consumeLine())
 
-    variables.push([key.trim(), value.trim()])
+    variables.push([key.trim(), value.trim() || true])
 
     skip(source)
   }

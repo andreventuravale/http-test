@@ -69,6 +69,27 @@ test('variables', () => {
 `)
 })
 
+it('valueless request variables are treated as booleans', () => {
+  const requests = parse(`
+    @only
+    @skip
+    GET https://{{host}}/todos/1
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "method": "GET",
+    "url": "https://{{host}}/todos/1",
+    "variables": {
+      "only": true,
+      "skip": true,
+    },
+  },
+]
+`)
+})
+
 test('white space and comments are ignored', () => {
   const requests = parse(`
 
