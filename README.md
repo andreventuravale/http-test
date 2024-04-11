@@ -5,6 +5,8 @@
 
 ## Usage
 
+Install the npm package: jest-dot-http-files
+
 It exports a jest transformer.
 
 Example:
