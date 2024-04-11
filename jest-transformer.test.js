@@ -7,9 +7,9 @@ describe('interpolate', () => {
   it('nothing to do', () => {
     expect(interpolate(' ')).toMatchInlineSnapshot(`" "`)
     expect(interpolate('')).toMatchInlineSnapshot(`""`)
-    expect(interpolate()).toMatchInlineSnapshot(`""`)
-    expect(interpolate(null)).toMatchInlineSnapshot(`""`)
-    expect(interpolate(undefined)).toMatchInlineSnapshot(`""`)
+    expect(interpolate()).toMatchInlineSnapshot(`"undefined"`)
+    expect(interpolate(null)).toMatchInlineSnapshot(`"null"`)
+    expect(interpolate(undefined)).toMatchInlineSnapshot(`"undefined"`)
   })
 
   it('environment variables', () => {
@@ -180,7 +180,8 @@ describe('process', () => {
 ).toMatchInlineSnapshot(`
 {
   "dev": {
-    "HostAddress": "https://localhost:44320",
+    "Domain": "localhost",
+    "Port": 44320,
   },
 }
 `)
@@ -190,7 +191,7 @@ expect(
 ).toMatchInlineSnapshot(`
 {
   "dev": {
-    "HostAddress": "https://contoso.com",
+    "Domain": "127.0.0.1",
   },
 }
 `)
@@ -198,9 +199,9 @@ expect(
 process.env.NODE_ENV = 'dev'
 
     expect(
-      transformer.process('GET {{HostAddress}}', './tests/user-specific-env-file/sample.http')
+      transformer.process('GET https://{{Domain}}:{{Port}}', './tests/user-specific-env-file/sample.http')
     ).toStrictEqual({
-      code: expect.stringContaining(' test("GET https://contoso.com')
+      code: expect.stringContaining(' test("GET https://127.0.0.1:44320')
     })
   })
 })

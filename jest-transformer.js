@@ -1,11 +1,12 @@
-import { existsSync, readFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
 import {
   isFinite as _isFinite,
   isNaN as _isNaN,
   isInteger,
-  isNumber
+  isNumber,
+  merge
 } from 'lodash-es'
+import { existsSync, readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
 import parse from './parser.js'
 
 function assertInteger(something) {
@@ -63,7 +64,7 @@ export function interpolate(text, { env = {}, variables = {} } = {}) {
   const context = { env, variables }
 
   function visit(text, path) {
-    const brokenAtStart = text?.split('{{') ?? []
+    const brokenAtStart = String(text)?.split('{{') ?? []
 
     const segments = [brokenAtStart.shift()]
 
@@ -157,13 +158,11 @@ export default {
     if (filename) {
       const envPath = join(dirname(filename), 'http-client.env.json')
 
-      Object.assign(envs, existsSync(envPath)
-        ? JSON.parse(readFileSync(envPath, 'utf-8'))
-        : {})
-
       const userEnvPath = join(dirname(filename), 'http-client.env.json.user')
 
-      Object.assign(envs, existsSync(userEnvPath)
+      envs = merge(envs, existsSync(envPath)
+        ? JSON.parse(readFileSync(envPath, 'utf-8'))
+        : {}, existsSync(userEnvPath)
         ? JSON.parse(readFileSync(userEnvPath, 'utf-8'))
         : {})
     }
