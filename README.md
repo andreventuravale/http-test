@@ -35,7 +35,7 @@ export default {
 
 Used as test title if present. This variable is optional.
 
-```
+```http
 @name foo bar
 GET http://foo/bar
 ```
@@ -44,7 +44,7 @@ GET http://foo/bar
 
 Runs only that particular test.
 
-```
+```http
 @only
 GET http://foo/bar
 ```
@@ -53,7 +53,7 @@ GET http://foo/bar
 
 Skips a test.
 
-```
+```http
 @skip
 GET http://foo/bar
 ```
@@ -68,7 +68,7 @@ A regex pattern string.
 
 Use it to specify what response headers to ignore for snapshot assertion. The "age" and "date" headers are always ignored.
 
-```
+```http
 @ignoreHeaders ^(x-request-id|x-vendor-.*)
 GET http://foo/bar
 ```
