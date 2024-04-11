@@ -6,10 +6,8 @@ import {
   isInteger,
   isNumber
 } from 'lodash-es'
-import nodeFetchDefaultExport from 'node-fetch'
+import nodeFetch from 'node-fetch'
 import parse from './parser.js'
-
-const nodeFetch = nodeFetchDefaultExport
 
 function assertInteger(something) {
   let value = something
@@ -159,6 +157,8 @@ export default {
           const title = request.meta?.name?.[0] ?? `${request.method} ${url}`
 
           return `
+            import nodeFetch from 'node-fetch'
+
             /**
              * ${filename}
              */
