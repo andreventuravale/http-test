@@ -84,7 +84,10 @@ Offset unit:
 - s = Second
 - ms = Millisecond
 
-#### The $localDatetime is not implememted
+#### Not supported/implemented
+
+- The **$localDatetime** function.
+- Specific HTTP versions
 
 ## A note on "assertions"
 
