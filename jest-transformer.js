@@ -142,14 +142,15 @@ export default {
   process: (src, filename) => {
     const requests = parse(src)
 
-    const envPath = join(
-      dirname(filename ?? 'a1c63c96-ad67-4546-8a78-66b9805f10e2/file.http'),
-      'http-client.env.json'
-    )
+    let envs = {}
 
-    const envs = existsSync(envPath)
-      ? JSON.parse(readFileSync(envPath, 'utf-8'))
-      : {}
+    if (filename) {
+      const envPath = join(dirname(filename), 'http-client.env.json')
+
+      envs = existsSync(envPath)
+        ? JSON.parse(readFileSync(envPath, 'utf-8'))
+        : {}
+    }
 
     const env = envs[process.env.NODE_ENV]
 
