@@ -1,26 +1,22 @@
-import { groupBy, isArray } from 'lodash-es'
 
 export default source => parseRequests(source)
 
 function skip(source) {
   let meta = []
 
-  while (
-    !source.eof &&
-    (/^\s*$/.test(source.currentLine) ||
-      /^\s*#(?!#).*$/.test(source.currentLine) ||
-      /^\s*\/\/.*$/.test(source.currentLine))
-  ) {
-    const line = source.consumeLine()
-
-    const isComment1 = /^\s*#(?!#).*$/.test(line)
-
-    const isComment2 = /^\s*\/\/.*$/.test(line)
-
-    if ((isComment1 || isComment2) && line.includes('@')) {
-      fillMeta(line, isComment1 ? '#' : '//')
+  while (!source.eof) {
+    if (/^\s*$/.test(source.currentLine)) {
+      source.consumeLine()
+    } else if (/^\s*#(?!#).*$/.test(source.currentLine)) {
+      fillMeta(source.consumeLine(), '#')
+    } else if (/^\s*\/\/.*$/.test(source.currentLine)) {
+      fillMeta(source.consumeLine(), '//')
+    } else {
+      break
     }
   }
+
+  return meta.length ? Object.fromEntries(meta) : undefined
 
   function fillMeta(line, commentLookahead) {
     const variables = parseVariables(
@@ -32,23 +28,6 @@ function skip(source) {
 
     meta = meta.concat(variables)
   }
-
-  const compiledMeta = meta.length
-    ? Object.fromEntries(
-        Object.entries(groupBy(meta, ([k]) => k)).map(([k, group]) => [
-          k,
-          group.map(([, v]) => v)
-        ])
-      )
-    : undefined
-
-  if ((compiledMeta?.name?.length ?? 0) > 1) {
-    throw new Error(
-      `(line: ${source.cursor}) only a single "name" request variable is allowed per request`
-    )
-  }
-
-  return compiledMeta
 }
 
 function parseHeaders(source) {

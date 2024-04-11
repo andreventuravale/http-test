@@ -121,10 +121,12 @@ export async function test({ request }, { fetch } = {}) {
     body: responseBody
   }
 
-  const ignoreHeader = ['age', 'date', ...(request.meta?.ignoreHeader ?? [])]
+  console.log(13123213, request.meta?.ignoreHeaders)
+
+  const ignoreHeaders = ['age', 'date', ...(request.meta?.ignoreHeaders?.split(/[ ,]/g) ?? [])]
 
   for (const header of response.headers) {
-    if (ignoreHeader.includes(header[0])) {
+    if (ignoreHeaders.includes(header[0])) {
       header[1] = expect.anything()
     }
   }

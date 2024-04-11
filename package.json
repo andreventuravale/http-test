@@ -19,6 +19,7 @@
     "testdouble": "^3.20.2"
   },
   "peerDependencies": {
+    "lodash-es": "^4.17.21",
     "node-fetch": "^3.3.2"
   }
 }
