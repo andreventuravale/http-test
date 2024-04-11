@@ -6,8 +6,10 @@ import {
   isInteger,
   isNumber
 } from 'lodash-es'
-import nodeFetch from 'node-fetch'
+import nodeFetchDefaultExport from 'node-fetch'
 import parse from './parser.js'
+
+const nodeFetch = nodeFetchDefaultExport
 
 function assertInteger(something) {
   let value = something
