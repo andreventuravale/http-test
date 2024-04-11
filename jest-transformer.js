@@ -6,7 +6,6 @@ import {
   isInteger,
   isNumber
 } from 'lodash-es'
-import nodeFetch from 'node-fetch'
 import parse from './parser.js'
 
 function assertInteger(something) {
@@ -94,7 +93,7 @@ export function interpolate(text, { env = {}, variables = {} } = {}) {
   return visit(text, [])
 }
 
-export async function test({ request }, { fetch = nodeFetch } = {}) {
+export async function test({ request }, { fetch = globalThis.nodeFetch } = {}) {
   const fetchResponse = await fetch(request.url, {
     method: request.method,
     headers: request.headers,
@@ -158,6 +157,8 @@ export default {
 
           return `
             import nodeFetch from 'node-fetch'
+            
+            globalThis.nodeFetch = nodeFetch
 
             /**
              * ${filename}
