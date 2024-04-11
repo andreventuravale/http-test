@@ -1,3 +1,5 @@
+import { existsSync, readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
 import {
   isFinite as _isFinite,
   isNaN as _isNaN,
@@ -5,8 +7,6 @@ import {
   isNumber,
   merge
 } from 'lodash-es'
-import { existsSync, readFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
 import parse from './parser.js'
 
 function assertInteger(something) {
@@ -160,11 +160,13 @@ export default {
 
       const userEnvPath = join(dirname(filename), 'http-client.env.json.user')
 
-      envs = merge(envs, existsSync(envPath)
-        ? JSON.parse(readFileSync(envPath, 'utf-8'))
-        : {}, existsSync(userEnvPath)
-        ? JSON.parse(readFileSync(userEnvPath, 'utf-8'))
-        : {})
+      envs = merge(
+        envs,
+        existsSync(envPath) ? JSON.parse(readFileSync(envPath, 'utf-8')) : {},
+        existsSync(userEnvPath)
+          ? JSON.parse(readFileSync(userEnvPath, 'utf-8'))
+          : {}
+      )
     }
 
     const env = envs[process.env.NODE_ENV]
@@ -172,19 +174,20 @@ export default {
     return {
       code: `
       ${requests
-          .map(request => {
-            const variables = request.variables
+        .map(request => {
+          const variables = request.variables
 
-            const url = interpolate(request.url, { env, variables })
+          const url = interpolate(request.url, { env, variables })
 
-            const title = request.meta?.name ?? `${request.method} ${url}`
+          const title = request.meta?.name ?? `${request.method} ${url}`
 
-            return `
+          return `
             /**
              * ${filename}
              */
-            test${request.meta?.only ? '.only' : request.meta?.skip ? '.skip' : ''
-              }(${JSON.stringify(title)}, async () => {
+            test${
+              request.meta?.only ? '.only' : request.meta?.skip ? '.skip' : ''
+            }(${JSON.stringify(title)}, async () => {
               const outcome = await (${test.toString()})(${JSON.stringify(
                 { env, request: { ...request, url } },
                 null,
@@ -194,8 +197,8 @@ export default {
               expect(outcome).toMatchSnapshot()
             })
           `
-          })
-          .join('')}
+        })
+        .join('')}
         `
     }
   }

@@ -22,11 +22,11 @@ describe('interpolate', () => {
 
   it('regular variables overrides the environment ones', () => {
     expect(
-  interpolate(' {{HostAddress}} ', {
-    env: { HostAddress: 'foo' },
-    variables: { HostAddress: 'bar' }
-  })
-).toMatchInlineSnapshot(`" bar "`)
+      interpolate(' {{HostAddress}} ', {
+        env: { HostAddress: 'foo' },
+        variables: { HostAddress: 'bar' }
+      })
+    ).toMatchInlineSnapshot(`" bar "`)
   })
 
   it('$processEnv', () => {
@@ -169,15 +169,23 @@ describe('process', () => {
     })
   })
 
-
   it('process with variables from an environment variables file combined with a user-specific file', () => {
-    expect(existsSync('./tests/user-specific-env-file/http-client.env.json')).toStrictEqual(true)
-
-    expect(existsSync('./tests/user-specific-env-file/http-client.env.json.user')).toStrictEqual(true)
+    expect(
+      existsSync('./tests/user-specific-env-file/http-client.env.json')
+    ).toStrictEqual(true)
 
     expect(
-  JSON.parse(readFileSync('./tests/user-specific-env-file/http-client.env.json', 'utf-8'))
-).toMatchInlineSnapshot(`
+      existsSync('./tests/user-specific-env-file/http-client.env.json.user')
+    ).toStrictEqual(true)
+
+    expect(
+      JSON.parse(
+        readFileSync(
+          './tests/user-specific-env-file/http-client.env.json',
+          'utf-8'
+        )
+      )
+    ).toMatchInlineSnapshot(`
 {
   "dev": {
     "Domain": "localhost",
@@ -186,9 +194,14 @@ describe('process', () => {
 }
 `)
 
-expect(
-  JSON.parse(readFileSync('./tests/user-specific-env-file/http-client.env.json.user', 'utf-8'))
-).toMatchInlineSnapshot(`
+    expect(
+      JSON.parse(
+        readFileSync(
+          './tests/user-specific-env-file/http-client.env.json.user',
+          'utf-8'
+        )
+      )
+    ).toMatchInlineSnapshot(`
 {
   "dev": {
     "Domain": "127.0.0.1",
@@ -196,10 +209,13 @@ expect(
 }
 `)
 
-process.env.NODE_ENV = 'dev'
+    process.env.NODE_ENV = 'dev'
 
     expect(
-      transformer.process('GET https://{{Domain}}:{{Port}}', './tests/user-specific-env-file/sample.http')
+      transformer.process(
+        'GET https://{{Domain}}:{{Port}}',
+        './tests/user-specific-env-file/sample.http'
+      )
     ).toStrictEqual({
       code: expect.stringContaining(' test("GET https://127.0.0.1:44320')
     })
