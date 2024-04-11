@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
+import { format, formatISO, formatRFC7231 } from 'date-fns'
 import {
   isFinite as _isFinite,
   isNaN as _isNaN,
@@ -32,6 +33,12 @@ export function evaluate(id) {
   const [fn, ...args] = id.slice(1).split(/\s+/)
 
   switch (fn) {
+    case 'datetime':
+      return formatDatetime(new Date(), args[0])
+
+    case 'localDatetime':
+      return formatDatetime(new Date().toLocaleDateString(), args[0])
+
     case 'processEnv':
       return processEnv()
 
@@ -40,6 +47,17 @@ export function evaluate(id) {
 
     default:
       throw new Error(`not implemented: $${fn}`)
+  }
+
+  function formatDatetime(date, dateFormat) {
+    const lookup = {
+      iso8601: () => formatISO(date),
+      rfc1123: () => formatRFC7231(date)
+    }
+
+    if (dateFormat in lookup) return lookup[dateFormat](date)
+
+    return format(date, JSON.parse(dateFormat))
   }
 
   function processEnv() {

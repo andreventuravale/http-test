@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs'
+import { afterAll, beforeAll, jest } from '@jest/globals'
 import { Headers } from 'node-fetch'
 import * as td from 'testdouble'
 import transformer, { interpolate, test } from './jest-transformer.js'
@@ -55,13 +56,56 @@ describe('interpolate', () => {
     }
   })
 
-  it('$randomInt - invalid values', () => {
-    expect(() => interpolate('{{$randomInt a}}')).toThrow(
-      '"a" is not a integer number'
-    )
-    expect(() => interpolate('{{$randomInt 1 b}}')).toThrow(
-      '"b" is not a integer number'
-    )
+  it('$randomInt', () => {
+    testCase()
+    testCase(-10, -1)
+    testCase(0, 0)
+    testCase(0, 1)
+    testCase(10, 20)
+
+    function testCase(min = '', max = '') {
+      const value = interpolate(`{{$randomInt ${min} ${max}}}`)
+      const number = Number(value)
+      expect(number).toBeGreaterThanOrEqual(
+        Number(min || `${Number.MIN_SAFE_INTEGER}`)
+      )
+      expect(number).toBeLessThanOrEqual(
+        Number(max || `${Number.MAX_SAFE_INTEGER}`)
+      )
+    }
+  })
+
+  describe('date related', () => {
+    beforeAll(() => {
+      jest.useFakeTimers()
+      jest.setSystemTime(new Date(2020, 3, 1))
+    })
+
+    afterAll(() => {
+      jest.useRealTimers()
+    })
+
+    it('$datetime', () => {
+      expect(
+        interpolate(`
+        GET https://httpbin.org/headers
+        x-custom: {{$datetime "dd-MM-yyyy"}}
+        x-iso8601: {{$datetime iso8601}}
+        x-iso8601l: {{$localDatetime iso8601}}
+        x-rfc1123: {{$datetime rfc1123}}
+        x-rfc1123l: {{$localDatetime rfc1123}}
+      `)
+      ).toMatchInlineSnapshot(`
+"
+        GET https://httpbin.org/headers
+        x-custom: 01-04-2020
+        x-iso8601: 2020-04-01T00:00:00-03:00
+        x-iso8601l: 2020-04-01T00:00:00-03:00
+        x-rfc1123: Wed, 01 Apr 2020 03:00:00 GMT
+        x-rfc1123l: Wed, 01 Apr 2020 03:00:00 GMT
+      "
+`)
+    })
   })
 
   it('variables', () => {

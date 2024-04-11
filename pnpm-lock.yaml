@@ -8,6 +8,9 @@ devDependencies:
   '@biomejs/biome':
     specifier: ^1.6.4
     version: 1.6.4
+  date-fns:
+    specifier: ^3.6.0
+    version: 3.6.0
   jest:
     specifier: ^29.7.0
     version: 29.7.0
@@ -1080,6 +1083,10 @@ packages:
   /data-uri-to-buffer@4.0.1:
     resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
     engines: {node: '>= 12'}
+    dev: true
+
+  /date-fns@3.6.0:
+    resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
     dev: true
 
   /debug@4.3.4:
