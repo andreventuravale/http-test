@@ -123,8 +123,16 @@ export async function test({ request }, { fetch } = {}) {
 
   const ignoreHeaders = ['age', 'date']
 
-  const ignoreHeadersRegex =
-    request.meta?.ignoreHeaders && new RegExp(request.meta.ignoreHeaders)
+  let ignoreHeadersRegex
+
+  try {
+    ignoreHeadersRegex =
+      request.meta?.ignoreHeaders && new RegExp(request.meta.ignoreHeaders)
+  } catch (e) {
+    console.error(e)
+
+    throw e
+  }
 
   for (const header of response.headers) {
     if (
@@ -157,20 +165,19 @@ export default {
     return {
       code: `
       ${requests
-        .map(request => {
-          const variables = request.variables
+          .map(request => {
+            const variables = request.variables
 
-          const url = interpolate(request.url, { env, variables })
+            const url = interpolate(request.url, { env, variables })
 
-          const title = request.meta?.name ?? `${request.method} ${url}`
+            const title = request.meta?.name ?? `${request.method} ${url}`
 
-          return `
+            return `
             /**
              * ${filename}
              */
-            test${
-              request.meta?.only ? '.only' : request.meta?.skip ? '.skip' : ''
-            }(${JSON.stringify(title)}, async () => {
+            test${request.meta?.only ? '.only' : request.meta?.skip ? '.skip' : ''
+              }(${JSON.stringify(title)}, async () => {
               const outcome = await (${test.toString()})(${JSON.stringify(
                 { env, request: { ...request, url } },
                 null,
@@ -180,8 +187,8 @@ export default {
               expect(outcome).toMatchSnapshot()
             })
           `
-        })
-        .join('')}
+          })
+          .join('')}
         `
     }
   }
