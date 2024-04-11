@@ -64,7 +64,7 @@ Assertions are made using jest snapshots.
 
 #### The @ignoreHeaders request variable
 
-List delimited by spaces.
+A regex pattern string.
 
 Use it to specify what response headers to ignore for snapshot assertion. The "age" and "date" headers are always ignored.
 
