@@ -168,7 +168,9 @@ export default {
             /**
              * ${filename}
              */
-            test(${JSON.stringify(title)}, async () => {
+            test${
+              request.meta?.only ? '.only' : request.meta?.skip ? '.skip' : ''
+            }(${JSON.stringify(title)}, async () => {
               const outcome = await (${test.toString()})(${JSON.stringify(
                 { env, request: { ...request, url } },
                 null,

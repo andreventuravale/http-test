@@ -94,7 +94,7 @@ describe('interpolate', () => {
 })
 
 describe('process', () => {
-  it('uses the test name if present', () => {
+  it('name request variable', () => {
     expect(
       transformer.process(`
       // @name              foo bar
@@ -102,6 +102,30 @@ describe('process', () => {
     `)
     ).toStrictEqual({
       code: expect.stringContaining(` test(\"foo bar\",`)
+    })
+  })
+
+  it('skip request variable', () => {
+    expect(
+      transformer.process(`
+      // @name foo bar
+      // @skip
+      GET https://foo/bar
+    `)
+    ).toStrictEqual({
+      code: expect.stringContaining(` test.skip(\"foo bar\",`)
+    })
+  })
+
+  it('only request variable', () => {
+    expect(
+      transformer.process(`
+      // @name foo bar
+      // @only
+      GET https://foo/bar
+    `)
+    ).toStrictEqual({
+      code: expect.stringContaining(` test.only(\"foo bar\",`)
     })
   })
 
