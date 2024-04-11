@@ -5,11 +5,16 @@
 
 ## Usage
 
-Install the npm package: jest-dot-http-files
+Install the npm package: **jest-dot-http-files**
 
-It exports a jest transformer.
+Install the peer-dependencies:
 
-Example:
+- **lodash-es**
+- **node-fetch**
+
+It works by exporting a jest transformer.
+
+Here is a simplified way to use it:
 
 ```javascript
 // jest.config.js
