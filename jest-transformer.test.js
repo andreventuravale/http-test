@@ -20,6 +20,15 @@ describe('interpolate', () => {
     ).toMatchInlineSnapshot(`" foo "`)
   })
 
+  it('regular variables overrides the environment ones', () => {
+    expect(
+  interpolate(' {{HostAddress}} ', {
+    env: { HostAddress: 'foo' },
+    variables: { HostAddress: 'bar' }
+  })
+).toMatchInlineSnapshot(`" bar "`)
+  })
+
   it('$processEnv', () => {
     process.env.FOO = 'bar'
     expect(interpolate(' {{$processEnv FOO}} ')).toMatchInlineSnapshot(
