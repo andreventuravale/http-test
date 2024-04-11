@@ -1,7 +1,7 @@
-export default source => parseRequests(source)
+export default sourceText => parseRequests(sourceText)
 
-function makeSource(text) {
-  const lines = text?.split?.(/[\r\n]+/g) ?? []
+function makeSource(sourceText) {
+  const lines = sourceText?.split?.(/[\r\n]+/g) ?? []
 
   let cursor = 1
 
@@ -9,9 +9,11 @@ function makeSource(text) {
     get currentLine() {
       return lines[0]?.trim()
     },
+
     get cursor() {
       return cursor
     },
+
     get eof() {
       return lines.length === 0
     },
