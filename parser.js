@@ -1,4 +1,3 @@
-
 export default source => parseRequests(source)
 
 function skip(source) {
@@ -26,7 +25,7 @@ function skip(source) {
       '\\s+'
     )
 
-    meta = meta.concat(variables)
+    meta = meta.concat(variables ?? [])
   }
 }
 
@@ -106,10 +105,13 @@ function parseEndpoint(source) {
   return { method, url }
 }
 
-function parseVariables(source, separator = '=') {
+function parseVariables(source, separatorRegexPattern = '=') {
   const variables = []
 
-  const regex = new RegExp(`^\\s*@([a-z_][\\w]+)${separator}(.*)$`, 'i')
+  const regex = new RegExp(
+    `^\\s*@([a-z_][\\w]+)${separatorRegexPattern}(.*)$`,
+    'i'
+  )
 
   skip(source)
 

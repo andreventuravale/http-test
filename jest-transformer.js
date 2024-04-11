@@ -121,9 +121,14 @@ export async function test({ request }, { fetch } = {}) {
     body: responseBody
   }
 
-  console.log(13123213, request.meta?.ignoreHeaders)
-
-  const ignoreHeaders = ['age', 'date', ...(request.meta?.ignoreHeaders?.split(/[ ,]/g) ?? [])]
+  const ignoreHeaders = [
+    'age',
+    'date',
+    ...(request.meta?.ignoreHeaders
+      ?.trim()
+      ?.replace(/\s+/g, ' ')
+      ?.split(/[ ,]+/g) ?? [])
+  ]
 
   for (const header of response.headers) {
     if (ignoreHeaders.includes(header[0])) {
@@ -157,7 +162,7 @@ export default {
 
           const url = interpolate(request.url, { env, variables })
 
-          const title = request.meta?.name?.[0] ?? `${request.method} ${url}`
+          const title = request.meta?.name ?? `${request.method} ${url}`
 
           return `
             /**

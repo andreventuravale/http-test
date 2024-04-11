@@ -97,7 +97,7 @@ describe('process', () => {
   it('uses the test name if present', () => {
     expect(
       transformer.process(`
-      // @name foo bar
+      // @name              foo bar
       GET https://foo/bar
     `)
     ).toStrictEqual({
@@ -154,19 +154,19 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: {
-        meta: {
-          ignoreHeaders: ' x-foo x-bar , xbaz '
+      await test(
+        {
+          request: {
+            meta: {
+              ignoreHeaders: ' x-foo x-bar , xbaz '
+            },
+            method: 'GET',
+            url: 'http://foo'
+          }
         },
-        method: 'GET',
-        url: 'http://foo'
-      }
-    },
-    { fetch }
-  )
-).toMatchInlineSnapshot(`
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "meta": {

@@ -306,27 +306,13 @@ test('named requests', () => {
 [
   {
     "meta": {
-      "name": [
-        "foo",
-      ],
+      "name": "foo",
     },
     "method": "GET",
     "url": "https://jsonplaceholder.typicode.com/todos/1",
   },
 ]
 `)
-})
-
-test('named requests - only a single name request variable', () => {
-  expect(() =>
-    parse(`
-      // @name foo
-      // @name bar
-      GET https://jsonplaceholder.typicode.com/todos/1
-    `)
-  ).toThrow(
-    '(line: 4) only a single "name" request variable is allowed per request'
-  )
 })
 
 test('request meta', () => {
@@ -341,13 +327,8 @@ test('request meta', () => {
 [
   {
     "meta": {
-      "foo": [
-        "bar",
-        "baz",
-      ],
-      "qux": [
-        "waldo",
-      ],
+      "foo": "baz",
+      "qux": "waldo",
     },
     "method": "GET",
     "url": "https://jsonplaceholder.typicode.com/todos/1",
