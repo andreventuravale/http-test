@@ -178,19 +178,19 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: {
-        meta: {
-          ignoreHeaders: 'x-*'
+      await test(
+        {
+          request: {
+            meta: {
+              ignoreHeaders: 'x-*'
+            },
+            method: 'GET',
+            url: 'http://foo'
+          }
         },
-        method: 'GET',
-        url: 'http://foo'
-      }
-    },
-    { fetch }
-  )
-).toMatchInlineSnapshot(`
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "meta": {

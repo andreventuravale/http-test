@@ -69,6 +69,6 @@ List delimited by spaces.
 Use it to specify what response headers to ignore for snapshot assertion. The "age" and "date" headers are always ignored.
 
 ```
-@ignoreHeaders x-foo x-bar
+@ignoreHeaders ^(x-request-id|x-vendor-.*)
 GET http://foo/bar
 ```
