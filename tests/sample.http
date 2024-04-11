@@ -1,4 +1,4 @@
 # @name sample
-# @ignoreHeaders cf-ray
+# @ignoreHeaders ^(cf-ray|x-.*)
 GET https://jsonplaceholder.typicode.com/todos/1
 content-type: application/json

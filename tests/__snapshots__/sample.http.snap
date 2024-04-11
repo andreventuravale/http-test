@@ -10,7 +10,7 @@ exports[`sample 1`] = `
       ],
     ],
     "meta": {
-      "ignoreHeaders": "cf-ray",
+      "ignoreHeaders": "^(cf-ray|x-.*)",
       "name": "sample",
     },
     "method": "GET",
@@ -106,23 +106,23 @@ exports[`sample 1`] = `
       ],
       [
         "x-content-type-options",
-        "nosniff",
+        Anything,
       ],
       [
         "x-powered-by",
-        "Express",
+        Anything,
       ],
       [
         "x-ratelimit-limit",
-        "1000",
+        Anything,
       ],
       [
         "x-ratelimit-remaining",
-        "999",
+        Anything,
       ],
       [
         "x-ratelimit-reset",
-        "1712353351",
+        Anything,
       ],
     ],
   },

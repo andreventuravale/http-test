@@ -121,17 +121,16 @@ export async function test({ request }, { fetch } = {}) {
     body: responseBody
   }
 
-  const ignoreHeaders = [
-    'age',
-    'date',
-    ...(request.meta?.ignoreHeaders
-      ?.trim()
-      ?.replace(/[ \t]+/g, ' ')
-      ?.split(' ') ?? [])
-  ]
+  const ignoreHeaders = ['age', 'date']
+
+  const ignoreHeadersRegex =
+    request.meta?.ignoreHeaders && new RegExp(request.meta.ignoreHeaders)
 
   for (const header of response.headers) {
-    if (ignoreHeaders.includes(header[0])) {
+    if (
+      ignoreHeaders.includes(header[0]) ||
+      ignoreHeadersRegex?.test(header[0])
+    ) {
       header[1] = expect.anything()
     }
   }
