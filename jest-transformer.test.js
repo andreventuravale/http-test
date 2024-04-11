@@ -178,23 +178,23 @@ describe('test', () => {
     })
 
     expect(
-      await test(
-        {
-          request: {
-            meta: {
-              ignoreHeaders: ' x-foo x-bar , xbaz '
-            },
-            method: 'GET',
-            url: 'http://foo'
-          }
+  await test(
+    {
+      request: {
+        meta: {
+          ignoreHeaders: ' x-foo   x-bar      \t    xbaz '
         },
-        { fetch }
-      )
-    ).toMatchInlineSnapshot(`
+        method: 'GET',
+        url: 'http://foo'
+      }
+    },
+    { fetch }
+  )
+).toMatchInlineSnapshot(`
 {
   "request": {
     "meta": {
-      "ignoreHeaders": " x-foo x-bar , xbaz ",
+      "ignoreHeaders": " x-foo   x-bar      	    xbaz ",
     },
     "method": "GET",
     "url": "http://foo",

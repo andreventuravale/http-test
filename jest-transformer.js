@@ -126,8 +126,8 @@ export async function test({ request }, { fetch } = {}) {
     'date',
     ...(request.meta?.ignoreHeaders
       ?.trim()
-      ?.replace(/\s+/g, ' ')
-      ?.split(/[ ,]+/g) ?? [])
+      ?.replace(/[ \t]+/g, ' ')
+      ?.split(' ') ?? [])
   ]
 
   for (const header of response.headers) {
