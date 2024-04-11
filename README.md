@@ -29,7 +29,7 @@ export default {
 
 ```
 
-## Deviations to the original spec
+## Deviations from the original spec
 
 #### The @name request variable
 
