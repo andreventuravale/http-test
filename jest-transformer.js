@@ -110,7 +110,7 @@ export function interpolate(text, { env = {}, variables = {} } = {}) {
           )
         }
 
-        const value = variables[id] ?? env[id]
+        const value = variables[id]?.value ?? env[id]
 
         segments.push(visit(value, [...path, id]))
       }
@@ -207,7 +207,7 @@ export default {
 
           const url = interpolate(request.url, { env, variables })
 
-          const title = request.meta?.name ?? `${request.method} ${url}`
+          const title = request.meta?.name?.value ?? `${request.method} ${url}`
 
           return `
             /**

@@ -25,7 +25,7 @@ describe('interpolate', () => {
     expect(
       interpolate(' {{HostAddress}} ', {
         env: { HostAddress: 'foo' },
-        variables: { HostAddress: 'bar' }
+        variables: { HostAddress: { value: 'bar' } }
       })
     ).toMatchInlineSnapshot(`" bar "`)
   })
@@ -113,8 +113,8 @@ describe('interpolate', () => {
     expect(
       interpolate(' {{foo}} {{bar}} ', {
         variables: {
-          bar: 'baz',
-          foo: '{{bar}}'
+          bar: { value: 'baz' },
+          foo: { value: '{{bar}}' }
         }
       })
     ).toMatchInlineSnapshot(`" baz baz "`)
@@ -124,7 +124,7 @@ describe('interpolate', () => {
     expect(() =>
       interpolate(' {{self}} ', {
         variables: {
-          self: 'self = {{self}}'
+          self: { value: 'self = {{self}}' }
         }
       })
     ).toThrow('variable cycle found: self -> self')
@@ -134,9 +134,9 @@ describe('interpolate', () => {
     expect(() =>
       interpolate(' {{foo}} ', {
         variables: {
-          foo: '{{bar}}',
-          bar: '{{baz}}',
-          baz: '{{foo}}'
+          foo: { value: '{{bar}}' },
+          bar: { value: '{{baz}}' },
+          baz: { value: '{{foo}}' }
         }
       })
     ).toThrow('variable cycle found: foo -> bar -> baz -> foo')

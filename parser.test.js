@@ -60,9 +60,56 @@ test('variables', () => {
     "method": "GET",
     "url": "https://{{host}}/todos/1",
     "variables": {
-      "host": "{{hostname}}:{{port}}",
-      "hostname": "localhost",
-      "port": "3000",
+      "host": {
+        "global": false,
+        "value": "{{hostname}}:{{port}}",
+      },
+      "hostname": {
+        "global": false,
+        "value": "localhost",
+      },
+      "port": {
+        "global": false,
+        "value": "3000",
+      },
+    },
+  },
+]
+`)
+})
+
+test('global variables', () => {
+  const requests = parse(`
+    @@hostname=localhost
+    @@port=3000
+    @@host={{hostname}}:{{port}}
+
+    @endpoint=https://{{host}}/todos/1
+    GET {{endpoint}}
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "method": "GET",
+    "url": "{{endpoint}}",
+    "variables": {
+      "endpoint": {
+        "global": false,
+        "value": "https://{{host}}/todos/1",
+      },
+      "host": {
+        "global": true,
+        "value": "{{hostname}}:{{port}}",
+      },
+      "hostname": {
+        "global": true,
+        "value": "localhost",
+      },
+      "port": {
+        "global": true,
+        "value": "3000",
+      },
     },
   },
 ]
@@ -82,8 +129,14 @@ it('valueless request variables are treated as booleans', () => {
     "method": "GET",
     "url": "https://{{host}}/todos/1",
     "variables": {
-      "only": true,
-      "skip": true,
+      "only": {
+        "global": false,
+        "value": true,
+      },
+      "skip": {
+        "global": false,
+        "value": true,
+      },
     },
   },
 ]
@@ -327,7 +380,10 @@ test('named requests', () => {
 [
   {
     "meta": {
-      "name": "foo",
+      "name": {
+        "global": false,
+        "value": "foo",
+      },
     },
     "method": "GET",
     "url": "https://jsonplaceholder.typicode.com/todos/1",
@@ -348,8 +404,14 @@ test('request meta', () => {
 [
   {
     "meta": {
-      "foo": "baz",
-      "qux": "waldo",
+      "foo": {
+        "global": false,
+        "value": "baz",
+      },
+      "qux": {
+        "global": false,
+        "value": "waldo",
+      },
     },
     "method": "GET",
     "url": "https://jsonplaceholder.typicode.com/todos/1",

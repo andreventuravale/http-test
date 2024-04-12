@@ -33,6 +33,10 @@ export default {
 
 ## Deviations from the original spec
 
+#### Global variables
+
+Variables starting with @@ are held in the global scope, whether variables starting with a single @ are held in the request-scope.
+
 #### The @name request variable
 
 Used as test title if present. This variable is optional.

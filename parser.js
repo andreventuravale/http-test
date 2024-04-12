@@ -1,3 +1,5 @@
+import { trim } from 'lodash-es'
+
 export default sourceText => parseRequests(sourceText)
 
 function makeSource(sourceText) {
@@ -115,7 +117,7 @@ function parseVariables(source, separatorRegexPattern = '=') {
   const variables = []
 
   const regex = new RegExp(
-    `^\\s*@([a-z_][\\w]+)(?:${separatorRegexPattern}(.*))?$`,
+    `^\\s*(@@?[a-z_][\\w]+)(?:${separatorRegexPattern}(.*))?$`,
     'i'
   )
 
@@ -124,7 +126,13 @@ function parseVariables(source, separatorRegexPattern = '=') {
   while (!source.eof && regex.test(source.currentLine)) {
     const [, key, value = ''] = regex.exec(source.consumeLine())
 
-    variables.push([key.trim(), value.trim() || true])
+    variables.push([
+      trim(key.trim(), '@'),
+      {
+        value: value.trim() || true,
+        global: key.startsWith('@@')
+      }
+    ])
 
     skip(source)
   }
