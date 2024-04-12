@@ -191,7 +191,7 @@ describe('makeInterpolate', () => {
 })
 
 describe('process', () => {
-  it('name request variable', () => {
+  it('name meta variable', () => {
     expect(
       transformer.process(`
       // @name              foo bar
@@ -202,7 +202,7 @@ describe('process', () => {
     })
   })
 
-  it('skip request variable', () => {
+  it('skip meta variable', () => {
     expect(
       transformer.process(`
       // @name foo bar
@@ -214,7 +214,7 @@ describe('process', () => {
     })
   })
 
-  it('only request variable', () => {
+  it('only meta variable', () => {
     expect(
       transformer.process(`
       // @name foo bar
@@ -254,6 +254,34 @@ describe('process', () => {
     expect(result).toStrictEqual({
       code: expect.stringContaining(' test("GET https://foo:3000/bar",')
     })
+  })
+
+  it('global variables are hoisted', () => {
+    const result = transformer.process(`
+      @endpoint=https://{{host}}/bar
+      GET {{endpoint}}
+
+      ###
+
+      @endpoint=https://{{host}}/baz
+      GET {{endpoint}}
+
+      ###
+
+      @@domain=foo
+      @@port=3000
+      @@host={{domain}}:{{port}}
+    `)
+
+    expect(result).toStrictEqual({
+      code: expect.stringContaining(' test("GET https://foo:3000/baz",')
+    })
+
+    expect(result).toStrictEqual({
+      code: expect.stringContaining(' test("GET https://foo:3000/bar",')
+    })
+
+    expect(Array.from(result.code.matchAll(/ test\("/g))).toHaveLength(2)
   })
 
   it('process interpolates headers', () => {
@@ -365,19 +393,19 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: {
-        meta: {
-          ignoreHeaders: { value: '^x-.*' }
+      await test(
+        {
+          request: {
+            meta: {
+              ignoreHeaders: { value: '^x-.*' }
+            },
+            method: 'GET',
+            url: 'http://foo'
+          }
         },
-        method: 'GET',
-        url: 'http://foo'
-      }
-    },
-    { fetch }
-  )
-).toMatchInlineSnapshot(`
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "meta": {

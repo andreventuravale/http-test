@@ -37,30 +37,30 @@ export default {
 
 Variables starting with @@ are held in the global scope, whether variables starting with a single @ are held in the request-scope.
 
-#### The @name request variable
+#### The @name meta variable
 
 Used as test title if present. This variable is optional.
 
 ```http
-@name foo bar
+# @name foo bar
 GET http://foo/bar
 ```
 
-#### The @only request variable
+#### The @only meta variable
 
 Runs only that particular test.
 
 ```http
-@only
+# @only
 GET http://foo/bar
 ```
 
-#### The @skip request variable
+#### The @skip meta variable
 
 Skips a test.
 
 ```http
-@skip
+# @skip
 GET http://foo/bar
 ```
 

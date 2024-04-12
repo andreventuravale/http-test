@@ -116,19 +116,205 @@ test('global variables', () => {
 `)
 })
 
-it('valueless request variables are treated as booleans', () => {
+test('global variables across requests', () => {
   const requests = parse(`
-    @only
-    @skip
-    GET https://{{host}}/todos/1
+    @@hostname=localhost
+    @@port=3000
+
+    @endpoint=https://{{host}}/todos/1
+    GET {{endpoint}}
+
+    ###
+
+    @@host={{hostname}}:{{port}}
+
+    @endpoint=https://{{host}}/todos/1
+    GET {{endpoint}}
   `)
 
   expect(requests).toMatchInlineSnapshot(`
 [
   {
     "method": "GET",
-    "url": "https://{{host}}/todos/1",
+    "url": "{{endpoint}}",
     "variables": {
+      "endpoint": {
+        "global": false,
+        "value": "https://{{host}}/todos/1",
+      },
+      "hostname": {
+        "global": true,
+        "value": "localhost",
+      },
+      "port": {
+        "global": true,
+        "value": "3000",
+      },
+    },
+  },
+  {
+    "method": "GET",
+    "url": "{{endpoint}}",
+    "variables": {
+      "endpoint": {
+        "global": false,
+        "value": "https://{{host}}/todos/1",
+      },
+      "host": {
+        "global": true,
+        "value": "{{hostname}}:{{port}}",
+      },
+    },
+  },
+]
+`)
+})
+
+test('per-request meta', () => {
+  const requests = parse(`   
+    @@host=https://jsonplaceholder.typicode.com
+    @@dash={{$guid}}
+    
+    # @name sample1
+    # @ignoreHeaders .*
+    GET {{host}}/todos/1?_={{dash}}
+    content-type: application/json
+    
+    ###
+    
+    # @name sample2
+    # @ignoreHeaders .*
+    GET {{host}}/todos/2?_={{dash}}
+    content-type: application/json
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+    ],
+    "meta": {
+      "ignoreHeaders": {
+        "global": false,
+        "value": ".*",
+      },
+      "name": {
+        "global": false,
+        "value": "sample1",
+      },
+    },
+    "method": "GET",
+    "url": "{{host}}/todos/1?_={{dash}}",
+    "variables": {
+      "dash": {
+        "global": true,
+        "value": "{{$guid}}",
+      },
+      "host": {
+        "global": true,
+        "value": "https://jsonplaceholder.typicode.com",
+      },
+    },
+  },
+  {
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+    ],
+    "meta": {
+      "ignoreHeaders": {
+        "global": false,
+        "value": ".*",
+      },
+      "name": {
+        "global": false,
+        "value": "sample2",
+      },
+    },
+    "method": "GET",
+    "url": "{{host}}/todos/2?_={{dash}}",
+  },
+]
+`)
+})
+
+test('global variables at the bottom', () => {
+  const requests = parse(`
+    @@hostname=localhost
+    @@port=3000
+
+    @endpoint=https://{{host}}/todos/1
+    GET {{endpoint}}
+
+    ###
+
+    @endpoint=https://{{host}}/todos/1
+    GET {{endpoint}}
+
+    ###
+
+    @@host={{hostname}}:{{port}}
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "method": "GET",
+    "url": "{{endpoint}}",
+    "variables": {
+      "endpoint": {
+        "global": false,
+        "value": "https://{{host}}/todos/1",
+      },
+      "hostname": {
+        "global": true,
+        "value": "localhost",
+      },
+      "port": {
+        "global": true,
+        "value": "3000",
+      },
+    },
+  },
+  {
+    "method": "GET",
+    "url": "{{endpoint}}",
+    "variables": {
+      "endpoint": {
+        "global": false,
+        "value": "https://{{host}}/todos/1",
+      },
+    },
+  },
+  {
+    "variables": {
+      "host": {
+        "global": true,
+        "value": "{{hostname}}:{{port}}",
+      },
+    },
+  },
+]
+`)
+})
+
+it('valueless meta variables are treated as booleans', () => {
+  const requests = parse(`
+    # @only
+    # @skip
+    GET https://{{host}}/todos/1
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "meta": {
       "only": {
         "global": false,
         "value": true,
@@ -138,6 +324,8 @@ it('valueless request variables are treated as booleans', () => {
         "value": true,
       },
     },
+    "method": "GET",
+    "url": "https://{{host}}/todos/1",
   },
 ]
 `)

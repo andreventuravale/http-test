@@ -1,0 +1,5 @@
+- variables to evaluate to itself without mutate the parameter object
+- merge env and globalVars in a single globalScope using assign
+- understand why the first test is loosing the name request variable ( meta )
+  - move meta to the variable outside the while
+    - cpature the meta on the first skip

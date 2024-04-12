@@ -1,4 +1,14 @@
-# @name sample
+@@host=https://jsonplaceholder.typicode.com
+@@dash={{$guid}}
+
+# @name sample1
 # @ignoreHeaders .*
-GET https://jsonplaceholder.typicode.com/todos/1
+GET {{host}}/todos/1?_={{dash}}
+content-type: application/json
+
+###
+
+# @name sample2
+# @ignoreHeaders .*
+GET {{host}}/todos/2?_={{dash}}
 content-type: application/json

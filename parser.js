@@ -86,13 +86,18 @@ function parseRequests(sourceText) {
   const requests = []
 
   do {
-    const meta = skip(source)
+    const { meta, variables } = parseVariables(source)
 
     if (source.eof) {
+      const partial = {
+        ...(variables ? { variables: Object.fromEntries(variables) } : {}),
+        ...(Object.keys(meta).length ? { meta } : {})
+      }
+
+      Object.keys(partial).length && requests.push(partial)
+
       break
     }
-
-    const variables = parseVariables(source)
 
     const { method, url } = parseEndpoint(source)
 
@@ -106,7 +111,7 @@ function parseRequests(sourceText) {
       ...(headers ? { headers } : {}),
       ...(body ? { body } : {}),
       ...(variables ? { variables: Object.fromEntries(variables) } : {}),
-      ...(meta ? { meta } : {})
+      ...(Object.keys(meta).length ? { meta } : {})
     })
   } while (!source.eof)
 
@@ -114,6 +119,8 @@ function parseRequests(sourceText) {
 }
 
 function parseVariables(source, separatorRegexPattern = '=') {
+  const meta = {}
+
   const variables = []
 
   const regex = new RegExp(
@@ -121,7 +128,7 @@ function parseVariables(source, separatorRegexPattern = '=') {
     'i'
   )
 
-  skip(source)
+  Object.assign(meta, skip(source))
 
   while (!source.eof && regex.test(source.currentLine)) {
     const [, key, value = ''] = regex.exec(source.consumeLine())
@@ -134,10 +141,13 @@ function parseVariables(source, separatorRegexPattern = '=') {
       }
     ])
 
-    skip(source)
+    Object.assign(meta, skip(source))
   }
 
-  return variables.length ? variables : undefined
+  return {
+    meta,
+    ...(variables.length ? { variables } : {})
+  }
 }
 
 function skip(source) {
@@ -158,7 +168,7 @@ function skip(source) {
   return meta.length ? Object.fromEntries(meta) : undefined
 
   function fillMeta(line, commentLookahead) {
-    const variables = parseVariables(
+    const { variables } = parseVariables(
       makeSource(
         line.slice(line.indexOf(commentLookahead) + commentLookahead.length)
       ),

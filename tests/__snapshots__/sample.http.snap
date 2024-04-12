@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`sample 1`] = `
+exports[`sample1 1`] = `
 {
   "request": {
     "headers": [
@@ -16,11 +16,11 @@ exports[`sample 1`] = `
       },
       "name": {
         "global": false,
-        "value": "sample",
+        "value": "sample1",
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=ac7c6fe7-ad44-4247-91d6-f2427494715c",
   },
   "response": {
     "body": {
@@ -35,7 +35,134 @@ exports[`sample 1`] = `
         Anything,
       ],
       [
-        "age",
+        "alt-svc",
+        Anything,
+      ],
+      [
+        "cache-control",
+        Anything,
+      ],
+      [
+        "cf-cache-status",
+        Anything,
+      ],
+      [
+        "cf-ray",
+        Anything,
+      ],
+      [
+        "connection",
+        Anything,
+      ],
+      [
+        "content-encoding",
+        Anything,
+      ],
+      [
+        "content-type",
+        Anything,
+      ],
+      [
+        "date",
+        Anything,
+      ],
+      [
+        "etag",
+        Anything,
+      ],
+      [
+        "expires",
+        Anything,
+      ],
+      [
+        "nel",
+        Anything,
+      ],
+      [
+        "pragma",
+        Anything,
+      ],
+      [
+        "report-to",
+        Anything,
+      ],
+      [
+        "reporting-endpoints",
+        Anything,
+      ],
+      [
+        "server",
+        Anything,
+      ],
+      [
+        "transfer-encoding",
+        Anything,
+      ],
+      [
+        "vary",
+        Anything,
+      ],
+      [
+        "via",
+        Anything,
+      ],
+      [
+        "x-content-type-options",
+        Anything,
+      ],
+      [
+        "x-powered-by",
+        Anything,
+      ],
+      [
+        "x-ratelimit-limit",
+        Anything,
+      ],
+      [
+        "x-ratelimit-remaining",
+        Anything,
+      ],
+      [
+        "x-ratelimit-reset",
+        Anything,
+      ],
+    ],
+  },
+}
+`;
+
+exports[`sample2 1`] = `
+{
+  "request": {
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+    ],
+    "meta": {
+      "ignoreHeaders": {
+        "global": false,
+        "value": ".*",
+      },
+      "name": {
+        "global": false,
+        "value": "sample2",
+      },
+    },
+    "method": "GET",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=ac7c6fe7-ad44-4247-91d6-f2427494715c",
+  },
+  "response": {
+    "body": {
+      "completed": false,
+      "id": 2,
+      "title": "quis ut nam facilis et officia qui",
+      "userId": 1,
+    },
+    "headers": [
+      [
+        "access-control-allow-credentials",
         Anything,
       ],
       [
