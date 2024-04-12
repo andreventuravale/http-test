@@ -10,8 +10,14 @@ exports[`sample 1`] = `
       ],
     ],
     "meta": {
-      "ignoreHeaders": ".*",
-      "name": "sample",
+      "ignoreHeaders": {
+        "global": false,
+        "value": ".*",
+      },
+      "name": {
+        "global": false,
+        "value": "sample",
+      },
     },
     "method": "GET",
     "url": "https://jsonplaceholder.typicode.com/todos/1",

@@ -88,66 +88,65 @@ export function evaluate(id) {
   }
 }
 
-export function interpolate(
-  text,
-  { env = {}, globalVariables = {}, variables = {} } = {}
-) {
-  const context = { env, variables }
+export const makeInterpolate =
+  ({ env = {}, globalVariables = {}, variables = {} } = {}) =>
+    text => {
+      const context = { env, variables }
 
-  function visit(text, path, { isGlobal = false } = {}) {
-    const brokenAtStart = String(text)?.split('{{') ?? []
+      function visit(text, path, { isGlobal = false } = {}) {
+        const brokenAtStart = String(text)?.split('{{') ?? []
 
-    const segments = [brokenAtStart.shift()]
+        const segments = [brokenAtStart.shift()]
 
-    for (const start of brokenAtStart) {
-      const endIndex = start.indexOf('}}')
+        for (const start of brokenAtStart) {
+          const endIndex = start.indexOf('}}')
 
-      const id = start.slice(0, endIndex)
+          const id = start.slice(0, endIndex)
 
-      if (id[0] === '$') {
-        segments.push(evaluate(id, context))
-      } else {
-        if (path.includes(id)) {
-          throw new Error(
-            `variable cycle found: ${path.concat([id]).join(' -> ')}`
-          )
+          if (id[0] === '$') {
+            segments.push(evaluate(id, context))
+          } else {
+            if (path.includes(id)) {
+              throw new Error(
+                `variable cycle found: ${path.concat([id]).join(' -> ')}`
+              )
+            }
+
+            if (isGlobal && !(id in globalVariables) && !(id in env)) {
+              throw new Error(`variable not found on global scope: ${id}`)
+            }
+
+            if (
+              !isGlobal &&
+              !(id in variables) &&
+              !(id in globalVariables) &&
+              !(id in env)
+            ) {
+              throw new Error(`variable not found: ${id}`)
+            }
+
+            const value =
+              !isGlobal && id in variables
+                ? variables[id].value
+                : id in globalVariables
+                  ? globalVariables[id].value
+                  : env[id]
+
+            segments.push(
+              visit(value, [...path, id], {
+                isGlobal: id in globalVariables && !(id in variables)
+              })
+            )
+          }
+
+          segments.push(start.slice(endIndex + 2))
         }
 
-        if (isGlobal && !(id in globalVariables) && !(id in env)) {
-          throw new Error(`variable not found on global scope: ${id}`)
-        }
-
-        if (
-          !isGlobal &&
-          !(id in variables) &&
-          !(id in globalVariables) &&
-          !(id in env)
-        ) {
-          throw new Error(`variable not found: ${id}`)
-        }
-
-        const value =
-          !isGlobal && id in variables
-            ? variables[id].value
-            : id in globalVariables
-              ? globalVariables[id].value
-              : env[id]
-
-        segments.push(
-          visit(value, [...path, id], {
-            isGlobal: id in globalVariables && !(id in variables)
-          })
-        )
+        return segments.join('')
       }
 
-      segments.push(start.slice(endIndex + 2))
+      return visit(text, [])
     }
-
-    return segments.join('')
-  }
-
-  return visit(text, [])
-}
 
 export async function test({ request }, { fetch } = {}) {
   fetch = fetch ?? (await import('node-fetch')).default
@@ -183,12 +182,15 @@ export async function test({ request }, { fetch } = {}) {
 
   try {
     ignoreHeadersRegex =
-      request.meta?.ignoreHeaders && new RegExp(request.meta.ignoreHeaders)
+      request.meta?.ignoreHeaders?.value &&
+      new RegExp(request.meta.ignoreHeaders?.value)
   } catch (e) {
     console.error(e)
 
     throw e
   }
+
+  response.headers = response.headers.map(([k, v]) => [k, v])
 
   for (const header of response.headers) {
     if (
@@ -233,26 +235,41 @@ export default {
     return {
       code: `
       ${requests
-        .map(request => {
-          const variables = request.variables
+          .map(request => {
+            const variables = request.variables
 
-          const url = interpolate(request.url, {
-            env,
-            globalVariables,
-            variables
-          })
+            const interpolate = makeInterpolate({
+              env,
+              globalVariables,
+              variables
+            })
 
-          const title = request.meta?.name?.value ?? `${request.method} ${url}`
+            const url = interpolate(request.url)
 
-          return `
+            const title = request.meta?.name?.value ?? `${request.method} ${url}`
+
+            return `
             /**
              * ${filename}
              */
-            test${
-              request.meta?.only ? '.only' : request.meta?.skip ? '.skip' : ''
-            }(${JSON.stringify(title)}, async () => {
+            test${request.meta?.only?.value
+                ? '.only'
+                : request.meta?.skip?.value
+                  ? '.skip'
+                  : ''
+              }(${JSON.stringify(title)}, async () => {
               const outcome = await (${test.toString()})(${JSON.stringify(
-                { env, request: { ...request, url } },
+                {
+                  env,
+                  request: {
+                    ...request,
+                    headers: request.headers?.map(([k, v]) => [
+                      k,
+                      interpolate(v)
+                    ]),
+                    url
+                  }
+                },
                 null,
                 2
               )})
@@ -260,8 +277,8 @@ export default {
               expect(outcome).toMatchSnapshot()
             })
           `
-        })
-        .join('')}
+          })
+          .join('')}
         `
     }
   }

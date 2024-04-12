@@ -2,76 +2,78 @@ import { existsSync, readFileSync } from 'node:fs'
 import { afterAll, beforeAll, jest } from '@jest/globals'
 import { Headers } from 'node-fetch'
 import * as td from 'testdouble'
-import transformer, { interpolate, test } from './jest-transformer.js'
+import transformer, { makeInterpolate, test } from './jest-transformer.js'
 
-describe('interpolate', () => {
+describe('makeInterpolate', () => {
   it('nothing to do', () => {
-    expect(interpolate(' ')).toMatchInlineSnapshot(`" "`)
-    expect(interpolate('')).toMatchInlineSnapshot(`""`)
-    expect(interpolate()).toMatchInlineSnapshot(`"undefined"`)
-    expect(interpolate(null)).toMatchInlineSnapshot(`"null"`)
-    expect(interpolate(undefined)).toMatchInlineSnapshot(`"undefined"`)
+    expect(makeInterpolate()(' ')).toMatchInlineSnapshot(`" "`)
+    expect(makeInterpolate()('')).toMatchInlineSnapshot(`""`)
+    expect(makeInterpolate()()).toMatchInlineSnapshot(`"undefined"`)
+    expect(makeInterpolate()(null)).toMatchInlineSnapshot(`"null"`)
+    expect(makeInterpolate()(undefined)).toMatchInlineSnapshot(`"undefined"`)
   })
 
   it('variable not defined', () => {
-    expect(() => interpolate(' {{foo}} ')).toThrow('variable not found: foo')
+    expect(() => makeInterpolate()(' {{foo}} ')).toThrow(
+      'variable not found: foo'
+    )
   })
 
   it('environment variables', () => {
     expect(
-      interpolate(' {{HostAddress}} ', {
+      makeInterpolate({
         env: { HostAddress: 'foo' }
-      })
+      })(' {{HostAddress}} ')
     ).toMatchInlineSnapshot(`" foo "`)
   })
 
-  it('global variables can only interpolate with other global variables', () => {
+  it('global variables can only makeInterpolate with other global variables', () => {
     expect(() =>
-      interpolate(' {{foo}} ', {
+      makeInterpolate({
         globalVariables: {
           foo: { global: true, value: '{{bar}}' }
         },
         variables: {
           bar: { global: false, value: 'baz' }
         }
-      })
+      })(' {{foo}} ')
     ).toThrow('variable not found on global scope: bar')
 
     expect(
-      interpolate(' {{foo}} ', {
+      makeInterpolate({
         globalVariables: {
           foo: { global: true, value: '{{bar}}' },
           bar: { global: false, value: 'baz' }
         }
-      })
+      })(' {{foo}} ')
     ).toMatchInlineSnapshot(`" baz "`)
   })
 
   it('local variables sees global variables', () => {
     expect(
-      interpolate(' {{bar}} ', {
+      makeInterpolate({
         globalVariables: {
           foo: { global: true, value: 'foo' }
         },
         variables: {
           bar: { global: false, value: '{{foo}}' }
         }
-      })
+      })(' {{bar}} ')
     ).toMatchInlineSnapshot(`" foo "`)
   })
 
   it('regular variables overrides the environment ones', () => {
     expect(
-      interpolate(' {{HostAddress}} ', {
+      makeInterpolate({
         env: { HostAddress: 'foo' },
         variables: { HostAddress: { value: 'bar' } }
-      })
+      })(' {{HostAddress}} ')
     ).toMatchInlineSnapshot(`" bar "`)
   })
 
   it('$processEnv', () => {
     process.env.FOO = 'bar'
-    expect(interpolate(' {{$processEnv FOO}} ')).toMatchInlineSnapshot(
+    expect(makeInterpolate()(' {{$processEnv FOO}} ')).toMatchInlineSnapshot(
       `" bar "`
     )
   })
@@ -84,7 +86,7 @@ describe('interpolate', () => {
     testCase(10, 20)
 
     function testCase(min = '', max = '') {
-      const value = interpolate(`{{$randomInt ${min} ${max}}}`)
+      const value = makeInterpolate()(`{{$randomInt ${min} ${max}}}`)
       const number = Number(value)
       expect(number).toBeGreaterThanOrEqual(
         Number(min || `${Number.MIN_SAFE_INTEGER}`)
@@ -96,7 +98,7 @@ describe('interpolate', () => {
   })
 
   it('$guid', () => {
-    expect(interpolate('{{$guid}}')).toMatch(
+    expect(makeInterpolate()('{{$guid}}')).toMatch(
       /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
     )
   })
@@ -113,7 +115,7 @@ describe('interpolate', () => {
 
     it('$datetime', () => {
       expect(
-        interpolate(`
+        makeInterpolate()(`
         GET https://httpbin.org/headers
         x-custom: {{$datetime "dd-MM-yyyy"}}
         x-iso8601: {{$datetime iso8601}}
@@ -131,7 +133,7 @@ describe('interpolate', () => {
 
     it('$datetime with offsets', () => {
       expect(
-        interpolate(`
+        makeInterpolate()(`
         GET https://httpbin.org/headers
         x-custom: {{$datetime "dd-MM-yyyy" 1 d}}
         x-iso8601: {{$datetime iso8601 7 d}}
@@ -150,39 +152,41 @@ describe('interpolate', () => {
 
   it('variables', () => {
     expect(
-      interpolate(' {{foo}} {{bar}} ', {
+      makeInterpolate({
         variables: {
           bar: { value: 'baz' },
           foo: { value: '{{bar}}' }
         }
-      })
+      })(' {{foo}} {{bar}} ')
     ).toMatchInlineSnapshot(`" baz baz "`)
   })
 
   it('variables - no direct cycles', () => {
     expect(() =>
-      interpolate(' {{self}} ', {
+      makeInterpolate({
         variables: {
           self: { value: 'self = {{self}}' }
         }
-      })
+      })(' {{self}} ')
     ).toThrow('variable cycle found: self -> self')
   })
 
   it('variables - no distant cycles', () => {
     expect(() =>
-      interpolate(' {{foo}} ', {
+      makeInterpolate({
         variables: {
           foo: { value: '{{bar}}' },
           bar: { value: '{{baz}}' },
           baz: { value: '{{foo}}' }
         }
-      })
+      })(' {{foo}} ')
     ).toThrow('variable cycle found: foo -> bar -> baz -> foo')
   })
 
   it('unknown function', () => {
-    expect(() => interpolate(' {{$foo}} ')).toThrow('not implemented: $foo')
+    expect(() => makeInterpolate()(' {{$foo}} ')).toThrow(
+      'not implemented: $foo'
+    )
   })
 })
 
@@ -228,7 +232,7 @@ describe('process', () => {
     })
   })
 
-  it('process with local and global variables ', () => {
+  it('process with local and global variables', () => {
     const result = transformer.process(`
       @@domain=foo
       @@port=3000
@@ -250,6 +254,20 @@ describe('process', () => {
     expect(result).toStrictEqual({
       code: expect.stringContaining(' test("GET https://foo:3000/bar",')
     })
+  })
+
+  it('process interpolates headers', () => {
+    const result = transformer.process(`
+      @@domain=foo
+      @@port=3000
+      @@host={{domain}}:{{port}}
+
+      @endpoint=https://{{host}}/bar
+      GET {{endpoint}}
+      x-origin: {{host}}
+    `)
+
+    expect(result.code).toMatch(/"x-origin",\s*"foo:3000"/)
   })
 
   it('process with variables from an environment variables file', () => {
@@ -347,23 +365,25 @@ describe('test', () => {
     })
 
     expect(
-      await test(
-        {
-          request: {
-            meta: {
-              ignoreHeaders: 'x-.*'
-            },
-            method: 'GET',
-            url: 'http://foo'
-          }
+  await test(
+    {
+      request: {
+        meta: {
+          ignoreHeaders: { value: '^x-.*' }
         },
-        { fetch }
-      )
-    ).toMatchInlineSnapshot(`
+        method: 'GET',
+        url: 'http://foo'
+      }
+    },
+    { fetch }
+  )
+).toMatchInlineSnapshot(`
 {
   "request": {
     "meta": {
-      "ignoreHeaders": "x-.*",
+      "ignoreHeaders": {
+        "value": "^x-.*",
+      },
     },
     "method": "GET",
     "url": "http://foo",
