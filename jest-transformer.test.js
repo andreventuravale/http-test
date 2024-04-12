@@ -21,6 +21,41 @@ describe('interpolate', () => {
     ).toMatchInlineSnapshot(`" foo "`)
   })
 
+  it('global variables can only interpolate with other global variables', () => {
+    expect(
+      interpolate(' {{foo}} ', {
+        globalVariables: {
+          foo: { global: true, value: '{{bar}}' }
+        },
+        variables: {
+          bar: { global: false, value: 'baz' }
+        }
+      })
+    ).toMatchInlineSnapshot(`" undefined "`)
+
+    expect(
+      interpolate(' {{foo}} ', {
+        globalVariables: {
+          foo: { global: true, value: '{{bar}}' },
+          bar: { global: false, value: 'baz' }
+        }
+      })
+    ).toMatchInlineSnapshot(`" baz "`)
+  })
+
+  it('local variables sees global variables', () => {
+    expect(
+      interpolate(' {{bar}} ', {
+        globalVariables: {
+          foo: { global: true, value: 'foo' }
+        },
+        variables: {
+          bar: { global: false, value: '{{foo}}' }
+        }
+      })
+    ).toMatchInlineSnapshot(`" foo "`)
+  })
+
   it('regular variables overrides the environment ones', () => {
     expect(
       interpolate(' {{HostAddress}} ', {
@@ -186,6 +221,30 @@ describe('process', () => {
   it('process without variables from an environment variables file', () => {
     expect(transformer.process('GET https://foo/bar')).toStrictEqual({
       code: expect.stringContaining(` test(\"GET https://foo/bar\",`)
+    })
+  })
+
+  it('process with local and global variables ', () => {
+    const result = transformer.process(`
+    @@domain=foo
+    @@port=3000
+    @@host={{domain}}:{{port}}
+
+    @endpoint=https://{{host}}/bar
+    GET {{endpoint}}
+
+    ###
+
+    @endpoint=https://{{host}}/baz
+    GET {{endpoint}}
+  `)
+
+    expect(result).toStrictEqual({
+      code: expect.stringContaining(' test("GET https://foo:3000/baz",')
+    })
+
+    expect(result).toStrictEqual({
+      code: expect.stringContaining(' test("GET https://foo:3000/bar",')
     })
   })
 

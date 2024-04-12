@@ -88,10 +88,13 @@ export function evaluate(id) {
   }
 }
 
-export function interpolate(text, { env = {}, variables = {} } = {}) {
+export function interpolate(
+  text,
+  { env = {}, globalVariables = {}, variables = {} } = {}
+) {
   const context = { env, variables }
 
-  function visit(text, path) {
+  function visit(text, path, { isGlobal = false } = {}) {
     const brokenAtStart = String(text)?.split('{{') ?? []
 
     const segments = [brokenAtStart.shift()]
@@ -110,9 +113,18 @@ export function interpolate(text, { env = {}, variables = {} } = {}) {
           )
         }
 
-        const value = variables[id]?.value ?? env[id]
+        const value =
+          !isGlobal && id in variables
+            ? variables[id].value
+            : id in globalVariables
+              ? globalVariables[id].value
+              : env[id]
 
-        segments.push(visit(value, [...path, id]))
+        segments.push(
+          visit(value, [...path, id], {
+            isGlobal: id in globalVariables && !(id in variables)
+          })
+        )
       }
 
       segments.push(start.slice(endIndex + 2))
@@ -199,13 +211,23 @@ export default {
 
     const env = envs[process.env.NODE_ENV]
 
+    const globalVariables = Object.fromEntries(
+      requests.flatMap(({ variables = {} }) =>
+        Object.entries(variables).filter(([, { global }]) => global)
+      )
+    )
+
     return {
       code: `
       ${requests
         .map(request => {
           const variables = request.variables
 
-          const url = interpolate(request.url, { env, variables })
+          const url = interpolate(request.url, {
+            env,
+            globalVariables,
+            variables
+          })
 
           const title = request.meta?.name?.value ?? `${request.method} ${url}`
 
