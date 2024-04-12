@@ -13,6 +13,10 @@ describe('interpolate', () => {
     expect(interpolate(undefined)).toMatchInlineSnapshot(`"undefined"`)
   })
 
+  it('variable not defined', () => {
+    expect(() => interpolate(' {{foo}} ')).toThrow('variable not found: foo')
+  })
+
   it('environment variables', () => {
     expect(
       interpolate(' {{HostAddress}} ', {
@@ -22,7 +26,7 @@ describe('interpolate', () => {
   })
 
   it('global variables can only interpolate with other global variables', () => {
-    expect(
+    expect(() =>
       interpolate(' {{foo}} ', {
         globalVariables: {
           foo: { global: true, value: '{{bar}}' }
@@ -31,7 +35,7 @@ describe('interpolate', () => {
           bar: { global: false, value: 'baz' }
         }
       })
-    ).toMatchInlineSnapshot(`" undefined "`)
+    ).toThrow('variable not found on global scope: bar')
 
     expect(
       interpolate(' {{foo}} ', {

@@ -113,6 +113,19 @@ export function interpolate(
           )
         }
 
+        if (isGlobal && !(id in globalVariables) && !(id in env)) {
+          throw new Error(`variable not found on global scope: ${id}`)
+        }
+
+        if (
+          !isGlobal &&
+          !(id in variables) &&
+          !(id in globalVariables) &&
+          !(id in env)
+        ) {
+          throw new Error(`variable not found: ${id}`)
+        }
+
         const value =
           !isGlobal && id in variables
             ? variables[id].value
