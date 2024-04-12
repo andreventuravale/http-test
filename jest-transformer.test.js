@@ -226,18 +226,18 @@ describe('process', () => {
 
   it('process with local and global variables ', () => {
     const result = transformer.process(`
-    @@domain=foo
-    @@port=3000
-    @@host={{domain}}:{{port}}
+      @@domain=foo
+      @@port=3000
+      @@host={{domain}}:{{port}}
 
-    @endpoint=https://{{host}}/bar
-    GET {{endpoint}}
+      @endpoint=https://{{host}}/bar
+      GET {{endpoint}}
 
-    ###
+      ###
 
-    @endpoint=https://{{host}}/baz
-    GET {{endpoint}}
-  `)
+      @endpoint=https://{{host}}/baz
+      GET {{endpoint}}
+    `)
 
     expect(result).toStrictEqual({
       code: expect.stringContaining(' test("GET https://foo:3000/baz",')
