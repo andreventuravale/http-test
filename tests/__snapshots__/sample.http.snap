@@ -35,6 +35,10 @@ exports[`GET https://jsonplaceholder.typicode.com/todos/1?_=90cab374-3b45-49af-b
         Anything,
       ],
       [
+        "age",
+        Anything,
+      ],
+      [
         "alt-svc",
         Anything,
       ],
@@ -163,6 +167,10 @@ exports[`GET https://jsonplaceholder.typicode.com/todos/2?_=90cab374-3b45-49af-b
     "headers": [
       [
         "access-control-allow-credentials",
+        Anything,
+      ],
+      [
+        "age",
         Anything,
       ],
       [

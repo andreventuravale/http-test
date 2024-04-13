@@ -241,6 +241,22 @@ export default {
     )
 
     const code = `
+      let responses
+
+      beforeAll(() => {
+        responses = {}
+      })
+
+      afterAll(() => {
+        responses = {}
+      })
+
+      const assertInteger = ${assertInteger.toString()}
+
+      const evaluate = ${evaluate.toString()}
+
+      const makeInterpolate = ${makeInterpolate.toString()}
+
       ${requests
         .filter(request => request.url)
         .map(request => {
@@ -285,12 +301,18 @@ export default {
                 2
               )})
 
+              if (request.meta?.name?.value) {
+                responses[(request.meta.name] = outcome
+              }
+
               expect(outcome).toMatchSnapshot()
             })
           `
         })
         .join('')}
-      `
+    `
+
+    console.log(code)
 
     return {
       geCacheKey: (text, path, { configString }) => {
