@@ -197,9 +197,9 @@ describe('process', () => {
       // @name              foo bar
       GET https://foo/bar
     `)
-    ).toStrictEqual({
+    ).toStrictEqual(expect.objectContaining({
       code: expect.stringContaining(` test(\"foo bar\",`)
-    })
+    }))
   })
 
   it('skip meta variable', () => {
@@ -209,9 +209,9 @@ describe('process', () => {
       // @skip
       GET https://foo/bar
     `)
-    ).toStrictEqual({
+    ).toStrictEqual(expect.objectContaining({
       code: expect.stringContaining(` test.skip(\"foo bar\",`)
-    })
+    }))
   })
 
   it('only meta variable', () => {
@@ -221,15 +221,15 @@ describe('process', () => {
       // @only
       GET https://foo/bar
     `)
-    ).toStrictEqual({
+    ).toStrictEqual(expect.objectContaining({
       code: expect.stringContaining(` test.only(\"foo bar\",`)
-    })
+    }))
   })
 
   it('process without variables from an environment variables file', () => {
-    expect(transformer.process('GET https://foo/bar')).toStrictEqual({
+    expect(transformer.process('GET https://foo/bar')).toStrictEqual(expect.objectContaining({
       code: expect.stringContaining(` test(\"GET https://foo/bar\",`)
-    })
+    }))
   })
 
   it('process with local and global variables', () => {
@@ -247,13 +247,13 @@ describe('process', () => {
       GET {{endpoint}}
     `)
 
-    expect(result).toStrictEqual({
+    expect(result).toStrictEqual(expect.objectContaining({
       code: expect.stringContaining(' test("GET https://foo:3000/baz",')
-    })
+    }))
 
-    expect(result).toStrictEqual({
+    expect(result).toStrictEqual(expect.objectContaining({
       code: expect.stringContaining(' test("GET https://foo:3000/bar",')
-    })
+    }))
   })
 
   it('global variables are hoisted', () => {
@@ -273,13 +273,13 @@ describe('process', () => {
       @@host={{domain}}:{{port}}
     `)
 
-    expect(result).toStrictEqual({
+    expect(result).toStrictEqual(expect.objectContaining({
       code: expect.stringContaining(' test("GET https://foo:3000/baz",')
-    })
+    }))
 
-    expect(result).toStrictEqual({
+    expect(result).toStrictEqual(expect.objectContaining({
       code: expect.stringContaining(' test("GET https://foo:3000/bar",')
-    })
+    }))
 
     expect(Array.from(result.code.matchAll(/ test\("/g))).toHaveLength(2)
   })
@@ -318,9 +318,9 @@ describe('process', () => {
 
     expect(
       transformer.process('GET {{HostAddress}}', './tests/sample.http')
-    ).toStrictEqual({
+    ).toStrictEqual(expect.objectContaining({
       code: expect.stringContaining(' test("GET https://localhost:44320')
-    })
+    }))
   })
 
   it('process with variables from an environment variables file combined with a user-specific file', () => {
@@ -370,9 +370,9 @@ describe('process', () => {
         'GET https://{{Domain}}:{{Port}}',
         './tests/user-specific-env-file/sample.http'
       )
-    ).toStrictEqual({
+    ).toStrictEqual(expect.objectContaining({
       code: expect.stringContaining(' test("GET https://127.0.0.1:44320')
-    })
+    }))
   })
 })
 

@@ -1,8 +1,8 @@
-import { randomUUID } from 'node:crypto'
-import { existsSync, readFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
 import { add, format, formatISO, formatRFC7231 } from 'date-fns'
 import { isFinite as _isFinite, isInteger, merge } from 'lodash-es'
+import { createHash, randomUUID } from 'node:crypto'
+import { existsSync, readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
 import parse from './parser.js'
 
 function assertInteger(something) {
@@ -260,30 +260,29 @@ export default {
             /**
              * ${filename}
              */
-            test${
-              request.meta?.only?.value
-                ? '.only'
-                : request.meta?.skip?.value
-                  ? '.skip'
-                  : ''
+            test${request.meta?.only?.value
+              ? '.only'
+              : request.meta?.skip?.value
+                ? '.skip'
+                : ''
             }(${JSON.stringify(title)}, async () => {
               const outcome = await (${test.toString()})(${JSON.stringify(
-                {
-                  env,
-                  request: {
-                    meta: request.meta,
-                    method: request.method,
-                    url,
-                    headers: request.headers?.map(([k, v]) => [
-                      k,
-                      interpolate(v)
-                    ]),
-                    body: request.body
-                  }
-                },
-                null,
-                2
-              )})
+              {
+                env,
+                request: {
+                  meta: request.meta,
+                  method: request.method,
+                  url,
+                  headers: request.headers?.map(([k, v]) => [
+                    k,
+                    interpolate(v)
+                  ]),
+                  body: request.body
+                }
+              },
+              null,
+              2
+            )})
 
               expect(outcome).toMatchSnapshot()
             })
@@ -293,6 +292,13 @@ export default {
       `
 
     return {
+      geCacheKey: (text, path, { configString }) => {
+        return createHash('sha1')
+          .update(text)
+          .update(path)
+          .update(configString)
+          .digest('hex')
+      },
       code
     }
   }
