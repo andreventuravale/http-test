@@ -86,7 +86,6 @@ Offset unit:
 - h = Hour
 - m = Minute
 - s = Second
-- ms = Millisecond
 
 #### Not supported/implemented
 
