@@ -5,7 +5,7 @@ import { add, format, formatISO, formatRFC7231 } from 'date-fns'
 import { isFinite as _isFinite, isInteger, merge } from 'lodash-es'
 import parse from './parser.js'
 
-function assertInteger(something) {
+const assertInteger = something => {
   let value = something
 
   if (value.startsWith('-')) {
@@ -19,7 +19,7 @@ function assertInteger(something) {
   }
 }
 
-export function evaluate(id) {
+export const evaluate = id => {
   const [fn, ...args] = id.slice(1).split(' ')
 
   switch (fn) {
@@ -156,7 +156,7 @@ export const makeInterpolate = ({
   }
 }
 
-export async function test({ request }, { fetch } = {}) {
+export const test = async ({ request }, { fetch } = {}) => {
   fetch = fetch ?? (await import('node-fetch')).default
 
   const fetchResponse = await fetch(request.url, {
