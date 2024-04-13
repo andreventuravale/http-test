@@ -2,6 +2,10 @@ import { trim } from 'lodash-es'
 
 export default sourceText => parseRequests(sourceText)
 
+function isSeparator(source) {
+  return /^\s*###\s*$/.test(source.currentLine)
+}
+
 function makeSource(sourceText) {
   const lines = sourceText?.split?.(/[\r\n]+/g) ?? []
 
@@ -31,11 +35,9 @@ function makeSource(sourceText) {
 function parseBody(source) {
   const fragment = []
 
-  const separator = /^\s*###\s*$/
-
   skip(source)
 
-  while (!source.eof && !separator.test(source.currentLine)) {
+  while (!source.eof && !isSeparator(source)) {
     fragment.push(source.consumeLine())
   }
 
@@ -97,6 +99,19 @@ function parseRequests(sourceText) {
       Object.keys(partial).length && requests.push(partial)
 
       break
+    }
+
+    skip(source)
+
+    if (isSeparator(source)) {
+      source.consumeLine()
+
+      requests.push({
+        ...(variables ? { variables: Object.fromEntries(variables) } : {}),
+        ...(Object.keys(meta).length ? { meta } : {})
+      })
+  
+      continue
     }
 
     const { method, url } = parseEndpoint(source)

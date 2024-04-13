@@ -116,6 +116,50 @@ test('global variables', () => {
 `)
 })
 
+test('global variables ( with request separator )', () => {
+  const requests = parse(`
+    @@hostname=localhost
+    @@port=3000
+    @@host={{hostname}}:{{port}}
+
+    ###
+
+    @endpoint=https://{{host}}/todos/1
+    GET {{endpoint}}
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "variables": {
+      "host": {
+        "global": true,
+        "value": "{{hostname}}:{{port}}",
+      },
+      "hostname": {
+        "global": true,
+        "value": "localhost",
+      },
+      "port": {
+        "global": true,
+        "value": "3000",
+      },
+    },
+  },
+  {
+    "method": "GET",
+    "url": "{{endpoint}}",
+    "variables": {
+      "endpoint": {
+        "global": false,
+        "value": "https://{{host}}/todos/1",
+      },
+    },
+  },
+]
+`)
+})
+
 test('global variables across requests', () => {
   const requests = parse(`
     @@hostname=localhost
