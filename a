@@ -1,0 +1,5 @@
+
+> jest-dot-http-files@0.0.9 test /home/avale/node/jest-dot-http-files
+> NODE_OPTIONS="$NODE_OPTIONS --experimental-vm-modules" npx jest "--updateSnapshot" "http"
+
+ ELIFECYCLE  Test failed. See above for more details.

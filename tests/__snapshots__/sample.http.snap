@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/1?_=8c98d2d9-8341-44b9-b55c-5555c092a376 1`] = `
+exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/1?_=eb4290a1-7be0-4725-af81-fe526c41099e 1`] = `
 {
   "request": {
     "headers": [
@@ -24,7 +24,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
     "variables": {
       "dash": {
         "global": true,
-        "value": "8c98d2d9-8341-44b9-b55c-5555c092a376",
+        "value": "eb4290a1-7be0-4725-af81-fe526c41099e",
       },
       "host": {
         "global": true,
@@ -37,6 +37,137 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
       "completed": false,
       "id": 1,
       "title": "delectus aut autem",
+      "userId": 1,
+    },
+    "headers": [
+      [
+        "access-control-allow-credentials",
+        Anything,
+      ],
+      [
+        "alt-svc",
+        Anything,
+      ],
+      [
+        "cache-control",
+        Anything,
+      ],
+      [
+        "cf-cache-status",
+        Anything,
+      ],
+      [
+        "cf-ray",
+        Anything,
+      ],
+      [
+        "connection",
+        Anything,
+      ],
+      [
+        "content-encoding",
+        Anything,
+      ],
+      [
+        "content-type",
+        Anything,
+      ],
+      [
+        "date",
+        Anything,
+      ],
+      [
+        "etag",
+        Anything,
+      ],
+      [
+        "expires",
+        Anything,
+      ],
+      [
+        "nel",
+        Anything,
+      ],
+      [
+        "pragma",
+        Anything,
+      ],
+      [
+        "report-to",
+        Anything,
+      ],
+      [
+        "reporting-endpoints",
+        Anything,
+      ],
+      [
+        "server",
+        Anything,
+      ],
+      [
+        "transfer-encoding",
+        Anything,
+      ],
+      [
+        "vary",
+        Anything,
+      ],
+      [
+        "via",
+        Anything,
+      ],
+      [
+        "x-content-type-options",
+        Anything,
+      ],
+      [
+        "x-powered-by",
+        Anything,
+      ],
+      [
+        "x-ratelimit-limit",
+        Anything,
+      ],
+      [
+        "x-ratelimit-remaining",
+        Anything,
+      ],
+      [
+        "x-ratelimit-reset",
+        Anything,
+      ],
+    ],
+  },
+}
+`;
+
+exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/2?_=eb4290a1-7be0-4725-af81-fe526c41099e 1`] = `
+{
+  "request": {
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+    ],
+    "meta": {
+      "ignoreHeaders": {
+        "global": false,
+        "value": ".*",
+      },
+      "name": {
+        "global": false,
+        "value": "sample2",
+      },
+    },
+    "method": "GET",
+    "url": "{{host}}/todos/2?_={{dash}}",
+  },
+  "response": {
+    "body": {
+      "completed": false,
+      "id": 2,
+      "title": "quis ut nam facilis et officia qui",
       "userId": 1,
     },
     "headers": [

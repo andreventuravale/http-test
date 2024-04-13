@@ -280,13 +280,14 @@ export default {
     )
 
     const code = `
+      const { randomUUID } = require('node:crypto')
 
       describe(${JSON.stringify(filename)}, () => {
         // TODO: immerjs as peer dep to freeze stuff
 
         const env = ${JSON.stringify(env, null, 2)}
 
-        const globalVariables = ${JSON.stringify(env, null, 2)}
+        const globalVariables = ${JSON.stringify(globalVariables, null, 2)}
 
         let requests
 
