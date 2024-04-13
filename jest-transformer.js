@@ -254,7 +254,7 @@ export default {
 
           const url = interpolate(request.url)
 
-          const title = request.meta?.name?.value ?? `${request.method} ${url}`
+          const title = request.meta?.title?.value ?? `${request.method} ${url}`
 
           return `
             /**

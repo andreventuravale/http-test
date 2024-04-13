@@ -191,15 +191,15 @@ describe('makeInterpolate', () => {
 })
 
 describe('process', () => {
-  it('name meta variable', () => {
+  it('title meta variable', () => {
     expect(
       transformer.process(`
-      // @name              foo
+      // @title              The foo bar test
       GET https://foo/bar
     `)
     ).toStrictEqual(
       expect.objectContaining({
-        code: expect.stringContaining(` test(\"foo\",`)
+        code: expect.stringContaining(` test(\"The foo bar test\",`)
       })
     )
   })
@@ -207,7 +207,7 @@ describe('process', () => {
   it('skip meta variable', () => {
     expect(
       transformer.process(`
-      // @name foo
+      // @title foo
       // @skip
       GET https://foo/bar
     `)
@@ -221,7 +221,7 @@ describe('process', () => {
   it('only meta variable', () => {
     expect(
       transformer.process(`
-      // @name foo
+      // @title foo
       // @only
       GET https://foo/bar
     `)

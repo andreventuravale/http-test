@@ -36,9 +36,18 @@ export default {
 
 Variables starting with @@ are held in the global scope, whether variables starting with a single @ are held in the request scope.
 
-#### The @name meta variable
+#### The @title meta variable
 
 Used as test title if present. This variable is optional.
+
+```http
+# @title foo
+GET http://foo/bar
+```
+
+#### The @name meta variable
+
+Used to name a request. Named requests can be used in interpolations.
 
 ```http
 # @name foo
