@@ -2,7 +2,8 @@ import { createHash, randomUUID } from 'node:crypto'
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { add, format, formatISO, formatRFC7231 } from 'date-fns'
-import { isFinite as _isFinite, isInteger, merge } from 'lodash-es'
+import jp from 'jsonpath'
+import { isFinite as _isFinite, get, isInteger, merge } from 'lodash-es'
 import parse from './parser.js'
 
 const assertInteger = something => {
@@ -91,6 +92,7 @@ export const evaluate = id => {
 export const makeInterpolate = ({
   env = {},
   globalVariables = {},
+  requests = {},
   variables = {}
 } = {}) => {
   const envVariables = Object.fromEntries(
@@ -123,21 +125,40 @@ export const makeInterpolate = ({
             throw new Error(`variable not found on global scope: ${id}`)
           }
 
+          const [maybeRequestId] = id.split('.')
+
           if (
-            !isGlobal &&
-            !(id in variables) &&
+            !(id in envVariables) &&
             !(id in globalVariables) &&
-            !(id in envVariables)
-          ) {
+            !(maybeRequestId in requests) &&
+            !(id in variables)
+          )
             throw new Error(`variable not found: ${id}`)
+
+          let variable
+
+          if (maybeRequestId in requests) {
+            const expr = id.split('.').slice(1).join('.')
+
+            const path = expr.slice(0, expr.indexOf('$') - 1)
+
+            const jsonPath = expr.slice(expr.indexOf('$'))
+
+            const value = jp.query(
+              get(requests[maybeRequestId], path, {}),
+              jsonPath
+            )
+
+            variable = { global: true, value }
           }
 
-          const variable =
-            !isGlobal && id in variables
+          variable =
+            variable ??
+            (!isGlobal && id in variables
               ? variables[id]
               : id in globalVariables
                 ? globalVariables[id]
-                : envVariables[id]
+                : envVariables[id])
 
           variable.value = visit(variable.value, [...path, id], {
             isGlobal: id in globalVariables && !(id in variables)
@@ -156,10 +177,22 @@ export const makeInterpolate = ({
   }
 }
 
-export const test = async ({ request }, { fetch } = {}) => {
+export const test = async (
+  { request },
+  { env, fetch, globalVariables, requests } = {}
+) => {
   fetch = fetch ?? (await import('node-fetch')).default
 
-  const fetchResponse = await fetch(request.url, {
+  const interpolate = makeInterpolate({
+    env,
+    globalVariables,
+    requests,
+    variables: request.variables
+  })
+
+  const url = interpolate(request.url)
+
+  const fetchResponse = await fetch(url, {
     method: request.method,
     headers: request.headers,
     ...(['GET', 'HEAD'].includes(request.method) ? {} : { body: request.body })
@@ -209,11 +242,17 @@ export const test = async ({ request }, { fetch } = {}) => {
     }
   }
 
-  return { request, response }
+  const outcome = { request, response }
+
+  if (request.meta?.name?.value) {
+    requests[request.meta.name.value] = outcome
+  }
+
+  return outcome
 }
 
 export default {
-  process: (src, filename) => {
+  process: (src, filename = '') => {
     const requests = parse(src)
 
     let envs = {}
@@ -241,78 +280,75 @@ export default {
     )
 
     const code = `
-      let responses
 
-      beforeAll(() => {
-        responses = {}
-      })
+      describe(${JSON.stringify(filename)}, () => {
+        // TODO: immerjs as peer dep to freeze stuff
 
-      afterAll(() => {
-        responses = {}
-      })
+        const env = ${JSON.stringify(env, null, 2)}
 
-      const assertInteger = ${assertInteger.toString()}
+        const globalVariables = ${JSON.stringify(env, null, 2)}
 
-      const evaluate = ${evaluate.toString()}
+        let requests
 
-      const makeInterpolate = ${makeInterpolate.toString()}
+        let get
 
-      ${requests
-        .filter(request => request.url)
-        .map(request => {
-          const variables = request.variables
+        let jp
 
-          const interpolate = makeInterpolate({
-            env,
-            globalVariables,
-            variables
-          })
+        beforeAll(async () => {
+          get = (await import('lodash-es')).get
 
-          const url = interpolate(request.url)
+          jp = await import('jsonpath')
 
-          const title = request.meta?.title?.value ?? `${request.method} ${url}`
-
-          return `
-            /**
-             * ${filename}
-             */
-            test${
-              request.meta?.only?.value
-                ? '.only'
-                : request.meta?.skip?.value
-                  ? '.skip'
-                  : ''
-            }(${JSON.stringify(title)}, async () => {
-              const outcome = await (${test.toString()})(${JSON.stringify(
-                {
-                  env,
-                  request: {
-                    meta: request.meta,
-                    method: request.method,
-                    url,
-                    headers: request.headers?.map(([k, v]) => [
-                      k,
-                      interpolate(v)
-                    ]),
-                    body: request.body
-                  }
-                },
-                null,
-                2
-              )})
-
-              if (request.meta?.name?.value) {
-                responses[(request.meta.name] = outcome
-              }
-
-              expect(outcome).toMatchSnapshot()
-            })
-          `
+          requests = {}
         })
-        .join('')}
-    `
 
-    console.log(code)
+        const assertInteger = ${assertInteger.toString()}
+
+        const evaluate = ${evaluate.toString()}
+
+        const makeInterpolate = ${makeInterpolate.toString()}
+
+        ${requests
+          .filter(request => request.url)
+          .map(request => {
+            const interpolate = makeInterpolate({
+              env,
+              globalVariables,
+              variables: request.variables
+            })
+
+            const url = interpolate(request.url)
+
+            const title =
+              request.meta?.title?.value ?? `${request.method} ${url}`
+
+            return `
+              /**
+               * ${filename}
+               */
+              test${
+                request.meta?.only?.value
+                  ? '.only'
+                  : request.meta?.skip?.value
+                    ? '.skip'
+                    : ''
+              }(${JSON.stringify(title)}, async () => {
+                const outcome = await (${test.toString()})(${JSON.stringify(
+                  {
+                    env,
+                    request
+                  },
+                  null,
+                  2
+                )}, { env, globalVariables, requests })
+
+                expect(outcome).toMatchSnapshot()
+              })
+            `
+          })
+          .join('')}
+      })
+    `
 
     return {
       geCacheKey: (text, path, { configString }) => {

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GET https://jsonplaceholder.typicode.com/todos/1?_=90cab374-3b45-49af-bd58-ef7530aadf06 1`] = `
+exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/1?_=8c98d2d9-8341-44b9-b55c-5555c092a376 1`] = `
 {
   "request": {
     "headers": [
@@ -20,7 +20,17 @@ exports[`GET https://jsonplaceholder.typicode.com/todos/1?_=90cab374-3b45-49af-b
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=90cab374-3b45-49af-bd58-ef7530aadf06",
+    "url": "{{host}}/todos/1?_={{dash}}",
+    "variables": {
+      "dash": {
+        "global": true,
+        "value": "8c98d2d9-8341-44b9-b55c-5555c092a376",
+      },
+      "host": {
+        "global": true,
+        "value": "https://jsonplaceholder.typicode.com",
+      },
+    },
   },
   "response": {
     "body": {
@@ -32,145 +42,6 @@ exports[`GET https://jsonplaceholder.typicode.com/todos/1?_=90cab374-3b45-49af-b
     "headers": [
       [
         "access-control-allow-credentials",
-        Anything,
-      ],
-      [
-        "age",
-        Anything,
-      ],
-      [
-        "alt-svc",
-        Anything,
-      ],
-      [
-        "cache-control",
-        Anything,
-      ],
-      [
-        "cf-cache-status",
-        Anything,
-      ],
-      [
-        "cf-ray",
-        Anything,
-      ],
-      [
-        "connection",
-        Anything,
-      ],
-      [
-        "content-encoding",
-        Anything,
-      ],
-      [
-        "content-type",
-        Anything,
-      ],
-      [
-        "date",
-        Anything,
-      ],
-      [
-        "etag",
-        Anything,
-      ],
-      [
-        "expires",
-        Anything,
-      ],
-      [
-        "nel",
-        Anything,
-      ],
-      [
-        "pragma",
-        Anything,
-      ],
-      [
-        "report-to",
-        Anything,
-      ],
-      [
-        "reporting-endpoints",
-        Anything,
-      ],
-      [
-        "server",
-        Anything,
-      ],
-      [
-        "transfer-encoding",
-        Anything,
-      ],
-      [
-        "vary",
-        Anything,
-      ],
-      [
-        "via",
-        Anything,
-      ],
-      [
-        "x-content-type-options",
-        Anything,
-      ],
-      [
-        "x-powered-by",
-        Anything,
-      ],
-      [
-        "x-ratelimit-limit",
-        Anything,
-      ],
-      [
-        "x-ratelimit-remaining",
-        Anything,
-      ],
-      [
-        "x-ratelimit-reset",
-        Anything,
-      ],
-    ],
-  },
-}
-`;
-
-exports[`GET https://jsonplaceholder.typicode.com/todos/2?_=90cab374-3b45-49af-bd58-ef7530aadf06 1`] = `
-{
-  "request": {
-    "headers": [
-      [
-        "content-type",
-        "application/json",
-      ],
-    ],
-    "meta": {
-      "ignoreHeaders": {
-        "global": false,
-        "value": ".*",
-      },
-      "name": {
-        "global": false,
-        "value": "sample2",
-      },
-    },
-    "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=90cab374-3b45-49af-bd58-ef7530aadf06",
-  },
-  "response": {
-    "body": {
-      "completed": false,
-      "id": 2,
-      "title": "quis ut nam facilis et officia qui",
-      "userId": 1,
-    },
-    "headers": [
-      [
-        "access-control-allow-credentials",
-        Anything,
-      ],
-      [
-        "age",
         Anything,
       ],
       [
