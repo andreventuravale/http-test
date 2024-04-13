@@ -35,7 +35,7 @@ export default {
 
 #### Global variables
 
-Variables starting with @@ are held in the global scope, whether variables starting with a single @ are held in the request-scope.
+Variables starting with @@ are held in the global scope, whether variables starting with a single @ are held in the request scope.
 
 #### The @name meta variable
 
