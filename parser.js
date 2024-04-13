@@ -110,7 +110,7 @@ function parseRequests(sourceText) {
         ...(variables ? { variables: Object.fromEntries(variables) } : {}),
         ...(Object.keys(meta).length ? { meta } : {})
       })
-  
+
       continue
     }
 
@@ -157,6 +157,12 @@ function parseVariables(source, separatorRegexPattern = '=') {
     ])
 
     Object.assign(meta, skip(source))
+  }
+
+  if (meta?.name?.value && !meta.name.value.match(/^[_a-z][_a-z0-9]*$/i)) {
+    throw new Error(
+      `(line: ${source.cursor}) invalid request name: ${meta.name.value}`
+    )
   }
 
   return {

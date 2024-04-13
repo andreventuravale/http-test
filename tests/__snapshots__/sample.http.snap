@@ -20,7 +20,7 @@ exports[`sample1 1`] = `
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=f7bccbbd-7049-4cb0-a02c-d343d5b44e01",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=7177428b-1097-4b27-bdbc-35dde9287976",
   },
   "response": {
     "body": {
@@ -151,7 +151,7 @@ exports[`sample2 1`] = `
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=f7bccbbd-7049-4cb0-a02c-d343d5b44e01",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=7177428b-1097-4b27-bdbc-35dde9287976",
   },
   "response": {
     "body": {

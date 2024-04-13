@@ -41,7 +41,7 @@ Variables starting with @@ are held in the global scope, whether variables start
 Used as test title if present. This variable is optional.
 
 ```http
-# @name foo bar
+# @name foo
 GET http://foo/bar
 ```
 

@@ -622,6 +622,13 @@ test('named requests', () => {
   },
 ]
 `)
+
+  expect(() => {
+    const requests = parse(`
+  // @name foo bar
+  GET https://jsonplaceholder.typicode.com/todos/1
+`)
+  }).toThrow('(line: 3) invalid request name: foo bar')
 })
 
 test('request meta', () => {
