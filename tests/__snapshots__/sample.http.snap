@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GET https://jsonplaceholder.typicode.com/todos/1?_=1987b2fa-81be-4602-a276-6f1111ea058d 1`] = `
+exports[`GET https://jsonplaceholder.typicode.com/todos/1?_=d5e9788c-d802-4405-8171-3b3dfb60aa42 1`] = `
 {
   "request": {
     "headers": [
@@ -20,7 +20,7 @@ exports[`GET https://jsonplaceholder.typicode.com/todos/1?_=1987b2fa-81be-4602-a
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=1987b2fa-81be-4602-a276-6f1111ea058d",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=d5e9788c-d802-4405-8171-3b3dfb60aa42",
   },
   "response": {
     "body": {
@@ -131,7 +131,7 @@ exports[`GET https://jsonplaceholder.typicode.com/todos/1?_=1987b2fa-81be-4602-a
 }
 `;
 
-exports[`GET https://jsonplaceholder.typicode.com/todos/2?_=1987b2fa-81be-4602-a276-6f1111ea058d 1`] = `
+exports[`GET https://jsonplaceholder.typicode.com/todos/2?_=d5e9788c-d802-4405-8171-3b3dfb60aa42 1`] = `
 {
   "request": {
     "headers": [
@@ -151,7 +151,7 @@ exports[`GET https://jsonplaceholder.typicode.com/todos/2?_=1987b2fa-81be-4602-a
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=1987b2fa-81be-4602-a276-6f1111ea058d",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=d5e9788c-d802-4405-8171-3b3dfb60aa42",
   },
   "response": {
     "body": {
