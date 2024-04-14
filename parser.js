@@ -87,15 +87,19 @@ function parseRequests(sourceText) {
 
   const requests = []
 
+  const consumePartial = (variables) => {
+    const partial = {
+      ...(variables ? { variables: Object.fromEntries(variables) } : {})
+    }
+
+    Object.keys(partial).length && requests.push(partial)
+  }
+
   do {
     const { meta, variables } = parseVariables(source)
 
     if (source.eof) {
-      const partial = {
-        ...(variables ? { variables: Object.fromEntries(variables) } : {})
-      }
-
-      Object.keys(partial).length && requests.push(partial)
+      consumePartial(variables)
 
       break
     }
@@ -105,9 +109,7 @@ function parseRequests(sourceText) {
     if (isSeparator(source)) {
       source.consumeLine()
 
-      requests.push({
-        ...(variables ? { variables: Object.fromEntries(variables) } : {})
-      })
+      consumePartial(variables)
 
       continue
     }
@@ -187,13 +189,13 @@ function skip(source) {
   return meta.length ? Object.fromEntries(meta) : undefined
 
   function fillMeta(line, commentLookahead) {
-    const { variables } = parseVariables(
+    const { variables = [] } = parseVariables(
       makeSource(
         line.slice(line.indexOf(commentLookahead) + commentLookahead.length)
       ),
       '\\s+'
     )
 
-    meta = meta.concat(variables ?? [])
+    meta = meta.concat(variables)
   }
 }

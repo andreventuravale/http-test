@@ -116,6 +116,34 @@ test('global variables', () => {
 `)
 })
 
+test('separator within empty ( only comments or whitespace )', () => {
+  const requests = parse(`
+    ###
+
+    ###
+
+    ###
+
+    @endpoint=https://{{host}}/todos/1
+    GET {{endpoint}}
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "method": "GET",
+    "url": "{{endpoint}}",
+    "variables": {
+      "endpoint": {
+        "global": false,
+        "value": "https://{{host}}/todos/1",
+      },
+    },
+  },
+]
+`)
+})
+
 test('global variables ( with request separator )', () => {
   const requests = parse(`
     @@hostname=localhost

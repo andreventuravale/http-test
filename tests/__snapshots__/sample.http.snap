@@ -167,7 +167,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=39f9fbfa-6556-423a-b8d0-102cef4ba3cc",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=942e5b10-22fa-47ee-9502-7b529b0c73ec",
   },
   "response": {
     "body": {
