@@ -87,7 +87,7 @@ function parseRequests(sourceText) {
 
   const requests = []
 
-  const consumePartial = (variables) => {
+  const consumePartial = variables => {
     const partial = {
       ...(variables ? { variables: Object.fromEntries(variables) } : {})
     }

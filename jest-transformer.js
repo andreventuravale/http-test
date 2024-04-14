@@ -311,7 +311,9 @@ export default {
         let jp
 
         beforeAll(async () => {
-          get = (await import('lodash-es')).get
+          const _ = await import('lodash-es')
+
+          get = _.get
 
           jp = (await import('jsonpath')).default
 

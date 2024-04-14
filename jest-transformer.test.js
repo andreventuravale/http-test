@@ -1,6 +1,6 @@
+import { existsSync, readFileSync } from 'node:fs'
 import { afterAll, beforeAll, jest } from '@jest/globals'
 import { Headers } from 'node-fetch'
-import { existsSync, readFileSync } from 'node:fs'
 import * as td from 'testdouble'
 import transformer, { makeInterpolate, test } from './jest-transformer.js'
 import parse from './parser.js'
@@ -408,7 +408,10 @@ describe('test', () => {
     const requests = {}
 
     td.when(
-      await fetch('http://foo:3000/bar', td.matchers.contains({ method: 'GET' }))
+      await fetch(
+        'http://foo:3000/bar',
+        td.matchers.contains({ method: 'GET' })
+      )
     ).thenResolve({
       headers: new Headers({
         'content-type': 'application/json'
@@ -417,9 +420,9 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: parse(`
+      await test(
+        {
+          request: parse(`
           @@domain=foo
           @@port=3000
           @@host={{domain}}:{{port}}
@@ -428,10 +431,10 @@ describe('test', () => {
           GET {{endpoint}}
           x-origin: {{host}}
         `)[0]
-    },
-    { fetch, requests }
-  )
-).toMatchInlineSnapshot(`
+        },
+        { fetch, requests }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "body": "undefined",
