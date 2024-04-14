@@ -430,19 +430,19 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: {
-        meta: {
-          name: { value: 'foo' }
+      await test(
+        {
+          request: {
+            meta: {
+              name: { value: 'foo' }
+            },
+            method: 'GET',
+            url: 'http://foo'
+          }
         },
-        method: 'GET',
-        url: 'http://foo'
-      }
-    },
-    { fetch, requests }
-  )
-).toMatchInlineSnapshot(`
+        { fetch, requests }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "body": "undefined",
@@ -481,19 +481,19 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: {
-        meta: {
-          name: { value: 'bar' }
+      await test(
+        {
+          request: {
+            meta: {
+              name: { value: 'bar' }
+            },
+            method: 'GET',
+            url: 'http://foo/{{foo.response.body.$.data.foo}}'
+          }
         },
-        method: 'GET',
-        url: 'http://foo/{{foo.response.body.$.data.foo}}'
-      }
-    },
-    { fetch, requests }
-  )
-).toMatchInlineSnapshot(`
+        { fetch, requests }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "body": "undefined",
@@ -539,19 +539,19 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: {
-        meta: {
-          ignoreHeaders: { value: '^x-.*' }
+      await test(
+        {
+          request: {
+            meta: {
+              ignoreHeaders: { value: '^x-.*' }
+            },
+            method: 'GET',
+            url: 'http://foo'
+          }
         },
-        method: 'GET',
-        url: 'http://foo'
-      }
-    },
-    { fetch }
-  )
-).toMatchInlineSnapshot(`
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "body": "undefined",
@@ -602,16 +602,16 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: {
-        method: 'GET',
-        url: 'http://foo'
-      }
-    },
-    { fetch }
-  )
-).toMatchInlineSnapshot(`
+      await test(
+        {
+          request: {
+            method: 'GET',
+            url: 'http://foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "body": "undefined",
@@ -645,16 +645,16 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: {
-        method: 'GET',
-        url: 'http://foo'
-      }
-    },
-    { fetch }
-  )
-).toMatchInlineSnapshot(`
+      await test(
+        {
+          request: {
+            method: 'GET',
+            url: 'http://foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "body": "undefined",
@@ -690,16 +690,16 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: {
-        method: 'GET',
-        url: 'http://foo'
-      }
-    },
-    { fetch }
-  )
-).toMatchInlineSnapshot(`
+      await test(
+        {
+          request: {
+            method: 'GET',
+            url: 'http://foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "body": "undefined",
@@ -733,16 +733,16 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: {
-        method: 'GET',
-        url: 'http://foo'
-      }
-    },
-    { fetch }
-  )
-).toMatchInlineSnapshot(`
+      await test(
+        {
+          request: {
+            method: 'GET',
+            url: 'http://foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "body": "undefined",
@@ -776,16 +776,16 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: {
-        method: 'HEAD',
-        url: 'http://foo'
-      }
-    },
-    { fetch }
-  )
-).toMatchInlineSnapshot(`
+      await test(
+        {
+          request: {
+            method: 'HEAD',
+            url: 'http://foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "body": "undefined",
@@ -819,17 +819,17 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: {
-        method: 'POST',
-        url: 'http://foo',
-        body: 'foo'
-      }
-    },
-    { fetch }
-  )
-).toMatchInlineSnapshot(`
+      await test(
+        {
+          request: {
+            method: 'POST',
+            url: 'http://foo',
+            body: 'foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "body": "foo",
@@ -863,16 +863,16 @@ describe('test', () => {
     })
 
     expect(
-  await test(
-    {
-      request: {
-        method: 'POST',
-        url: 'http://foo'
-      }
-    },
-    { fetch }
-  )
-).toMatchInlineSnapshot(`
+      await test(
+        {
+          request: {
+            method: 'POST',
+            url: 'http://foo'
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
 {
   "request": {
     "body": "undefined",
