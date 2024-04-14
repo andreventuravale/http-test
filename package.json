@@ -1,6 +1,6 @@
 {
   "name": "jest-dot-http-files",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "type": "module",
   "main": "./jest-transformer.js",
   "scripts": {
@@ -11,8 +11,14 @@
   },
   "author": "Andre Vale <andreventuravale@gmail.com>",
   "license": "MIT",
-  "categories": ["Testing"],
-  "keywords": ["jest", "testing", "http"],
+  "categories": [
+    "Testing"
+  ],
+  "keywords": [
+    "jest",
+    "testing",
+    "http"
+  ],
   "repository": {
     "url": "https://github.com/andreventuravale/jest-dot-http-files"
   },
@@ -27,6 +33,7 @@
   },
   "peerDependencies": {
     "date-fns": "^3.6.0",
+    "jsonpath": "^1.1.1",
     "lodash-es": "^4.17.21",
     "node-fetch": "^3.3.2"
   }
