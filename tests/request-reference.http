@@ -1,0 +1,14 @@
+@@host=https://jsonplaceholder.typicode.com
+@@dash={{$guid}}
+
+# @name sample1
+# @ignoreHeaders .*
+GET {{host}}/todos/1?_={{dash}}
+content-type: application/json
+
+###
+
+# @title Replay the sample1 request
+# @ignoreHeaders .*
+GET {{host}}/todos/{{sample1.response.body.$.id}}?_={{dash}}
+content-type: application/json

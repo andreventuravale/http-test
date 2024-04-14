@@ -1,8 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/1?_=b19a367a-4ae9-45cc-9a54-f3fc52317d7f 1`] = `
+exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET https://jsonplaceholder.typicode.com/todos/1?_=b0b92c49-aa19-4c92-84f6-da8756a57623 1`] = `
 {
   "request": {
+    "body": "undefined",
     "headers": [
       [
         "content-type",
@@ -20,11 +21,11 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
       },
     },
     "method": "GET",
-    "url": "{{host}}/todos/1?_={{dash}}",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=b0b92c49-aa19-4c92-84f6-da8756a57623",
     "variables": {
       "dash": {
         "global": true,
-        "value": "b19a367a-4ae9-45cc-9a54-f3fc52317d7f",
+        "value": "b0b92c49-aa19-4c92-84f6-da8756a57623",
       },
       "host": {
         "global": true,
@@ -141,9 +142,10 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
 }
 `;
 
-exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/2?_=b19a367a-4ae9-45cc-9a54-f3fc52317d7f 1`] = `
+exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http Replay the sample1 request 1`] = `
 {
   "request": {
+    "body": "undefined",
     "headers": [
       [
         "content-type",
@@ -155,19 +157,19 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
         "global": false,
         "value": ".*",
       },
-      "name": {
+      "title": {
         "global": false,
-        "value": "sample2",
+        "value": "Replay the sample1 request",
       },
     },
     "method": "GET",
-    "url": "{{host}}/todos/2?_={{dash}}",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=7be05a3a-d33f-4654-b735-ea3a9cd371f7",
   },
   "response": {
     "body": {
       "completed": false,
-      "id": 2,
-      "title": "quis ut nam facilis et officia qui",
+      "id": 1,
+      "title": "delectus aut autem",
       "userId": 1,
     },
     "headers": [

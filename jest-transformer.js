@@ -192,10 +192,14 @@ export const test = async (
 
   const url = interpolate(request.url)
 
+  const headers = request.headers.map(([k, v]) => [k, interpolate(v)])
+
+  const body = interpolate(request.body)
+
   const fetchResponse = await fetch(url, {
     method: request.method,
-    headers: request.headers,
-    ...(['GET', 'HEAD'].includes(request.method) ? {} : { body: request.body })
+    headers,
+    ...(['GET', 'HEAD'].includes(request.method) ? {} : { body })
   })
 
   let responseBody
@@ -242,7 +246,18 @@ export const test = async (
     }
   }
 
-  const outcome = { request, response }
+  const modifiedRequest = {
+    ...request
+  }
+
+  modifiedRequest.url = url
+  modifiedRequest.headers = headers
+  if (body) modifiedRequest.body = body
+
+  const outcome = {
+    request: modifiedRequest,
+    response
+  }
 
   if (request.meta?.name?.value) {
     requests[request.meta.name.value] = outcome
@@ -298,7 +313,7 @@ export default {
         beforeAll(async () => {
           get = (await import('lodash-es')).get
 
-          jp = await import('jsonpath')
+          jp = (await import('jsonpath')).default
 
           requests = {}
         })
@@ -318,10 +333,9 @@ export default {
               variables: request.variables
             })
 
-            const url = interpolate(request.url)
-
             const title =
-              request.meta?.title?.value ?? `${request.method} ${url}`
+              request.meta?.title?.value ??
+              `${request.method} ${interpolate(request.url)}`
 
             return `
               /**
