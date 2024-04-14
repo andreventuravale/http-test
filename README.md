@@ -10,6 +10,7 @@ Install the npm package ( in dev mode ): **jest-dot-http-files**
 Install the peer-dependencies ( in dev mode if you aren't using them already ):
 
 - **date-fns**
+- **jsonpath**
 - **lodash-es**
 - **node-fetch**
 
