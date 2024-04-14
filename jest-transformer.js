@@ -192,7 +192,7 @@ export const test = async (
 
   const url = interpolate(request.url)
 
-  const headers = request.headers.map(([k, v]) => [k, interpolate(v)])
+  const headers = request.headers?.map(([k, v]) => [k, interpolate(v)])
 
   const body = interpolate(request.body)
 
