@@ -1,8 +1,9 @@
-import { existsSync, readFileSync } from 'node:fs'
 import { afterAll, beforeAll, jest } from '@jest/globals'
 import { Headers } from 'node-fetch'
+import { existsSync, readFileSync } from 'node:fs'
 import * as td from 'testdouble'
 import transformer, { makeInterpolate, test } from './jest-transformer.js'
+import parse from './parser.js'
 
 describe('makeInterpolate', () => {
   it('nothing to do', () => {
@@ -318,20 +319,6 @@ describe('process', () => {
     expect(Array.from(result.code.matchAll(/ test\("/g))).toHaveLength(2)
   })
 
-  it.skip('process interpolates headers', () => {
-    const result = transformer.process(`
-      @@domain=foo
-      @@port=3000
-      @@host={{domain}}:{{port}}
-
-      @endpoint=https://{{host}}/bar
-      GET {{endpoint}}
-      x-origin: {{host}}
-    `)
-
-    expect(result.code).toMatch(/"x-origin",\s*"foo:3000"/)
-  })
-
   it('process with variables from an environment variables file', () => {
     expect(existsSync('./tests/http-client.env.json')).toStrictEqual(true)
 
@@ -415,6 +402,83 @@ describe('process', () => {
 })
 
 describe('test', () => {
+  it('interpolates headers', async () => {
+    const fetch = td.func('fetch')
+
+    const requests = {}
+
+    td.when(
+      await fetch('http://foo:3000/bar', td.matchers.contains({ method: 'GET' }))
+    ).thenResolve({
+      headers: new Headers({
+        'content-type': 'application/json'
+      }),
+      text: async () => JSON.stringify({ data: { foo: 'bar' } })
+    })
+
+    expect(
+  await test(
+    {
+      request: parse(`
+          @@domain=foo
+          @@port=3000
+          @@host={{domain}}:{{port}}
+
+          @endpoint=http://{{host}}/bar
+          GET {{endpoint}}
+          x-origin: {{host}}
+        `)[0]
+    },
+    { fetch, requests }
+  )
+).toMatchInlineSnapshot(`
+{
+  "request": {
+    "body": "undefined",
+    "headers": [
+      [
+        "x-origin",
+        "foo:3000",
+      ],
+    ],
+    "method": "GET",
+    "url": "http://foo:3000/bar",
+    "variables": {
+      "domain": {
+        "global": true,
+        "value": "foo",
+      },
+      "endpoint": {
+        "global": false,
+        "value": "http://foo:3000/bar",
+      },
+      "host": {
+        "global": true,
+        "value": "foo:3000",
+      },
+      "port": {
+        "global": true,
+        "value": "3000",
+      },
+    },
+  },
+  "response": {
+    "body": {
+      "data": {
+        "foo": "bar",
+      },
+    },
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+    ],
+  },
+}
+`)
+  })
+
   it('interpolates with request responses', async () => {
     const fetch = td.func('fetch')
 

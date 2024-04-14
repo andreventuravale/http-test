@@ -92,8 +92,7 @@ function parseRequests(sourceText) {
 
     if (source.eof) {
       const partial = {
-        ...(variables ? { variables: Object.fromEntries(variables) } : {}),
-        ...(Object.keys(meta).length ? { meta } : {})
+        ...(variables ? { variables: Object.fromEntries(variables) } : {})
       }
 
       Object.keys(partial).length && requests.push(partial)
@@ -107,8 +106,7 @@ function parseRequests(sourceText) {
       source.consumeLine()
 
       requests.push({
-        ...(variables ? { variables: Object.fromEntries(variables) } : {}),
-        ...(Object.keys(meta).length ? { meta } : {})
+        ...(variables ? { variables: Object.fromEntries(variables) } : {})
       })
 
       continue

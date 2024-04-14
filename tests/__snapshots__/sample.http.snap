@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/1?_=b2a381f2-74fe-4757-bf71-0f9e5ceba775 1`] = `
+exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/1?_=919e49b2-168b-43e2-9b46-77409017c0c7 1`] = `
 {
   "request": {
     "body": "undefined",
@@ -21,11 +21,11 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=b2a381f2-74fe-4757-bf71-0f9e5ceba775",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=919e49b2-168b-43e2-9b46-77409017c0c7",
     "variables": {
       "dash": {
         "global": true,
-        "value": "b2a381f2-74fe-4757-bf71-0f9e5ceba775",
+        "value": "919e49b2-168b-43e2-9b46-77409017c0c7",
       },
       "host": {
         "global": true,
@@ -43,6 +43,10 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
     "headers": [
       [
         "access-control-allow-credentials",
+        Anything,
+      ],
+      [
+        "age",
         Anything,
       ],
       [
@@ -142,7 +146,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
 }
 `;
 
-exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/2?_=b2a381f2-74fe-4757-bf71-0f9e5ceba775 1`] = `
+exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/2?_=919e49b2-168b-43e2-9b46-77409017c0c7 1`] = `
 {
   "request": {
     "body": "undefined",
@@ -163,7 +167,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=ce14cb22-a9f2-4289-a516-c20cec121d96",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=39f9fbfa-6556-423a-b8d0-102cef4ba3cc",
   },
   "response": {
     "body": {

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET https://jsonplaceholder.typicode.com/todos/1?_=8c82be90-070e-440f-870d-8a0ffe28fe9b 1`] = `
+exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET https://jsonplaceholder.typicode.com/todos/1?_=f1e91c23-c3d4-4071-b32a-dcba3a0813f8 1`] = `
 {
   "request": {
     "body": "undefined",
@@ -21,11 +21,11 @@ exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET h
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=8c82be90-070e-440f-870d-8a0ffe28fe9b",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=f1e91c23-c3d4-4071-b32a-dcba3a0813f8",
     "variables": {
       "dash": {
         "global": true,
-        "value": "8c82be90-070e-440f-870d-8a0ffe28fe9b",
+        "value": "f1e91c23-c3d4-4071-b32a-dcba3a0813f8",
       },
       "host": {
         "global": true,
@@ -43,6 +43,10 @@ exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET h
     "headers": [
       [
         "access-control-allow-credentials",
+        Anything,
+      ],
+      [
+        "age",
         Anything,
       ],
       [
@@ -163,7 +167,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http Repla
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=56b084f5-88d2-403c-bf98-c2b8baa73121",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=13a1e5fe-e1bb-4369-85c5-87d912f54920",
   },
   "response": {
     "body": {
