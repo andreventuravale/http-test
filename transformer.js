@@ -81,14 +81,23 @@ export const evaluate = id => {
 
   function randomInt() {
     let [min, max] = args
+
     min ||= `${Number.MIN_SAFE_INTEGER}`
+
     max ||= `${Number.MAX_SAFE_INTEGER}`
+
     assertInteger(min)
+
     assertInteger(max)
+
     min = Number(min)
+
     max = Number(max)
+
     const delta = Number(max) - Number(min)
+
     const random = Math.trunc(delta * Math.random())
+
     return min + random
   }
 }
@@ -191,11 +200,11 @@ export const makeInterpolate = ({
   }
 }
 
-export const setJsonPath = (request, jsonPath) => {
+export const setJsonPath = (request, jsonPath, value) => {
   const targetPaths = jp.paths(request, jsonPath)
 
   for (const targetPath of targetPaths) {
-    setWith(request, targetPath.slice(1), expect.anything(), Object)
+    setWith(request, targetPath.slice(1), value, Object)
   }
 }
 
@@ -281,8 +290,8 @@ export const test = async (
   }
 
   if (request.meta?.ignore?.value) {
-    for (const { value } of request.meta.ignore.value) {
-      setJsonPath(outcome, value)
+    for (const { value: jsonPath } of request.meta.ignore.value) {
+      setJsonPath(outcome, jsonPath, expect.anything())
     }
   }
 
