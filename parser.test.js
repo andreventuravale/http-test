@@ -316,6 +316,50 @@ test('per-request meta', () => {
 `)
 })
 
+test('the "expect" request meta is accumulative ( forms a list )', () => {
+  const requests = parse(`   
+    # @name sample1
+    # @expect status 200
+    # @expect statusText OK
+    GET http://foo
+    content-type: application/json
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+    ],
+    "meta": {
+      "expect": {
+        "global": false,
+        "value": [
+          [
+            "status",
+            "200",
+          ],
+          [
+            "statusText",
+            "OK",
+          ],
+        ],
+      },
+      "name": {
+        "global": false,
+        "value": "sample1",
+      },
+    },
+    "method": "GET",
+    "url": "http://foo",
+  },
+]
+`)
+})
+
 test('global variables at the bottom', () => {
   const requests = parse(`
     @@hostname=localhost

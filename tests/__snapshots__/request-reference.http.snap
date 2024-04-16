@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET https://jsonplaceholder.typicode.com/todos/1?_=f1e91c23-c3d4-4071-b32a-dcba3a0813f8 1`] = `
+exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET https://jsonplaceholder.typicode.com/todos/1?_=f6677c2a-57ee-4a4c-8601-90d9a6655545 1`] = `
 {
   "request": {
     "body": "undefined",
@@ -21,11 +21,11 @@ exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET h
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=f1e91c23-c3d4-4071-b32a-dcba3a0813f8",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=f6677c2a-57ee-4a4c-8601-90d9a6655545",
     "variables": {
       "dash": {
         "global": true,
-        "value": "f1e91c23-c3d4-4071-b32a-dcba3a0813f8",
+        "value": "f6677c2a-57ee-4a4c-8601-90d9a6655545",
       },
       "host": {
         "global": true,
@@ -43,10 +43,6 @@ exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET h
     "headers": [
       [
         "access-control-allow-credentials",
-        Anything,
-      ],
-      [
-        "age",
         Anything,
       ],
       [
@@ -142,6 +138,8 @@ exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET h
         Anything,
       ],
     ],
+    "status": 200,
+    "statusText": "OK",
   },
 }
 `;
@@ -167,7 +165,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http Repla
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=5265a6f9-cfdb-4c08-8d3c-04a796b870ae",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=730c619a-9eab-4e66-89bd-1ec0f0d33dbc",
   },
   "response": {
     "body": {
@@ -274,6 +272,8 @@ exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http Repla
         Anything,
       ],
     ],
+    "status": 200,
+    "statusText": "OK",
   },
 }
 `;

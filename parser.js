@@ -143,7 +143,7 @@ function parseVariables(source, separatorRegexPattern = '=') {
     'i'
   )
 
-  Object.assign(meta, skip(source))
+  setMeta(source, meta)
 
   while (!source.eof && regex.test(source.currentLine)) {
     const [, key, value = ''] = regex.exec(source.consumeLine())
@@ -156,7 +156,7 @@ function parseVariables(source, separatorRegexPattern = '=') {
       }
     ])
 
-    Object.assign(meta, skip(source))
+    setMeta(source, meta)
   }
 
   if (meta?.name?.value && !meta.name.value.match(/^[_a-z][_a-z0-9]*$/i)) {
@@ -168,6 +168,33 @@ function parseVariables(source, separatorRegexPattern = '=') {
   return {
     meta,
     ...(variables.length ? { variables } : {})
+  }
+}
+
+function parseExpect({ value }) {
+  const pivot = value.indexOf(' ')
+
+  return [value.slice(0, pivot).trim(), value.slice(pivot).trim()]
+}
+
+function setMeta(source, meta) {
+  for (const [name, variable] of skip(source) ?? []) {
+    switch (name) {
+      case 'expect':
+        {
+          meta[name] ??= {
+            global: false,
+            value: []
+          }
+
+          meta[name].value.push(parseExpect(variable))
+        }
+        break
+
+      default: {
+        meta[name] = variable
+      }
+    }
   }
 }
 
@@ -186,7 +213,7 @@ function skip(source) {
     }
   }
 
-  return meta.length ? Object.fromEntries(meta) : undefined
+  return meta.length ? meta : undefined
 
   function fillMeta(line, commentLookahead) {
     const { variables = [] } = parseVariables(

@@ -89,6 +89,18 @@ export const evaluate = id => {
   }
 }
 
+export const evaluateJsonPath = (request, rawExpr) => {
+  const expr = rawExpr.split('.').slice(1).join('.')
+
+  const path = expr.slice(0, expr.indexOf('$') - 1)
+
+  const jsonPath = expr.slice(expr.indexOf('$'))
+
+  const value = jp.query(get(request, path, {}), jsonPath)
+
+  return value
+}
+
 export const makeInterpolate = ({
   env = {},
   globalVariables = {},
@@ -138,18 +150,10 @@ export const makeInterpolate = ({
           let variable
 
           if (maybeRequestId in requests) {
-            const expr = id.split('.').slice(1).join('.')
-
-            const path = expr.slice(0, expr.indexOf('$') - 1)
-
-            const jsonPath = expr.slice(expr.indexOf('$'))
-
-            const value = jp.query(
-              get(requests[maybeRequestId], path, {}),
-              jsonPath
-            )
-
-            variable = { global: true, value }
+            variable = {
+              global: true,
+              value: evaluateJsonPath(requests[maybeRequestId], id)
+            }
           }
 
           variable =
@@ -217,6 +221,8 @@ export const test = async (
   }
 
   const response = {
+    status: fetchResponse.status,
+    statusText: fetchResponse.statusText,
     headers: Array.from(fetchResponse.headers),
     body: responseBody
   }
@@ -324,6 +330,8 @@ export default {
 
         const evaluate = ${evaluate.toString()}
 
+        const evaluateJsonPath = ${evaluateJsonPath.toString()}
+
         const makeInterpolate = ${makeInterpolate.toString()}
 
         ${requests
@@ -359,6 +367,23 @@ export default {
                   2
                 )}, { env, globalVariables, requests })
 
+                ${
+                  request.meta?.expect?.value
+                    ? request.meta.expect.value
+                        .map(([expr, value]) => {
+                          return `
+                            expect(evaluateJsonPath(outcome, ${JSON.stringify(
+                              `response.$.${expr}`
+                            )})}, source)).toStrictEqual(${JSON.stringify(
+                              value
+                            )})
+
+                          `
+                        })
+                        .join('\n')
+                    : ''
+                }
+
                 expect(outcome).toMatchSnapshot()
               })
             `
@@ -366,6 +391,8 @@ export default {
           .join('')}
       })
     `
+
+    console.log(code)
 
     return {
       geCacheKey: (text, path, { configString }) => {

@@ -477,6 +477,8 @@ describe('test', () => {
         "application/json",
       ],
     ],
+    "status": undefined,
+    "statusText": undefined,
   },
 }
 `)
@@ -534,6 +536,8 @@ describe('test', () => {
         "application/json",
       ],
     ],
+    "status": undefined,
+    "statusText": undefined,
   },
 }
 `)
@@ -585,6 +589,8 @@ describe('test', () => {
         "application/json",
       ],
     ],
+    "status": undefined,
+    "statusText": undefined,
   },
 }
 `)
@@ -651,6 +657,8 @@ describe('test', () => {
         Anything,
       ],
     ],
+    "status": undefined,
+    "statusText": undefined,
   },
 }
 `)
@@ -694,6 +702,8 @@ describe('test', () => {
         "text/",
       ],
     ],
+    "status": undefined,
+    "statusText": undefined,
   },
 }
 `)
@@ -739,6 +749,8 @@ describe('test', () => {
         "something/that-contains-json",
       ],
     ],
+    "status": undefined,
+    "statusText": undefined,
   },
 }
 `)
@@ -782,6 +794,8 @@ describe('test', () => {
         "something/that-contains-json",
       ],
     ],
+    "status": undefined,
+    "statusText": undefined,
   },
 }
 `)
@@ -825,6 +839,8 @@ describe('test', () => {
         "something/else",
       ],
     ],
+    "status": undefined,
+    "statusText": undefined,
   },
 }
 `)
@@ -868,6 +884,8 @@ describe('test', () => {
         "text/",
       ],
     ],
+    "status": undefined,
+    "statusText": undefined,
   },
 }
 `)
@@ -912,6 +930,8 @@ describe('test', () => {
         "text/",
       ],
     ],
+    "status": undefined,
+    "statusText": undefined,
   },
 }
 `)
@@ -955,6 +975,8 @@ describe('test', () => {
         "text/",
       ],
     ],
+    "status": undefined,
+    "statusText": undefined,
   },
 }
 `)

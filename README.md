@@ -33,9 +33,11 @@ export default {
 
 ## Deviations from the original spec
 
-#### Global variables
+### Global variables
 
 Variables starting with @@ are held in the global scope, whether variables starting with a single @ are held in the request scope.
+
+### Meta variables
 
 #### The @title meta variable
 
@@ -48,7 +50,7 @@ GET http://foo/bar
 
 #### The @name meta variable
 
-Used to name a request. Named requests can be used in interpolations.
+Used to name a request. Named requests can be used in interpolations. This variable is optional.
 
 ```http
 # @name foo
@@ -57,7 +59,7 @@ GET http://foo/bar
 
 #### The @only meta variable
 
-Runs only that particular test.
+Runs only that particular test. This variable is optional.
 
 ```http
 # @only
@@ -66,14 +68,16 @@ GET http://foo/bar
 
 #### The @skip meta variable
 
-Skips a test.
+Skips a test. This variable is optional.
 
 ```http
 # @skip
 GET http://foo/bar
 ```
 
-#### The @guid function
+### Functions
+
+#### The $guid function
 
 Generates a random v4 UUID.
 
@@ -106,7 +110,7 @@ Offset unit:
 
 Assertions are made using jest snapshots.
 
-#### The @ignoreHeaders request variable
+### The @ignoreHeaders meta variable
 
 A regex pattern string.
 
@@ -114,5 +118,17 @@ Use it to specify what response headers to ignore for snapshot assertion. The "a
 
 ```http
 @ignoreHeaders ^(x-request-id|x-vendor-.*)
+GET http://foo/bar
+```
+
+#### The @expect meta variable
+
+Asserts a expression against a constant. The expression is related to the response.
+
+This variable is accumulative and forms a list, meaning it doesn't override the previous value.
+
+```http
+# @expect status 200
+# @expect statusText OK
 GET http://foo/bar
 ```
