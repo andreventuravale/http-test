@@ -121,7 +121,7 @@ Assertions are made using jest snapshots.
 
 A regex pattern string.
 
-Use it to specify what response headers to ignore for snapshot assertion. The "age" and "date" headers are always ignored.
+Use it to specify what headers (both request and response) to ignore for snapshot assertion. The "age" and "date" headers are always ignored.
 
 ```http
 @ignoreHeaders ^(x-request-id|x-vendor-.*)
