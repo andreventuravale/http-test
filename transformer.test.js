@@ -9,9 +9,9 @@ describe('makeInterpolate', () => {
   it('nothing to do', () => {
     expect(makeInterpolate()(' ')).toMatchInlineSnapshot(`" "`)
     expect(makeInterpolate()('')).toMatchInlineSnapshot(`""`)
-    expect(makeInterpolate()()).toMatchInlineSnapshot(`"undefined"`)
-    expect(makeInterpolate()(null)).toMatchInlineSnapshot(`"null"`)
-    expect(makeInterpolate()(undefined)).toMatchInlineSnapshot(`"undefined"`)
+    expect(makeInterpolate()()).toMatchInlineSnapshot('undefined')
+    expect(makeInterpolate()(null)).toMatchInlineSnapshot('null')
+    expect(makeInterpolate()(undefined)).toMatchInlineSnapshot('undefined')
   })
 
   it('variable not defined', () => {
@@ -437,7 +437,6 @@ describe('test', () => {
     ).toMatchInlineSnapshot(`
 {
   "request": {
-    "body": "undefined",
     "headers": [
       [
         "x-origin",
@@ -514,7 +513,6 @@ describe('test', () => {
     ).toMatchInlineSnapshot(`
 {
   "request": {
-    "body": "undefined",
     "headers": undefined,
     "meta": {
       "name": {
@@ -567,7 +565,6 @@ describe('test', () => {
     ).toMatchInlineSnapshot(`
 {
   "request": {
-    "body": "undefined",
     "headers": undefined,
     "meta": {
       "name": {
@@ -627,7 +624,6 @@ describe('test', () => {
     ).toMatchInlineSnapshot(`
 {
   "request": {
-    "body": "undefined",
     "headers": undefined,
     "meta": {
       "ignoreHeaders": {
@@ -689,7 +685,6 @@ describe('test', () => {
     ).toMatchInlineSnapshot(`
 {
   "request": {
-    "body": "undefined",
     "headers": undefined,
     "method": "GET",
     "url": "http://foo",
@@ -734,7 +729,6 @@ describe('test', () => {
     ).toMatchInlineSnapshot(`
 {
   "request": {
-    "body": "undefined",
     "headers": undefined,
     "method": "GET",
     "url": "http://foo",
@@ -781,13 +775,11 @@ describe('test', () => {
     ).toMatchInlineSnapshot(`
 {
   "request": {
-    "body": "undefined",
     "headers": undefined,
     "method": "GET",
     "url": "http://foo",
   },
   "response": {
-    "body": null,
     "headers": [
       [
         "content-type",
@@ -826,7 +818,6 @@ describe('test', () => {
     ).toMatchInlineSnapshot(`
 {
   "request": {
-    "body": "undefined",
     "headers": undefined,
     "method": "GET",
     "url": "http://foo",
@@ -871,7 +862,6 @@ describe('test', () => {
     ).toMatchInlineSnapshot(`
 {
   "request": {
-    "body": "undefined",
     "headers": undefined,
     "method": "HEAD",
     "url": "http://foo",
@@ -962,7 +952,6 @@ describe('test', () => {
     ).toMatchInlineSnapshot(`
 {
   "request": {
-    "body": "undefined",
     "headers": undefined,
     "method": "POST",
     "url": "http://foo",

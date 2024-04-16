@@ -123,6 +123,10 @@ export const makeInterpolate = ({
   )
 
   return text => {
+    if (text === undefined || text === null) {
+      return text
+    }
+
     const context = { env: envVariables, variables }
 
     function visit(text, path, { isGlobal = false } = {}) {
@@ -237,7 +241,7 @@ export const test = async (
     status: fetchResponse.status,
     statusText: fetchResponse.statusText,
     headers: Array.from(fetchResponse.headers),
-    body: responseBody
+    ...(responseBody ? { body: responseBody } : {})
   }
 
   const ignoreHeaders = ['age', 'date']
