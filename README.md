@@ -132,6 +132,8 @@ GET http://foo/bar
 
 Use it to specify what json-paths to ignore for snapshot assertion. The json-path is related to the named-request's request/response.
 
+This variable is accumulative and forms a list, meaning you can ignore more than one path per request.
+
 ```http
 @ignore $.response.body.id
 @ignore $.response.body.completed
@@ -142,7 +144,7 @@ GET http://foo/bar
 
 Asserts a json-path against a constant. The json-path is related to the named-request's request/response.
 
-This variable is accumulative and forms a list, meaning it doesn't override the previous value.
+This variable is accumulative and forms a list, meaning you can have many assertions.
 
 ```http
 # @expect $.response.status 200
@@ -151,6 +153,8 @@ GET http://foo/bar
 ```
 
 #### The @status meta variable
+
+Alias to `@expect $.response.status <statusCode>` and ( optionally ) `@expect $.response.statusText "<statusText>"`
 
 ```http
 # @status 200 "OK"
@@ -163,8 +167,6 @@ or the status code only
 # @status 200
 GET http://foo/bar
 ```
-
-Alias to `@expect $.response.status <statusCode>` and ( optionally ) `@expect $.response.statusText "<statusText>"`
 
 #### The @throws meta variable
 
