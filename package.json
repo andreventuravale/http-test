@@ -1,6 +1,6 @@
 {
   "name": "jest-dot-http-files",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "type": "module",
   "description": "Jest transformer for .http files",
   "scripts": {
