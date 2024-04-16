@@ -11,7 +11,7 @@ https://jestjs.io/docs/code-transformation
 
 - https://github.com/dotnet/AspNetCore.Docs/blob/main/aspnetcore/test/http-files.md
 - https://marketplace.visualstudio.com/items?itemName=humao.rest-client
-- https://www.jetbrains.com/help/idea/exploring-http-syntax.html#http_request_names
+- https://www.jetbrains.com/help/idea/exploring-http-syntax.html
 
 ## Usage
 
