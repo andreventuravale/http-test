@@ -68,7 +68,7 @@ GET http://foo/{{foo.response.body.$.id}}
 
 #### The @only meta variable
 
-Meaninig: runs only this request.
+Meaning: runs only this request.
 
 ```http
 # @only
@@ -77,7 +77,7 @@ GET http://foo/bar
 
 #### The @skip meta variable
 
-Meaninig: don't run this request.
+Meaning: don't run this request.
 
 ```http
 # @skip
