@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/1?_=afbfeb53-a48d-4ca4-9ffb-cd4c8ed6f811 1`] = `
+exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/1?_=fd1a00eb-52e7-412a-9a00-4ab4ea8b06a2 1`] = `
 {
   "request": {
     "headers": [
@@ -14,11 +14,11 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
         "global": false,
         "value": [
           [
-            "status",
+            "$.response.status",
             200,
           ],
           [
-            "statusText",
+            "$.response.statusText",
             "OK",
           ],
         ],
@@ -33,11 +33,11 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=afbfeb53-a48d-4ca4-9ffb-cd4c8ed6f811",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=fd1a00eb-52e7-412a-9a00-4ab4ea8b06a2",
     "variables": {
       "dash": {
         "global": true,
-        "value": "afbfeb53-a48d-4ca4-9ffb-cd4c8ed6f811",
+        "value": "fd1a00eb-52e7-412a-9a00-4ab4ea8b06a2",
       },
       "host": {
         "global": true,
@@ -156,7 +156,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
 }
 `;
 
-exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/2?_=afbfeb53-a48d-4ca4-9ffb-cd4c8ed6f811 1`] = `
+exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/2?_=fd1a00eb-52e7-412a-9a00-4ab4ea8b06a2 1`] = `
 {
   "request": {
     "headers": [
@@ -166,17 +166,19 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
       ],
     ],
     "meta": {
-      "expect": {
+      "expectStatus": 200,
+      "expectStatusText": "OK",
+      "ignore": {
         "global": false,
         "value": [
-          [
-            "status",
-            200,
-          ],
-          [
-            "statusText",
-            "OK",
-          ],
+          {
+            "global": false,
+            "value": "$.response.body.id",
+          },
+          {
+            "global": false,
+            "value": "$.response.body.completed",
+          },
         ],
       },
       "ignoreHeaders": {
@@ -189,12 +191,12 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=0ce13045-012c-4344-93bf-9a8a3f0d6f0e",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=52010bd9-4665-49e0-8154-b83fe6b9aefd",
   },
   "response": {
     "body": {
-      "completed": false,
-      "id": 2,
+      "completed": Anything,
+      "id": Anything,
       "title": "quis ut nam facilis et officia qui",
       "userId": 1,
     },

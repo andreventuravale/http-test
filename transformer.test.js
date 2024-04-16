@@ -34,7 +34,7 @@ describe('makeInterpolate', () => {
             }
           }
         }
-      })(' {{foo.response.body.$.data.foo}} ')
+      })(' {{foo.$.response.body.data.foo}} ')
     ).toStrictEqual(' bar ')
   })
 
@@ -560,7 +560,7 @@ describe('test', () => {
               name: { value: 'bar' }
             },
             method: 'GET',
-            url: 'http://foo/{{foo.response.body.$.data.foo}}'
+            url: 'http://foo/{{foo.$.response.body.data.foo}}'
           }
         },
         { fetch, requests }

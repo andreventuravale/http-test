@@ -6,7 +6,7 @@ import parse from './parser.js'
 const {
   dateFns: { add, format, formatISO, formatRFC7231 },
   jsonpath: { default: jp },
-  lodashEs: { get, isFinite: _isFinite, isInteger, merge }
+  lodashEs: { get, isFinite: _isFinite, isInteger, merge, setWith }
 } = await import('./dependencies.js')
 
 const assertInteger = something => {
@@ -98,19 +98,13 @@ export const evaluateJsonPath = (
   rawExpr,
   { ignoreFirstSegment = true } = {}
 ) => {
-  const expr = ignoreFirstSegment
-    ? rawExpr.split('.').slice(1).join('.')
-    : rawExpr
+  const jsonPath = (
+    ignoreFirstSegment ? rawExpr.split('.').slice(1).join('.') : rawExpr
+  ).trim()
 
-  const divider = '.$'
+  const results = jp.query(request, jsonPath)
 
-  const path = expr.slice(0, expr.indexOf(divider))
-
-  const jsonPath = expr.slice(expr.indexOf(divider) + divider.length - 1)
-
-  const value = jp.query(get(request, path, {}), jsonPath)?.[0]
-
-  return value
+  return results.length <= 1 ? results[0] : results
 }
 
 export const makeInterpolate = ({
@@ -194,6 +188,14 @@ export const makeInterpolate = ({
     }
 
     return visit(text, [])
+  }
+}
+
+export const setJsonPath = (request, jsonPath) => {
+  const targetPaths = jp.paths(request, jsonPath)
+
+  for (const targetPath of targetPaths) {
+    setWith(request, targetPath.slice(1), expect.anything(), Object)
   }
 }
 
@@ -287,6 +289,12 @@ export const test = async (
     requests[request.meta.name.value] = outcome
   }
 
+  if (request.meta?.ignore?.value) {
+    for (const { value } of request.meta.ignore.value) {
+      setJsonPath(outcome, value)
+    }
+  }
+
   return outcome
 }
 
@@ -328,6 +336,8 @@ export default {
 
         let jp
 
+        let setWith
+
         let requests
 
         const env = ${JSON.stringify(env, null, 2)}
@@ -341,6 +351,8 @@ export default {
 
           jp = jsonpath.default
 
+          setWith = lodashEs.setWith
+
           requests = {}
         })
 
@@ -351,6 +363,8 @@ export default {
         const evaluateJsonPath = ${evaluateJsonPath.toString()}
 
         const makeInterpolate = ${makeInterpolate.toString()}
+
+        const setJsonPath = ${setJsonPath.toString()}
 
         ${requests
           .filter(request => request.url)
@@ -364,6 +378,22 @@ export default {
             const title =
               request.meta?.title?.value ??
               `${request.method} ${interpolate(request.url)}`
+
+            const assertions = request.meta?.expect?.value ?? []
+
+            if (request.meta?.expectStatus?.value) {
+              assertions.push([
+                '$.response.status',
+                request.meta.expectStatus.value
+              ])
+            }
+
+            if (request.meta?.expectStatusText?.value) {
+              assertions.push([
+                '$.response.statusText',
+                request.meta.expectStatusText.value
+              ])
+            }
 
             return `
               /**
@@ -387,21 +417,17 @@ export default {
 
                 expect(outcome).toMatchSnapshot()
 
-                ${
-                  request.meta?.expect?.value
-                    ? request.meta.expect.value
-                        .map(([expr, value]) => {
-                          return `
+                ${assertions
+                  .map(([jsonPath, value]) => {
+                    return `
                     expect(evaluateJsonPath(outcome, ${JSON.stringify(
-                      `response.$.${expr}`
+                      jsonPath
                     )}, { ignoreFirstSegment: false })).toStrictEqual(${JSON.stringify(
                       value
                     )})
                   `
-                        })
-                        .join('\n')
-                    : ''
-                }
+                  })
+                  .join('\n')}
               })
             `
           })

@@ -360,6 +360,50 @@ test('the "expect" request meta is accumulative ( forms a list )', () => {
 `)
 })
 
+test('the "ignore" request meta is accumulative ( forms a list )', () => {
+  const requests = parse(`   
+    # @name sample1
+    # @ignore response.status
+    # @ignore response.statusText
+    GET http://foo
+    content-type: application/json
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+    ],
+    "meta": {
+      "ignore": {
+        "global": false,
+        "value": [
+          {
+            "global": false,
+            "value": "response.status",
+          },
+          {
+            "global": false,
+            "value": "response.statusText",
+          },
+        ],
+      },
+      "name": {
+        "global": false,
+        "value": "sample1",
+      },
+    },
+    "method": "GET",
+    "url": "http://foo",
+  },
+]
+`)
+})
+
 test('global variables at the bottom', () => {
   const requests = parse(`
     @@hostname=localhost

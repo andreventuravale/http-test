@@ -63,7 +63,7 @@ GET http://foo/bar
 Accessing the named request:
 
 ```http
-GET http://foo/{{foo.response.body.$.id}}
+GET http://foo/{{foo.$.response.body.id}}
 ```
 
 #### The @only meta variable
@@ -128,17 +128,35 @@ Use it to specify what response headers to ignore for snapshot assertion. The "a
 GET http://foo/bar
 ```
 
+### The @ignore meta variable
+
+Use it to specify what json-paths to ignore for snapshot assertion. The json-path is related to the named-request's request/response.
+
+```http
+@ignore $.response.body.id
+@ignore $.response.body.completed
+GET http://foo/bar
+```
+
 #### The @expect meta variable
 
-Asserts a expression against a constant. The expression is related to the response.
+Asserts a json-path against a constant. The json-path is related to the named-request's request/response.
 
 This variable is accumulative and forms a list, meaning it doesn't override the previous value.
 
 ```http
-# @expect status 200
-# @expect statusText "OK"
+# @expect $.response.status 200
+# @expect $.response.statusText "OK"
 GET http://foo/bar
 ```
+
+#### The @expectStatus meta variable
+
+Alias to `@expect $.response.status <status>`
+
+#### The @expectStatusText meta variable
+
+Alias to `@expect $.response.statusText <text>`
 
 ---
 

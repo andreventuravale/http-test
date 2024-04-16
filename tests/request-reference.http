@@ -10,5 +10,5 @@ content-type: application/json
 
 # @title Replay the sample1 request
 # @ignoreHeaders .*
-GET {{host}}/todos/{{sample1.response.body.$.id}}?_={{dash}}
+GET {{host}}/todos/{{sample1.$.response.body.id}}?_={{dash}}
 content-type: application/json
