@@ -375,6 +375,8 @@ export default {
                   2
                 )}, { env, globalVariables, requests })
 
+                expect(outcome).toMatchSnapshot()
+
                 ${
                   request.meta?.expect?.value
                     ? request.meta.expect.value
@@ -390,8 +392,6 @@ export default {
                         .join('\n')
                     : ''
                 }
-
-                expect(outcome).toMatchSnapshot()
               })
             `
           })
