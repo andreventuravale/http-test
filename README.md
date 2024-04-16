@@ -135,3 +135,11 @@ This variable is accumulative and forms a list, meaning it doesn't override the 
 # @expect statusText "OK"
 GET http://foo/bar
 ```
+
+---
+
+### See also
+
+- Language support for vscode:
+  - Repository: https://github.com/andreventuravale/vscode-dot-http-files
+  - Marketplace: https://marketplace.visualstudio.com/items?itemName=AndreValeOutlook.vscode-dot-http-files
