@@ -19,11 +19,15 @@ function parseExpect({ value }) {
 function parseStatus({ value, ...rest }) {
   const pivot = value.indexOf(' ')
 
+  const code = JSON.parse(value.slice(0, pivot < 0 ? value.length : pivot).trim())
+
+  const text = pivot < 0 ? '' : value.slice(pivot + 1).trim()
+
   return {
     ...rest,
     value: [
-      JSON.parse(value.slice(0, pivot < 0 ? value.length : pivot).trim()),
-      JSON.parse(value.slice(pivot).trim())
+      code,
+      text.length ? JSON.parse(text) : undefined
     ]
   }
 }

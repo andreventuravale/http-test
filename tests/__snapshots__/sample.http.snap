@@ -33,11 +33,11 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test global inte
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=87f0acfc-ee7b-4bed-a6ee-2135014f21bc",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=ef345ba2-78dd-4475-8c7f-b65932f29872",
     "variables": {
       "dash": {
         "global": true,
-        "value": "87f0acfc-ee7b-4bed-a6ee-2135014f21bc",
+        "value": "ef345ba2-78dd-4475-8c7f-b65932f29872",
       },
       "host": {
         "global": true,
@@ -202,7 +202,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test many expect
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=fd7ff38c-9aa6-4475-b12b-a79b3f508388",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=6a7348c7-b57e-4a47-87dd-052bfa36af56",
   },
   "response": {
     "body": {
@@ -355,7 +355,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test the @status
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=fd7ff38c-9aa6-4475-b12b-a79b3f508388",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=6a7348c7-b57e-4a47-87dd-052bfa36af56",
   },
   "response": {
     "body": {
@@ -503,7 +503,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test the @status
         "global": false,
         "value": [
           200,
-          0,
+          null,
         ],
       },
       "title": {
@@ -512,7 +512,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test the @status
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=fd7ff38c-9aa6-4475-b12b-a79b3f508388",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=6a7348c7-b57e-4a47-87dd-052bfa36af56",
   },
   "response": {
     "body": {
@@ -647,7 +647,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http use the @throws 
         "global": false,
         "value": [
           100,
-          0,
+          null,
         ],
       },
       "throws": {
@@ -660,7 +660,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http use the @throws 
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=fd7ff38c-9aa6-4475-b12b-a79b3f508388",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=6a7348c7-b57e-4a47-87dd-052bfa36af56",
   },
   "response": {
     "body": {
@@ -808,7 +808,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http use the @throws 
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=fd7ff38c-9aa6-4475-b12b-a79b3f508388",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=6a7348c7-b57e-4a47-87dd-052bfa36af56",
   },
   "response": {
     "body": {

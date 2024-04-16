@@ -397,6 +397,43 @@ test('The @status meta', () => {
 `)
 })
 
+test('The @status meta ( code only )', () => {
+  const requests = parse(`   
+    # @name sample1
+    # @status 200
+    GET http://foo
+    content-type: application/json
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+    ],
+    "meta": {
+      "name": {
+        "global": false,
+        "value": "sample1",
+      },
+      "status": {
+        "global": false,
+        "value": [
+          200,
+          undefined,
+        ],
+      },
+    },
+    "method": "GET",
+    "url": "http://foo",
+  },
+]
+`)
+})
+
 test('the "ignore" request meta is accumulative ( forms a list )', () => {
   const requests = parse(`   
     # @name sample1
