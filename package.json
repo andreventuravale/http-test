@@ -1,7 +1,8 @@
 {
   "name": "jest-dot-http-files",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "type": "module",
+  "description": "Jest transformer for .http files",
   "scripts": {
     "format": "clear && biome check --quote-style=single --semicolons=as-needed --arrow-parentheses=as-needed --json-formatter-indent-style=space --apply-unsafe .",
     "lint": "clear && biome lint .",
