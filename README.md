@@ -1,22 +1,23 @@
 
 ## Jest transformer for .http files
 
-> @see https://github.com/dotnet/AspNetCore.Docs/blob/main/aspnetcore/test/http-files.md
+### Literature and references
+
+#### About jest transformers
+
+https://jestjs.io/docs/code-transformation
+
+#### About HTTP Files
+
+- https://github.com/dotnet/AspNetCore.Docs/blob/main/aspnetcore/test/http-files.md
+- https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+- https://www.jetbrains.com/help/idea/exploring-http-syntax.html#http_request_names
 
 ## Usage
 
-Install the npm package ( in dev mode ): **jest-dot-http-files**
+Install the npm package as dev dependency: **jest-dot-http-files**
 
-Install the peer-dependencies ( in dev mode if you aren't using them already ):
-
-- **date-fns**
-- **jsonpath**
-- **lodash-es**
-- **node-fetch**
-
-It works by exporting a jest transformer.
-
-Here is a simplified way to use it:
+It works by exporting a jest transformer. Here is a simplified way to use it:
 
 ```javascript
 // jest.config.js
@@ -25,26 +26,28 @@ export default {
   moduleFileExtensions: ['http'],
   testMatch: ['**/*.http'],
   transform: {
-    '\\.http$': 'jest-dot-http-files'
+    '\\.http$': 'jest-dot-http-files/transformer'
   }
 }
 
 ```
 
-## Deviations from the original spec
+## Deviations from the existing literature
 
 ### Global variables
 
-Variables starting with @@ are held in the global scope, whether variables starting with a single @ are held in the request scope.
+Variables starting with **@@** are held in the global scope, meaning they are available to all requests.
 
 ### Meta variables
 
+> Meta variables are defined in the request scope within comments, similarly to jsdoc.
+
 #### The @title meta variable
 
-Used as test title if present. This variable is optional.
+Overrides the test title. This variable is optional.
 
 ```http
-# @title foo
+# @title My meaningful test title.
 GET http://foo/bar
 ```
 
@@ -57,9 +60,15 @@ Used to name a request. Named requests can be used in interpolations. This varia
 GET http://foo/bar
 ```
 
+Accessing the named request:
+
+```http
+GET http://foo/{{foo.response.body.$.id}}
+```
+
 #### The @only meta variable
 
-Runs only that particular test. This variable is optional.
+Meaninig: runs only this request.
 
 ```http
 # @only
@@ -68,14 +77,16 @@ GET http://foo/bar
 
 #### The @skip meta variable
 
-Skips a test. This variable is optional.
+Meaninig: don't run this request.
 
 ```http
 # @skip
 GET http://foo/bar
 ```
 
-### Functions
+## Functions
+
+> Functions are used within interpolations `{{...}}`.
 
 #### The $guid function
 
@@ -83,9 +94,6 @@ Generates a random v4 UUID.
 
 #### The $datetime function
 
-The **$datetime** might not fully represent the reference implementation.
-
-Additionally, it supports offsets at the end, for instance:
 
 ```http
 # "1 y" means to add one year to the current date
@@ -100,11 +108,6 @@ Offset unit:
 - h = Hour
 - m = Minute
 - s = Second
-
-#### Not supported/implemented
-
-- The **$localDatetime** function.
-- Specific HTTP versions
 
 ## A note on "assertions"
 

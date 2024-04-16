@@ -1,4 +1,6 @@
-import { trim } from 'lodash-es'
+const {
+  lodashEs: { trim }
+} = await import('./dependencies.js')
 
 export default sourceText => parseRequests(sourceText)
 

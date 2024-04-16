@@ -2,8 +2,8 @@ import { existsSync, readFileSync } from 'node:fs'
 import { afterAll, beforeAll, jest } from '@jest/globals'
 import { Headers } from 'node-fetch'
 import * as td from 'testdouble'
-import transformer, { makeInterpolate, test } from './jest-transformer.js'
 import parse from './parser.js'
+import transformer, { makeInterpolate, test } from './transformer.js'
 
 describe('makeInterpolate', () => {
   it('nothing to do', () => {

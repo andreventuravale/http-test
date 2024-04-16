@@ -1,10 +1,13 @@
 import { createHash, randomUUID } from 'node:crypto'
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
-import { add, format, formatISO, formatRFC7231 } from 'date-fns'
-import jp from 'jsonpath'
-import { isFinite as _isFinite, get, isInteger, merge } from 'lodash-es'
 import parse from './parser.js'
+
+const {
+  dateFns: { add, format, formatISO, formatRFC7231 },
+  jsonpath: { default: jp },
+  lodashEs: { get, isFinite: _isFinite, isInteger, merge }
+} = await import('./dependencies.js')
 
 const assertInteger = something => {
   let value = something
@@ -193,7 +196,9 @@ export const test = async (
   { request },
   { env, fetch, globalVariables, requests } = {}
 ) => {
-  fetch = fetch ?? (await import('node-fetch')).default
+  fetch =
+    fetch ??
+    (await import('jest-dot-http-files/dependencies')).nodeFetch.default
 
   const interpolate = makeInterpolate({
     env,
@@ -325,11 +330,11 @@ export default {
         let jp
 
         beforeAll(async () => {
-          const _ = await import('lodash-es')
+          const { lodashEs, jsonpath } = await import('jest-dot-http-files/dependencies')
 
-          get = _.get
+          get = lodashEs.get
 
-          jp = (await import('jsonpath')).default
+          jp = jsonpath.default
 
           requests = {}
         })

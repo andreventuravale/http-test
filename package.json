@@ -1,8 +1,7 @@
 {
   "name": "jest-dot-http-files",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "type": "module",
-  "main": "./jest-transformer.js",
   "scripts": {
     "format": "clear && biome check --quote-style=single --semicolons=as-needed --arrow-parentheses=as-needed --json-formatter-indent-style=space --apply-unsafe .",
     "lint": "clear && biome lint .",
@@ -30,5 +29,9 @@
     "jsonpath": "^1.1.1",
     "lodash-es": "^4.17.21",
     "node-fetch": "^3.3.2"
+  },
+  "exports": {
+    "./dependencies": "./dependencies.js",
+    "./transformer": "./transformer.js"
   }
 }
