@@ -6,7 +6,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test global inte
     "headers": [
       [
         "content-type",
-        "application/json",
+        Anything,
       ],
     ],
     "meta": {
@@ -33,11 +33,11 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test global inte
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=ef345ba2-78dd-4475-8c7f-b65932f29872",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=7a744d36-49ff-4065-9fb7-6d192edc2435",
     "variables": {
       "dash": {
         "global": true,
-        "value": "ef345ba2-78dd-4475-8c7f-b65932f29872",
+        "value": "7a744d36-49ff-4065-9fb7-6d192edc2435",
       },
       "host": {
         "global": true,
@@ -162,7 +162,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test many expect
     "headers": [
       [
         "content-type",
-        "application/json",
+        Anything,
       ],
     ],
     "meta": {
@@ -202,7 +202,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test many expect
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=6a7348c7-b57e-4a47-87dd-052bfa36af56",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=9a6c6565-9fcd-42cd-9294-f65b5e511a84",
   },
   "response": {
     "body": {
@@ -321,7 +321,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test the @status
     "headers": [
       [
         "content-type",
-        "application/json",
+        Anything,
       ],
     ],
     "meta": {
@@ -355,7 +355,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test the @status
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=6a7348c7-b57e-4a47-87dd-052bfa36af56",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=9a6c6565-9fcd-42cd-9294-f65b5e511a84",
   },
   "response": {
     "body": {
@@ -478,7 +478,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test the @status
     "headers": [
       [
         "content-type",
-        "application/json",
+        Anything,
       ],
     ],
     "meta": {
@@ -512,7 +512,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test the @status
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=6a7348c7-b57e-4a47-87dd-052bfa36af56",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=9a6c6565-9fcd-42cd-9294-f65b5e511a84",
   },
   "response": {
     "body": {
@@ -635,7 +635,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http use the @throws 
     "headers": [
       [
         "content-type",
-        "application/json",
+        Anything,
       ],
     ],
     "meta": {
@@ -660,7 +660,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http use the @throws 
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=6a7348c7-b57e-4a47-87dd-052bfa36af56",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=9a6c6565-9fcd-42cd-9294-f65b5e511a84",
   },
   "response": {
     "body": {
@@ -783,7 +783,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http use the @throws 
     "headers": [
       [
         "content-type",
-        "application/json",
+        Anything,
       ],
     ],
     "meta": {
@@ -808,7 +808,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http use the @throws 
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=6a7348c7-b57e-4a47-87dd-052bfa36af56",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=9a6c6565-9fcd-42cd-9294-f65b5e511a84",
   },
   "response": {
     "body": {

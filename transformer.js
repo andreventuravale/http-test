@@ -263,15 +263,6 @@ export const test = async (
 
   response.headers = response.headers.map(([k, v]) => [k, v])
 
-  for (const header of response.headers) {
-    if (
-      ignoreHeaders.includes(header[0]) ||
-      ignoreHeadersRegex?.test(header[0])
-    ) {
-      header[1] = expect.anything()
-    }
-  }
-
   const modifiedRequest = {
     ...request
   }
@@ -292,6 +283,24 @@ export const test = async (
   if (request.meta?.ignore?.value) {
     for (const { value } of request.meta.ignore.value) {
       setJsonPath(outcome, value)
+    }
+  }
+
+  for (const header of outcome.request.headers ?? []) {
+    if (
+      ignoreHeaders.includes(header[0]) ||
+      ignoreHeadersRegex?.test(header[0])
+    ) {
+      header[1] = expect.anything()
+    }
+  }
+
+  for (const header of outcome.response.headers) {
+    if (
+      ignoreHeaders.includes(header[0]) ||
+      ignoreHeadersRegex?.test(header[0])
+    ) {
+      header[1] = expect.anything()
     }
   }
 
