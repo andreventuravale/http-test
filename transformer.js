@@ -446,7 +446,7 @@ export default {
           .join('')}
       })
     `
-    console.log(code)
+
     return {
       geCacheKey: (text, path, { configString }) => {
         return createHash('sha1')
