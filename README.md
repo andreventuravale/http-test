@@ -92,6 +92,10 @@ GET http://foo/bar
 
 Generates a random v4 UUID.
 
+#### The $uuid function
+
+Alias to $guid.
+
 #### The $datetime function
 
 

@@ -31,6 +31,7 @@ export const evaluate = id => {
       return formatDatetime(new Date(), args.join(' '))
 
     case 'guid':
+    case 'uuid':
       return randomUUID()
 
     case 'processEnv':

@@ -120,6 +120,9 @@ describe('makeInterpolate', () => {
     expect(makeInterpolate()('{{$guid}}')).toMatch(
       /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
     )
+    expect(makeInterpolate()('{{$uuid}}')).toMatch(
+      /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
+    )
   })
 
   describe('date related', () => {
