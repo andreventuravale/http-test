@@ -174,7 +174,7 @@ function parseVariables(source, separatorRegexPattern = '=') {
 function parseExpect({ value }) {
   const pivot = value.indexOf(' ')
 
-  return [value.slice(0, pivot).trim(), value.slice(pivot).trim()]
+  return [value.slice(0, pivot).trim(), JSON.parse(value.slice(pivot).trim())]
 }
 
 function setMeta(source, meta) {

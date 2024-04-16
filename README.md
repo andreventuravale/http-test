@@ -129,6 +129,6 @@ This variable is accumulative and forms a list, meaning it doesn't override the 
 
 ```http
 # @expect status 200
-# @expect statusText OK
+# @expect statusText "OK"
 GET http://foo/bar
 ```

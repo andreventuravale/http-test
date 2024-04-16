@@ -89,14 +89,22 @@ export const evaluate = id => {
   }
 }
 
-export const evaluateJsonPath = (request, rawExpr) => {
-  const expr = rawExpr.split('.').slice(1).join('.')
+export const evaluateJsonPath = (
+  request,
+  rawExpr,
+  { ignoreFirstSegment = true } = {}
+) => {
+  const expr = ignoreFirstSegment
+    ? rawExpr.split('.').slice(1).join('.')
+    : rawExpr
 
-  const path = expr.slice(0, expr.indexOf('$') - 1)
+  const divider = '.$'
 
-  const jsonPath = expr.slice(expr.indexOf('$'))
+  const path = expr.slice(0, expr.indexOf(divider))
 
-  const value = jp.query(get(request, path, {}), jsonPath)
+  const jsonPath = expr.slice(expr.indexOf(divider) + divider.length - 1)
+
+  const value = jp.query(get(request, path, {}), jsonPath)?.[0]
 
   return value
 }
@@ -372,13 +380,12 @@ export default {
                     ? request.meta.expect.value
                         .map(([expr, value]) => {
                           return `
-                            expect(evaluateJsonPath(outcome, ${JSON.stringify(
-                              `response.$.${expr}`
-                            )})}, source)).toStrictEqual(${JSON.stringify(
-                              value
-                            )})
-
-                          `
+                    expect(evaluateJsonPath(outcome, ${JSON.stringify(
+                      `response.$.${expr}`
+                    )}, { ignoreFirstSegment: false })).toStrictEqual(${JSON.stringify(
+                      value
+                    )})
+                  `
                         })
                         .join('\n')
                     : ''
@@ -391,8 +398,6 @@ export default {
           .join('')}
       })
     `
-
-    console.log(code)
 
     return {
       geCacheKey: (text, path, { configString }) => {

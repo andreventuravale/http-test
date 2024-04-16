@@ -4,7 +4,7 @@
 # @name sample1
 # @ignoreHeaders .*
 # @expect status 200
-# @expect statusText OK
+# @expect statusText "OK"
 GET {{host}}/todos/1?_={{dash}}
 content-type: application/json
 
@@ -13,6 +13,6 @@ content-type: application/json
 # @name sample2
 # @ignoreHeaders .*
 # @expect status 200
-# @expect statusText OK
+# @expect statusText "OK"
 GET {{host}}/todos/2?_={{dash}}
 content-type: application/json

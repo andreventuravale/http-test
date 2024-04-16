@@ -320,7 +320,7 @@ test('the "expect" request meta is accumulative ( forms a list )', () => {
   const requests = parse(`   
     # @name sample1
     # @expect status 200
-    # @expect statusText OK
+    # @expect statusText "OK"
     GET http://foo
     content-type: application/json
   `)
@@ -340,7 +340,7 @@ test('the "expect" request meta is accumulative ( forms a list )', () => {
         "value": [
           [
             "status",
-            "200",
+            200,
           ],
           [
             "statusText",

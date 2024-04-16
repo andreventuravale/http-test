@@ -1,6 +1,6 @@
 {
   "name": "jest-dot-http-files",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "type": "module",
   "main": "./jest-transformer.js",
   "scripts": {
