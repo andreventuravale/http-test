@@ -5,20 +5,27 @@ const {
 const defaultOptions = {
   meta: {
     expect: { list: true, parse: parseExpect },
-    expectStatus: { parse: parseJson },
-    expectStatusText: { parse: parseJson },
+    status: { parse: parseStatus },
     ignore: { list: true }
   }
-}
-
-function parseJson({ value }) {
-  return JSON.parse(value)
 }
 
 function parseExpect({ value }) {
   const pivot = value.indexOf(' ')
 
   return [value.slice(0, pivot).trim(), JSON.parse(value.slice(pivot).trim())]
+}
+
+function parseStatus({ value, ...rest }) {
+  const pivot = value.indexOf(' ')
+
+  return {
+    ...rest,
+    value: [
+      JSON.parse(value.slice(0, pivot < 0 ? value.length : pivot).trim()),
+      JSON.parse(value.slice(pivot).trim())
+    ]
+  }
 }
 
 export const makeParser = (options = {}) => {

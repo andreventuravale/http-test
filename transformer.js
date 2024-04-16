@@ -6,7 +6,7 @@ import parse from './parser.js'
 const {
   dateFns: { add, format, formatISO, formatRFC7231 },
   jsonpath: { default: jp },
-  lodashEs: { get, isFinite: _isFinite, isInteger, merge, setWith }
+  lodashEs: { isFinite: _isFinite, isInteger, merge, setWith }
 } = await import('./dependencies.js')
 
 const assertInteger = something => {
@@ -381,18 +381,12 @@ export default {
 
             const assertions = request.meta?.expect?.value ?? []
 
-            if (request.meta?.expectStatus?.value) {
-              assertions.push([
-                '$.response.status',
-                request.meta.expectStatus.value
-              ])
-            }
+            if (request.meta?.status?.value) {
+              const [code, text] = request.meta.status.value
 
-            if (request.meta?.expectStatusText?.value) {
-              assertions.push([
-                '$.response.statusText',
-                request.meta.expectStatusText.value
-              ])
+              assertions.push(['$.response.status', code])
+
+              text && assertions.push(['$.response.statusText', text])
             }
 
             return `
@@ -406,6 +400,13 @@ export default {
                     ? '.skip'
                     : ''
               }(${JSON.stringify(title)}, async () => {
+
+                ${
+                  request.meta?.throws?.value
+                    ? 'await expect(async () => {'
+                    : ''
+                }
+
                 const outcome = await (${test.toString()})(${JSON.stringify(
                   {
                     env,
@@ -428,13 +429,24 @@ export default {
                   `
                   })
                   .join('\n')}
+
+                  ${
+                    request.meta?.throws?.value
+                      ? `}).rejects.toThrow(${
+                          typeof request.meta.throws.value === 'boolean'
+                            ? ''
+                            : `/${request.meta.throws.value}/g`
+                        })`
+                      : ''
+                  }
+  
               })
             `
           })
           .join('')}
       })
     `
-
+    console.log(code)
     return {
       geCacheKey: (text, path, { configString }) => {
         return createHash('sha1')

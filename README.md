@@ -150,13 +150,46 @@ This variable is accumulative and forms a list, meaning it doesn't override the 
 GET http://foo/bar
 ```
 
-#### The @expectStatus meta variable
+#### The @status meta variable
 
-Alias to `@expect $.response.status <status>`
+```http
+# @status 200 "OK"
+GET http://foo/bar
+```
 
-#### The @expectStatusText meta variable
+or the status code only
 
-Alias to `@expect $.response.statusText <text>`
+```http
+# @status 200
+GET http://foo/bar
+```
+
+Alias to `@expect $.response.status <statusCode>` and ( optionally ) `@expect $.response.statusText "<statusText>"`
+
+#### The @throws meta variable
+
+```http
+# @throws
+GET http://foo/bar
+```
+
+or with a regex pattern
+
+```http
+# @throws .*error.*
+GET http://foo/bar
+```
+
+Expects the request to throw an error.
+
+This is helpful to test negative cases, for example:
+
+```http
+# @titles Tests that the response is not 500
+# @status 500
+# @throws
+GET http://foo/bar
+```
 
 ---
 

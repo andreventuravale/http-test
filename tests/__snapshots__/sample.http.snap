@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/1?_=fd1a00eb-52e7-412a-9a00-4ab4ea8b06a2 1`] = `
+exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test global interpolation 1`] = `
 {
   "request": {
     "headers": [
@@ -27,17 +27,17 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
         "global": false,
         "value": ".*",
       },
-      "name": {
+      "title": {
         "global": false,
-        "value": "sample1",
+        "value": "test global interpolation",
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=fd1a00eb-52e7-412a-9a00-4ab4ea8b06a2",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=c710047d-5ebb-4aca-a981-7b857d3ec9db",
     "variables": {
       "dash": {
         "global": true,
-        "value": "fd1a00eb-52e7-412a-9a00-4ab4ea8b06a2",
+        "value": "c710047d-5ebb-4aca-a981-7b857d3ec9db",
       },
       "host": {
         "global": true,
@@ -156,7 +156,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
 }
 `;
 
-exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://jsonplaceholder.typicode.com/todos/2?_=fd1a00eb-52e7-412a-9a00-4ab4ea8b06a2 1`] = `
+exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test many expects 1`] = `
 {
   "request": {
     "headers": [
@@ -166,8 +166,19 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
       ],
     ],
     "meta": {
-      "expectStatus": 200,
-      "expectStatusText": "OK",
+      "expect": {
+        "global": false,
+        "value": [
+          [
+            "$.response.status",
+            200,
+          ],
+          [
+            "$.response.statusText",
+            "OK",
+          ],
+        ],
+      },
       "ignore": {
         "global": false,
         "value": [
@@ -185,13 +196,13 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
         "global": false,
         "value": ".*",
       },
-      "name": {
+      "title": {
         "global": false,
-        "value": "sample2",
+        "value": "test many expects",
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/2?_=52010bd9-4665-49e0-8154-b83fe6b9aefd",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=114d648e-b65c-4f2c-bd3b-64b51f28f2ef",
   },
   "response": {
     "body": {
@@ -203,6 +214,616 @@ exports[`/home/avale/node/jest-dot-http-files/tests/sample.http GET https://json
     "headers": [
       [
         "access-control-allow-credentials",
+        Anything,
+      ],
+      [
+        "alt-svc",
+        Anything,
+      ],
+      [
+        "cache-control",
+        Anything,
+      ],
+      [
+        "cf-cache-status",
+        Anything,
+      ],
+      [
+        "cf-ray",
+        Anything,
+      ],
+      [
+        "connection",
+        Anything,
+      ],
+      [
+        "content-encoding",
+        Anything,
+      ],
+      [
+        "content-type",
+        Anything,
+      ],
+      [
+        "date",
+        Anything,
+      ],
+      [
+        "etag",
+        Anything,
+      ],
+      [
+        "expires",
+        Anything,
+      ],
+      [
+        "nel",
+        Anything,
+      ],
+      [
+        "pragma",
+        Anything,
+      ],
+      [
+        "report-to",
+        Anything,
+      ],
+      [
+        "reporting-endpoints",
+        Anything,
+      ],
+      [
+        "server",
+        Anything,
+      ],
+      [
+        "transfer-encoding",
+        Anything,
+      ],
+      [
+        "vary",
+        Anything,
+      ],
+      [
+        "via",
+        Anything,
+      ],
+      [
+        "x-content-type-options",
+        Anything,
+      ],
+      [
+        "x-powered-by",
+        Anything,
+      ],
+      [
+        "x-ratelimit-limit",
+        Anything,
+      ],
+      [
+        "x-ratelimit-remaining",
+        Anything,
+      ],
+      [
+        "x-ratelimit-reset",
+        Anything,
+      ],
+    ],
+    "status": 200,
+    "statusText": "OK",
+  },
+}
+`;
+
+exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test the @status meta with both code and text 1`] = `
+{
+  "request": {
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+    ],
+    "meta": {
+      "ignore": {
+        "global": false,
+        "value": [
+          {
+            "global": false,
+            "value": "$.response.body.id",
+          },
+          {
+            "global": false,
+            "value": "$.response.body.completed",
+          },
+        ],
+      },
+      "ignoreHeaders": {
+        "global": false,
+        "value": ".*",
+      },
+      "status": {
+        "global": false,
+        "value": [
+          200,
+          "OK",
+        ],
+      },
+      "title": {
+        "global": false,
+        "value": "test the @status meta with both code and text",
+      },
+    },
+    "method": "GET",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=114d648e-b65c-4f2c-bd3b-64b51f28f2ef",
+  },
+  "response": {
+    "body": {
+      "completed": Anything,
+      "id": Anything,
+      "title": "quis ut nam facilis et officia qui",
+      "userId": 1,
+    },
+    "headers": [
+      [
+        "access-control-allow-credentials",
+        Anything,
+      ],
+      [
+        "age",
+        Anything,
+      ],
+      [
+        "alt-svc",
+        Anything,
+      ],
+      [
+        "cache-control",
+        Anything,
+      ],
+      [
+        "cf-cache-status",
+        Anything,
+      ],
+      [
+        "cf-ray",
+        Anything,
+      ],
+      [
+        "connection",
+        Anything,
+      ],
+      [
+        "content-encoding",
+        Anything,
+      ],
+      [
+        "content-type",
+        Anything,
+      ],
+      [
+        "date",
+        Anything,
+      ],
+      [
+        "etag",
+        Anything,
+      ],
+      [
+        "expires",
+        Anything,
+      ],
+      [
+        "nel",
+        Anything,
+      ],
+      [
+        "pragma",
+        Anything,
+      ],
+      [
+        "report-to",
+        Anything,
+      ],
+      [
+        "reporting-endpoints",
+        Anything,
+      ],
+      [
+        "server",
+        Anything,
+      ],
+      [
+        "transfer-encoding",
+        Anything,
+      ],
+      [
+        "vary",
+        Anything,
+      ],
+      [
+        "via",
+        Anything,
+      ],
+      [
+        "x-content-type-options",
+        Anything,
+      ],
+      [
+        "x-powered-by",
+        Anything,
+      ],
+      [
+        "x-ratelimit-limit",
+        Anything,
+      ],
+      [
+        "x-ratelimit-remaining",
+        Anything,
+      ],
+      [
+        "x-ratelimit-reset",
+        Anything,
+      ],
+    ],
+    "status": 200,
+    "statusText": "OK",
+  },
+}
+`;
+
+exports[`/home/avale/node/jest-dot-http-files/tests/sample.http test the @status meta with only the code 1`] = `
+{
+  "request": {
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+    ],
+    "meta": {
+      "ignore": {
+        "global": false,
+        "value": [
+          {
+            "global": false,
+            "value": "$.response.body.id",
+          },
+          {
+            "global": false,
+            "value": "$.response.body.completed",
+          },
+        ],
+      },
+      "ignoreHeaders": {
+        "global": false,
+        "value": ".*",
+      },
+      "status": {
+        "global": false,
+        "value": [
+          200,
+          0,
+        ],
+      },
+      "title": {
+        "global": false,
+        "value": "test the @status meta with only the code",
+      },
+    },
+    "method": "GET",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=114d648e-b65c-4f2c-bd3b-64b51f28f2ef",
+  },
+  "response": {
+    "body": {
+      "completed": Anything,
+      "id": Anything,
+      "title": "quis ut nam facilis et officia qui",
+      "userId": 1,
+    },
+    "headers": [
+      [
+        "access-control-allow-credentials",
+        Anything,
+      ],
+      [
+        "age",
+        Anything,
+      ],
+      [
+        "alt-svc",
+        Anything,
+      ],
+      [
+        "cache-control",
+        Anything,
+      ],
+      [
+        "cf-cache-status",
+        Anything,
+      ],
+      [
+        "cf-ray",
+        Anything,
+      ],
+      [
+        "connection",
+        Anything,
+      ],
+      [
+        "content-encoding",
+        Anything,
+      ],
+      [
+        "content-type",
+        Anything,
+      ],
+      [
+        "date",
+        Anything,
+      ],
+      [
+        "etag",
+        Anything,
+      ],
+      [
+        "expires",
+        Anything,
+      ],
+      [
+        "nel",
+        Anything,
+      ],
+      [
+        "pragma",
+        Anything,
+      ],
+      [
+        "report-to",
+        Anything,
+      ],
+      [
+        "reporting-endpoints",
+        Anything,
+      ],
+      [
+        "server",
+        Anything,
+      ],
+      [
+        "transfer-encoding",
+        Anything,
+      ],
+      [
+        "vary",
+        Anything,
+      ],
+      [
+        "via",
+        Anything,
+      ],
+      [
+        "x-content-type-options",
+        Anything,
+      ],
+      [
+        "x-powered-by",
+        Anything,
+      ],
+      [
+        "x-ratelimit-limit",
+        Anything,
+      ],
+      [
+        "x-ratelimit-remaining",
+        Anything,
+      ],
+      [
+        "x-ratelimit-reset",
+        Anything,
+      ],
+    ],
+    "status": 200,
+    "statusText": "OK",
+  },
+}
+`;
+
+exports[`/home/avale/node/jest-dot-http-files/tests/sample.http use the @throws meta to ensure that the @status meta works ( status code part ) 1`] = `
+{
+  "request": {
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+    ],
+    "meta": {
+      "ignoreHeaders": {
+        "global": false,
+        "value": ".*",
+      },
+      "status": {
+        "global": false,
+        "value": [
+          100,
+          0,
+        ],
+      },
+      "throws": {
+        "global": false,
+        "value": true,
+      },
+      "title": {
+        "global": false,
+        "value": "use the @throws meta to ensure that the @status meta works ( status code part )",
+      },
+    },
+    "method": "GET",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=114d648e-b65c-4f2c-bd3b-64b51f28f2ef",
+  },
+  "response": {
+    "body": {
+      "completed": false,
+      "id": 2,
+      "title": "quis ut nam facilis et officia qui",
+      "userId": 1,
+    },
+    "headers": [
+      [
+        "access-control-allow-credentials",
+        Anything,
+      ],
+      [
+        "age",
+        Anything,
+      ],
+      [
+        "alt-svc",
+        Anything,
+      ],
+      [
+        "cache-control",
+        Anything,
+      ],
+      [
+        "cf-cache-status",
+        Anything,
+      ],
+      [
+        "cf-ray",
+        Anything,
+      ],
+      [
+        "connection",
+        Anything,
+      ],
+      [
+        "content-encoding",
+        Anything,
+      ],
+      [
+        "content-type",
+        Anything,
+      ],
+      [
+        "date",
+        Anything,
+      ],
+      [
+        "etag",
+        Anything,
+      ],
+      [
+        "expires",
+        Anything,
+      ],
+      [
+        "nel",
+        Anything,
+      ],
+      [
+        "pragma",
+        Anything,
+      ],
+      [
+        "report-to",
+        Anything,
+      ],
+      [
+        "reporting-endpoints",
+        Anything,
+      ],
+      [
+        "server",
+        Anything,
+      ],
+      [
+        "transfer-encoding",
+        Anything,
+      ],
+      [
+        "vary",
+        Anything,
+      ],
+      [
+        "via",
+        Anything,
+      ],
+      [
+        "x-content-type-options",
+        Anything,
+      ],
+      [
+        "x-powered-by",
+        Anything,
+      ],
+      [
+        "x-ratelimit-limit",
+        Anything,
+      ],
+      [
+        "x-ratelimit-remaining",
+        Anything,
+      ],
+      [
+        "x-ratelimit-reset",
+        Anything,
+      ],
+    ],
+    "status": 200,
+    "statusText": "OK",
+  },
+}
+`;
+
+exports[`/home/avale/node/jest-dot-http-files/tests/sample.http use the @throws meta to ensure that the @status meta works ( status text part ) 1`] = `
+{
+  "request": {
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+    ],
+    "meta": {
+      "ignoreHeaders": {
+        "global": false,
+        "value": ".*",
+      },
+      "status": {
+        "global": false,
+        "value": [
+          200,
+          "foo bar",
+        ],
+      },
+      "throws": {
+        "global": false,
+        "value": ""foo bar"",
+      },
+      "title": {
+        "global": false,
+        "value": "use the @throws meta to ensure that the @status meta works ( status text part )",
+      },
+    },
+    "method": "GET",
+    "url": "https://jsonplaceholder.typicode.com/todos/2?_=114d648e-b65c-4f2c-bd3b-64b51f28f2ef",
+  },
+  "response": {
+    "body": {
+      "completed": false,
+      "id": 2,
+      "title": "quis ut nam facilis et officia qui",
+      "userId": 1,
+    },
+    "headers": [
+      [
+        "access-control-allow-credentials",
+        Anything,
+      ],
+      [
+        "age",
         Anything,
       ],
       [

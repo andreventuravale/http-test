@@ -319,8 +319,8 @@ test('per-request meta', () => {
 test('the "expect" request meta is accumulative ( forms a list )', () => {
   const requests = parse(`   
     # @name sample1
-    # @expect status 200
-    # @expect statusText "OK"
+    # @expect $.response.status 200
+    # @expect $.response.statusText "OK"
     GET http://foo
     content-type: application/json
   `)
@@ -339,11 +339,11 @@ test('the "expect" request meta is accumulative ( forms a list )', () => {
         "global": false,
         "value": [
           [
-            "status",
+            "$.response.status",
             200,
           ],
           [
-            "statusText",
+            "$.response.statusText",
             "OK",
           ],
         ],
@@ -360,11 +360,48 @@ test('the "expect" request meta is accumulative ( forms a list )', () => {
 `)
 })
 
+test('The @status meta', () => {
+  const requests = parse(`   
+    # @name sample1
+    # @status 200 "OK"
+    GET http://foo
+    content-type: application/json
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "headers": [
+      [
+        "content-type",
+        "application/json",
+      ],
+    ],
+    "meta": {
+      "name": {
+        "global": false,
+        "value": "sample1",
+      },
+      "status": {
+        "global": false,
+        "value": [
+          200,
+          "OK",
+        ],
+      },
+    },
+    "method": "GET",
+    "url": "http://foo",
+  },
+]
+`)
+})
+
 test('the "ignore" request meta is accumulative ( forms a list )', () => {
   const requests = parse(`   
     # @name sample1
-    # @ignore response.status
-    # @ignore response.statusText
+    # @ignore $.response.status
+    # @ignore $.response.statusText
     GET http://foo
     content-type: application/json
   `)
@@ -384,11 +421,11 @@ test('the "ignore" request meta is accumulative ( forms a list )', () => {
         "value": [
           {
             "global": false,
-            "value": "response.status",
+            "value": "$.response.status",
           },
           {
             "global": false,
-            "value": "response.statusText",
+            "value": "$.response.statusText",
           },
         ],
       },

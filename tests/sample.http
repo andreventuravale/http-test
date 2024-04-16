@@ -1,7 +1,7 @@
 @@host=https://jsonplaceholder.typicode.com
 @@dash={{$guid}}
 
-# @name sample1
+# @title test global interpolation
 # @ignoreHeaders .*
 # @expect $.response.status 200
 # @expect $.response.statusText "OK"
@@ -10,11 +10,49 @@ content-type: application/json
 
 ###
 
-# @name sample2
+# @title test many expects
 # @ignoreHeaders .*
-# @expectStatus 200
-# @expectStatusText "OK"
+# @expect $.response.status 200
+# @expect $.response.statusText "OK"
 # @ignore $.response.body.id
 # @ignore $.response.body.completed
+GET {{host}}/todos/2?_={{dash}}
+content-type: application/json
+
+###
+
+# @title test the @status meta with both code and text
+# @ignoreHeaders .*
+# @status 200 "OK"
+# @ignore $.response.body.id
+# @ignore $.response.body.completed
+GET {{host}}/todos/2?_={{dash}}
+content-type: application/json
+
+###
+
+# @title test the @status meta with only the code
+# @ignoreHeaders .*
+# @status 200
+# @ignore $.response.body.id
+# @ignore $.response.body.completed
+GET {{host}}/todos/2?_={{dash}}
+content-type: application/json
+
+###
+
+# @title use the @throws meta to ensure that the @status meta works ( status code part )
+# @ignoreHeaders .*
+# @status 100
+# @throws
+GET {{host}}/todos/2?_={{dash}}
+content-type: application/json
+
+###
+
+# @title use the @throws meta to ensure that the @status meta works ( status text part )
+# @ignoreHeaders .*
+# @status 200 "foo bar"
+# @throws "foo bar"
 GET {{host}}/todos/2?_={{dash}}
 content-type: application/json
