@@ -158,7 +158,13 @@ export const makeParser = (options = {}) => {
 
       const headers = parseHeaders(source)
 
-      const body = parseBody(source)
+      let body = parseBody(source)
+
+      const contentType = headers?.find(([k]) => /^content-type$/i.test(k))?.[1]
+
+      if (body && /json/i.test(contentType)) {
+        body = JSON.parse(body)
+      }
 
       requests.push({
         method,

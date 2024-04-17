@@ -78,6 +78,35 @@ test('variables', () => {
 `)
 })
 
+test('json body', () => {
+  const requests = parse(`
+    POST https://foo/bar
+    content-type: json
+
+    {
+      "foo": "bar"
+    }
+  `)
+
+  expect(requests).toMatchInlineSnapshot(`
+[
+  {
+    "body": {
+      "foo": "bar",
+    },
+    "headers": [
+      [
+        "content-type",
+        "json",
+      ],
+    ],
+    "method": "POST",
+    "url": "https://foo/bar",
+  },
+]
+`)
+})
+
 test('global variables', () => {
   const requests = parse(`
     @@hostname=localhost

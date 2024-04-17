@@ -227,7 +227,17 @@ export const test = async (
 
   const headers = request.headers?.map(([k, v]) => [k, interpolate(v)])
 
-  const body = interpolate(request.body)
+  const requestContentType = headers?.find(([k]) =>
+    /^content-type$/i.test(k)
+  )?.[1]
+
+  let body = request.body
+
+  if (body && /json/i.test(requestContentType)) {
+    body = JSON.stringify(body)
+  }
+
+  body = interpolate(body)
 
   const fetchResponse = await fetch(url, {
     method: request.method,
@@ -237,11 +247,11 @@ export const test = async (
 
   let responseBody
 
-  const contentType = fetchResponse.headers.get('content-type')
+  const responseContentType = fetchResponse.headers.get('content-type')
 
-  if (contentType.startsWith('text/')) {
+  if (responseContentType.startsWith('text/')) {
     responseBody = await fetchResponse.text()
-  } else if (contentType.indexOf('json') > -1) {
+  } else if (responseContentType.indexOf('json') > -1) {
     const jsonText = await fetchResponse.text()
 
     responseBody = JSON.parse(jsonText || 'null')

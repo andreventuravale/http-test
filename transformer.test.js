@@ -994,4 +994,57 @@ describe('test', () => {
 }
 `)
   })
+
+  it('POST with JSON body', async () => {
+    const fetch = td.func('fetch')
+
+    td.when(
+      await fetch('http://foo', td.matchers.contains({ method: 'POST' }))
+    ).thenResolve({
+      headers: new Headers({
+        'content-type': 'text/'
+      }),
+      text: async () => 'foo'
+    })
+
+    expect(
+      await test(
+        {
+          request: {
+            method: 'POST',
+            url: 'http://foo',
+            headers: [['content-type', 'json']],
+
+            body: { foo: 'bar' }
+          }
+        },
+        { fetch }
+      )
+    ).toMatchInlineSnapshot(`
+{
+  "request": {
+    "body": "{"foo":"bar"}",
+    "headers": [
+      [
+        "content-type",
+        "json",
+      ],
+    ],
+    "method": "POST",
+    "url": "http://foo",
+  },
+  "response": {
+    "body": "foo",
+    "headers": [
+      [
+        "content-type",
+        "text/",
+      ],
+    ],
+    "status": undefined,
+    "statusText": undefined,
+  },
+}
+`)
+  })
 })
