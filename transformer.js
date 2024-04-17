@@ -286,6 +286,10 @@ export const test = async (
     ...request
   }
 
+  if (body && /json/i.test(requestContentType)) {
+    body = JSON.parse(body)
+  }
+
   modifiedRequest.url = url
   modifiedRequest.headers = headers
   if (body) modifiedRequest.body = body

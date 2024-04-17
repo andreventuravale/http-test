@@ -1023,7 +1023,9 @@ describe('test', () => {
     ).toMatchInlineSnapshot(`
 {
   "request": {
-    "body": "{"foo":"bar"}",
+    "body": {
+      "foo": "bar",
+    },
     "headers": [
       [
         "content-type",

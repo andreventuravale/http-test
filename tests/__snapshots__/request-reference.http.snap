@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET https://jsonplaceholder.typicode.com/todos/1?_=c193469d-2e75-43cf-a0ec-6414d6d001b5 1`] = `
+exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET https://jsonplaceholder.typicode.com/todos/1?_=73c10e69-b09e-4e80-ae88-177f6ed6dd0c 1`] = `
 {
   "request": {
     "headers": [
@@ -20,11 +20,11 @@ exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET h
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=c193469d-2e75-43cf-a0ec-6414d6d001b5",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=73c10e69-b09e-4e80-ae88-177f6ed6dd0c",
     "variables": {
       "dash": {
         "global": true,
-        "value": "c193469d-2e75-43cf-a0ec-6414d6d001b5",
+        "value": "73c10e69-b09e-4e80-ae88-177f6ed6dd0c",
       },
       "host": {
         "global": true,
@@ -143,6 +143,133 @@ exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http GET h
 }
 `;
 
+exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http POST with JSON body stays as parsed JSON in the snapshot 1`] = `
+{
+  "request": {
+    "body": {
+      "foo": "bar",
+    },
+    "headers": [
+      [
+        "content-type",
+        Anything,
+      ],
+    ],
+    "meta": {
+      "ignoreHeaders": {
+        "global": false,
+        "value": ".*",
+      },
+      "title": {
+        "global": false,
+        "value": "POST with JSON body stays as parsed JSON in the snapshot",
+      },
+    },
+    "method": "POST",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=1d782135-c61b-4cc0-8f30-03a5ac94cb2f",
+  },
+  "response": {
+    "body": {},
+    "headers": [
+      [
+        "access-control-allow-credentials",
+        Anything,
+      ],
+      [
+        "alt-svc",
+        Anything,
+      ],
+      [
+        "cache-control",
+        Anything,
+      ],
+      [
+        "cf-cache-status",
+        Anything,
+      ],
+      [
+        "cf-ray",
+        Anything,
+      ],
+      [
+        "connection",
+        Anything,
+      ],
+      [
+        "content-length",
+        Anything,
+      ],
+      [
+        "content-type",
+        Anything,
+      ],
+      [
+        "date",
+        Anything,
+      ],
+      [
+        "etag",
+        Anything,
+      ],
+      [
+        "expires",
+        Anything,
+      ],
+      [
+        "nel",
+        Anything,
+      ],
+      [
+        "pragma",
+        Anything,
+      ],
+      [
+        "report-to",
+        Anything,
+      ],
+      [
+        "reporting-endpoints",
+        Anything,
+      ],
+      [
+        "server",
+        Anything,
+      ],
+      [
+        "vary",
+        Anything,
+      ],
+      [
+        "via",
+        Anything,
+      ],
+      [
+        "x-content-type-options",
+        Anything,
+      ],
+      [
+        "x-powered-by",
+        Anything,
+      ],
+      [
+        "x-ratelimit-limit",
+        Anything,
+      ],
+      [
+        "x-ratelimit-remaining",
+        Anything,
+      ],
+      [
+        "x-ratelimit-reset",
+        Anything,
+      ],
+    ],
+    "status": 404,
+    "statusText": "Not Found",
+  },
+}
+`;
+
 exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http Replay the sample1 request 1`] = `
 {
   "request": {
@@ -163,7 +290,7 @@ exports[`/home/avale/node/jest-dot-http-files/tests/request-reference.http Repla
       },
     },
     "method": "GET",
-    "url": "https://jsonplaceholder.typicode.com/todos/1?_=e06a6194-024c-4956-b203-6f9afbee6b6f",
+    "url": "https://jsonplaceholder.typicode.com/todos/1?_=1d782135-c61b-4cc0-8f30-03a5ac94cb2f",
   },
   "response": {
     "body": {

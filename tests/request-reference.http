@@ -12,3 +12,14 @@ content-type: application/json
 # @ignoreHeaders .*
 GET {{host}}/todos/{{sample1.$.response.body.id}}?_={{dash}}
 content-type: application/json
+
+###
+
+# @title POST with JSON body stays as parsed JSON in the snapshot
+# @ignoreHeaders .*
+POST {{host}}/todos/{{sample1.$.response.body.id}}?_={{dash}}
+content-type: application/json
+
+{
+  "foo": "bar"
+}
