@@ -96,12 +96,23 @@ Generates a random v4 UUID.
 
 Alias to $guid.
 
-#### The $datetime function
+#### The $randomInt function
+
+Generates a random integer number between min and max.
 
 ```http
-# "1 y" means to add one year to the current date
-GET http://foo/{{$datetime iso8601 1 y}}
+GET http://foo/{{$randomInt 10 20}}
 ```
+
+#### The $datetime function
+
+Generates a date/time string: `{{$datetime <format> [offset unit]}}`
+
+Format:
+  - rfc1123:
+  - iso8601:
+  - or a custom format, e.g: "dd-MM-yyyy"
+
 Offset unit:
 
 - y = Year
@@ -111,6 +122,13 @@ Offset unit:
 - h = Hour
 - m = Minute
 - s = Second
+
+Example:
+
+```http
+# adds one year to current date
+GET http://foo/{{$datetime iso8601 1 y}}
+```
 
 ## A note on "assertions"
 
