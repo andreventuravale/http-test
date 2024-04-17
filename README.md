@@ -98,7 +98,6 @@ Alias to $guid.
 
 #### The $datetime function
 
-
 ```http
 # "1 y" means to add one year to the current date
 GET http://foo/{{$datetime iso8601 1 y}}
@@ -124,7 +123,7 @@ A regex pattern string.
 Use it to specify what headers (both request and response) to ignore for snapshot assertion. The "age" and "date" headers are always ignored.
 
 ```http
-@ignoreHeaders ^(x-request-id|x-vendor-.*)
+# @ignoreHeaders ^(x-request-id|x-vendor-.*)
 GET http://foo/bar
 ```
 
@@ -135,8 +134,8 @@ Use it to specify what json-paths to ignore for snapshot assertion. The json-pat
 This variable is accumulative and forms a list, meaning you can ignore more than one path per request.
 
 ```http
-@ignore $.response.body.id
-@ignore $.response.body.completed
+# @ignore $.response.body.id
+# @ignore $.response.body.completed
 GET http://foo/bar
 ```
 
