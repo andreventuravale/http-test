@@ -20,6 +20,27 @@ describe('makeInterpolate', () => {
     )
   })
 
+  it(`interpolates with a request's request`, () => {
+    expect(
+      makeInterpolate({
+        requests: {
+          foo: {
+            request: {
+              body: { foo: 'bar' }
+            },
+            response: {
+              body: {
+                data: {
+                  foo: 'bar'
+                }
+              }
+            }
+          }
+        }
+      })(' {{foo.$.request.body.foo}} ')
+    ).toStrictEqual(' bar ')
+  })
+
   it('requests', () => {
     expect(
       makeInterpolate({
