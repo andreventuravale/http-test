@@ -7,7 +7,7 @@
 
 https://jestjs.io/docs/code-transformation
 
-#### About HTTP Files
+#### About .http Files
 
 - https://github.com/dotnet/AspNetCore.Docs/blob/main/aspnetcore/test/http-files.md
 - https://marketplace.visualstudio.com/items?itemName=humao.rest-client
